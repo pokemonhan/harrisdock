@@ -188,7 +188,7 @@ RUN if [ ${INSTALL_SSH2} = true ]; then \
 ;fi
 
 ###########################################################################
-# SOAP:
+# GMP:
 ###########################################################################
 
 USER root
@@ -197,7 +197,7 @@ ARG INSTALL_GMP=false
 ARG PHP_VERSION=${PHP_VERSION}
 
 RUN if [ ${INSTALL_GMP} = true ]; then \
-  # Install the PHP SOAP extension
+  # Install the PHP GMP extension
   apt-get -y install php${PHP_VERSION}-gmp \
 ;fi
 
@@ -393,8 +393,8 @@ RUN if [ ${INSTALL_SWOOLE} = true ]; then \
 ARG INSTALL_LIBPNG=false
 
 RUN if [ ${INSTALL_LIBPNG} = true ]; then \
-    apt update && \
-    apt install libpng16-16 \
+    apt-get update && \
+    apt-get install libpng16-16 \
 ;fi
 
 ###########################################################################
@@ -446,7 +446,8 @@ ENV NVM_DIR /home/laradock/.nvm
 
 RUN if [ ${INSTALL_NODE} = true ]; then \
     # Install nvm (A Node Version Manager)
-    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash \
+    mkdir -p $NVM_DIR && \
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash \
         && . $NVM_DIR/nvm.sh \
         && nvm install ${NODE_VERSION} \
         && nvm use ${NODE_VERSION} \
