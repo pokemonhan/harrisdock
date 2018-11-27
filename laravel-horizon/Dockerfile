@@ -22,61 +22,51 @@ RUN apk --update add wget \
   libgsasl-dev \
   supervisor
 
-RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
-       docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
-        && pecl channel-update pecl.php.net && pecl install memcached-2.2.0 && docker-php-ext-enable memcached \
-;else \
-	if [ ${PHP_VERSION} = '7.2.0' ]; then \
-		docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
-		&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 && docker-php-ext-enable memcached \
-	;else \
-    	docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
-    	&& pecl channel-update pecl.php.net && pecl install memcached && docker-php-ext-enable memcached \
-	;fi \
-;fi
-
-#Install SOAP package:
-ARG INSTALL_SOAP=false
-RUN if [ ${INSTALL_SOAP} = true ]; then \
-    docker-php-ext-install soap \
-;fi
+RUN docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl
+RUN pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 && docker-php-ext-enable memcached
 
 #Install BCMath package:
 ARG INSTALL_BCMATH=false
 RUN if [ ${INSTALL_BCMATH} = true ]; then \
-    docker-php-ext-install bcmath \
-;fi
-
-###########################################################################
-# PHP REDIS EXTENSION
-###########################################################################
-
-ARG INSTALL_PHPREDIS=false
-RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
-    # Install Php Redis Extension
-    printf "\n" | pecl install -o -f redis \
-    &&  rm -rf /tmp/pear \
-    &&  docker-php-ext-enable redis \
-;fi
+  docker-php-ext-install bcmath \
+  ;fi
 
 # Install PostgreSQL drivers:
 ARG INSTALL_PGSQL=false
 RUN if [ ${INSTALL_PGSQL} = true ]; then \
-    apk --update add postgresql-dev \
-        && docker-php-ext-install pdo_pgsql \
-;fi
+  apk --update add postgresql-dev \
+  && docker-php-ext-install pdo_pgsql \
+  ;fi
 
-# Install ZipArchive:
-ARG INSTALL_ZIP_ARCHIVE=false
-RUN if [ ${INSTALL_ZIP_ARCHIVE} = true ]; then \
-    apk --update add libzip-dev && \
-    docker-php-ext-configure zip --with-libzip && \
-    # Install the zip extension
-    docker-php-ext-install zip \
-;fi
+###########################################################################
+# PHP Memcached:
+###########################################################################
+
+ARG INSTALL_MEMCACHED=false
+
+RUN if [ ${INSTALL_MEMCACHED} = true ]; then \
+  # Install the php memcached extension
+  if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
+  curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-memcached/archive/2.2.0.tar.gz"; \
+  else \
+  curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-memcached/archive/php7.tar.gz"; \
+  fi \
+  && mkdir -p memcached \
+  && tar -C memcached -zxvf /tmp/memcached.tar.gz --strip 1 \
+  && ( \
+  cd memcached \
+  && phpize \
+  && ./configure \
+  && make -j$(nproc) \
+  && make install \
+  ) \
+  && rm -r memcached \
+  && rm /tmp/memcached.tar.gz \
+  && docker-php-ext-enable memcached \
+  ;fi
 
 RUN rm /var/cache/apk/* \
-    && mkdir -p /var/www
+  && mkdir -p /var/www
 
 #
 #--------------------------------------------------------------------------
@@ -98,7 +88,7 @@ ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisord.conf"]
 #
 # If you need to modify this image, feel free to do it right here.
 #
-    # -- Your awesome modifications go here -- #
+# -- Your awesome modifications go here -- #
 
 #
 #--------------------------------------------------------------------------
