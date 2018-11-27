@@ -1,0 +1,108 @@
+#博猫
+#jc
+*/10 * * * * laradock php /var/www/bocat_2.0/artisan jc:football-getsportdata
+*/10 * * * * laradock php /var/www/bocat_2.0/artisan jc:football-matchresult
+*/1 * * * * laradock php /var/www/bocat_2.0/artisan jc:checkgroupbuystatus
+0 3 * * * laradock php /var/www/bocat_2.0/artisan jc:update-user-growth 9001
+0 */10 * * * laradock php /var/www/bocat_2.0/artisan jc:football-teamicons
+
+# get number
+#* * * * * laradock php /var/www/bocat_2.0/artisan rng:getcode 11
+#* * * * * laradock php /var/www/bocat_2.0/artisan rng:getcode 23
+#* * * * * laradock php /var/www/bocat_2.0/artisan rng:getcode 24
+#* * * * * laradock php /var/www/bocat_2.0/artisan rng:getcode 12
+#* * * * * laradock php /var/www/bocat_2.0/artisan rng:getcode 20
+
+* * * * * laradock php /var/www/bocat_2.0/artisan mmc:getcode 11
+* * * * * laradock php /var/www/bocat_2.0/artisan mmc:getcode 23
+* * * * * laradock php /var/www/bocat_2.0/artisan mmc:getcode 24
+* * * * * laradock php /var/www/bocat_2.0/artisan mmc:getcode 12
+* * * * * laradock php /var/www/bocat_2.0/artisan mmc:getcode 20
+*/10 * * * * laradock php /var/www/bocat_2.0/artisan mmc:getcode 60
+* * * * * laradock php /var/www/bocat_2.0/artisan mmc:getcode 72
+#* * * * * laradock php /var/www/bocat_2.0/artisan vr15:getcode 81
+#* * * * * laradock sleep 30;php /var/www/bocat_2.0/artisan vr15:getcode 81
+
+
+#* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 1
+* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 3
+#* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 6
+* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 79
+* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 11
+#* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 23
+* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 24
+#* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 12
+#* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 9
+* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 22
+* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 21
+#* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 20
+#* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 72
+
+###0112
+* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 1
+* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 2
+* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 6
+* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 9
+* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 53
+#
+* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 23
+#* * * * * laradock sleep 10;php /var/www/bocat_2.0/artisan firecat:trace-make-up 23
+#* * * * * laradock sleep 20;php /var/www/bocat_2.0/artisan firecat:trace-make-up 23
+#* * * * * laradock sleep 30;php /var/www/bocat_2.0/artisan firecat:trace-make-up 23
+#* * * * * laradock sleep 40;php /var/www/bocat_2.0/artisan firecat:trace-make-up 23
+#* * * * * laradock sleep 50;php /var/www/bocat_2.0/artisan firecat:trace-make-up 23
+#
+* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 72
+#* * * * * laradock sleep 10;php /var/www/bocat_2.0/artisan firecat:trace-make-up 72
+#* * * * * laradock sleep 20;php /var/www/bocat_2.0/artisan firecat:trace-make-up 72
+#* * * * * laradock sleep 30;php /var/www/bocat_2.0/artisan firecat:trace-make-up 72
+#* * * * * laradock sleep 40;php /var/www/bocat_2.0/artisan firecat:trace-make-up 72
+#* * * * * laradock sleep 50;php /var/www/bocat_2.0/artisan firecat:trace-make-up 72
+#
+* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 12
+#* * * * * laradock sleep 10;php /var/www/bocat_2.0/artisan firecat:trace-make-up 12
+#* * * * * laradock sleep 20;php /var/www/bocat_2.0/artisan firecat:trace-make-up 12
+#* * * * * laradock sleep 30;php /var/www/bocat_2.0/artisan firecat:trace-make-up 12
+#* * * * * laradock sleep 40;php /var/www/bocat_2.0/artisan firecat:trace-make-up 12
+#* * * * * laradock sleep 50;php /var/www/bocat_2.0/artisan firecat:trace-make-up 12
+#
+* * * * * laradock php /var/www/bocat_2.0/artisan firecat:trace-make-up 20
+#* * * * * laradock sleep 10;php /var/www/bocat_2.0/artisan firecat:trace-make-up 20
+#* * * * * laradock sleep 20;php /var/www/bocat_2.0/artisan firecat:trace-make-up 20
+#* * * * * laradock sleep 30;php /var/www/bocat_2.0/artisan firecat:trace-make-up 20
+#* * * * * laradock sleep 40;php /var/www/bocat_2.0/artisan firecat:trace-make-up 20
+#* * * * * laradock sleep 50;php /var/www/bocat_2.0/artisan firecat:trace-make-up 20
+
+#oufutong
+#*/5 * * * * laradock php /var/www/bocat_2.0/artisan command:checkoftstatus
+
+# release account locks
+*/5 * * * * laradock php /var/www/bocat_2.0/artisan releaseall-dead-accountlock
+*/3 * * * * laradock php /var/www/bocat_2.0/artisan admin-tool:update-profits-from-other2
+#report
+#01 5 * * * laradock php /var/www/bocat_2.0/artisan firecat:generate-profit-snapshot user_profits
+#31 7 * * * laradock php /var/www/bocat_2.0/artisan firecat:generate-profit-snapshot profits
+
+31 6 * * * laradock php /var/www/bocat_2.0/artisan firecat:generate-commission 2
+31 6 * * * laradock php /var/www/bocat_2.0/artisan firecat:generate-commission 3
+31 5 * * * laradock php /var/www/bocat_2.0/artisan prize-group:assess
+* * * * * laradock php /var/www/bocat_2.0/artisan admin-tool:cron-generate-next-issue
+* * * * * laradock php /var/www/bocat_2.0/artisan admin-tool:cron-get-trace-issue-code
+
+*/5 * * * * laradock php /var/www/bocat_2.0/artisan jc:generate-sport-bonus-user
+
+#blackjack
+* * * * * laradock php /var/www/bocat_2.0/artisan blackjack:auto_calculate
+
+#* * * * * laradock php /var/www/bocat_2.0/artisan tonghuika:checktonghuikawithdrawalstatus
+#*/5 * * * * laradock php /var/www/bocat_2.0/artisan youjie:checkyoujiewithdrawalstatus
+#*/5 * * * * laradock php /var/www/bocat_2.0/artisan youfu:checkyoufuwithdrawalstatus
+#*/5 * * * * laradock php /var/www/bocat_2.0/artisan command:checkoftstatus
+#*/5 * * * * laradock php /var/www/bocat_2.0/artisan command:changbia
+
+#*/5 * * * * laradock php /var/www/bocat_2.0/artisan junxin:checkjunxinnetbankwithdrawalstatus
+#*/2 * * * * laradock php /var/www/bocat_2.0/artisan xinbei:checkxinbeinetbankwithdrawalstatus
+#*/2 * * * * laradock php /var/www/bocat_2.0/artisan xinbei:checkxinbeiqqwithdrawalstatus
+
+#首页电子娱乐区排行榜
+0 */6 * * * laradock php /var/www/bocat_2.0/artisan activity:update-home-bonus-userlist

@@ -158,6 +158,7 @@ services:
           - INSTALL_IONCUBE=${PHP_FPM_INSTALL_IONCUBE}
       volumes:
         - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
+        - ./php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
       expose:
         - "9000"

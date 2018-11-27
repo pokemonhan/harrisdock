@@ -1,0 +1,130 @@
+#for dayu
+[program:dayu-calculate]
+directory = /var/www/dayu
+command = php /var/www/dayu/artisan queue:listen main
+process_name = %(program_name)s_%(process_num)s
+numprocs = 1
+autostart=true
+autorestart=true
+;startsecs=1
+;startretries=-1
+stdout_logfile=/var/www/dayu/app/storage/logs/supervisor/dayu-main.log
+;redirect_stderr=true
+;exitcodes=0
+
+[program:dayu-send-money]
+directory = /var/www/dayu
+command = php /var/www/dayu/artisan queue:listen send_money
+process_name = %(program_name)s_%(process_num)s
+numprocs = 1
+autostart=true
+autorestart=true
+;startsecs=1
+;startretries=-1
+stdout_logfile=/var/www/dayu/app/storage/logs/supervisor/dayu-send.log
+;redirect_stderr=true
+;exitcodes=0
+
+[program:dayu-trace]
+directory = /var/www/dayu
+command = php /var/www/dayu/artisan queue:listen trace
+process_name = %(program_name)s_%(process_num)s
+numprocs = 1
+autostart=true
+autorestart=true
+;startsecs=1
+;startretries=-1
+stdout_logfile=/var/www/dayu/app/storage/logs/supervisor/dayu-trace.log
+;redirect_stderr=true
+;exitcodes=0
+
+[program:dayu-stat]
+directory = /var/www/dayu
+command = php /var/www/dayu/artisan queue:listen stat
+process_name = %(program_name)s_%(process_num)s
+numprocs = 1
+autostart=true
+autorestart=true
+;startsecs=1
+;startretries=-1
+stdout_logfile=/var/www/dayu/app/storage/logs/supervisor/dayu-stat.log
+;redirect_stderr=true
+;exitcodes=0
+
+[program:dayu-account]
+directory = /var/www/dayu
+command = php /var/www/dayu/artisan queue:listen account
+process_name = %(program_name)s_%(process_num)s
+numprocs = 1
+autostart=true
+autorestart=true
+;startsecs=1
+;startretries=-1
+stdout_logfile=/var/www/dayu/app/storage/logs/supervisor/dayu-account.log
+;redirect_stderr=true
+;exitcodes=0
+
+[program:dayu-withdraw]
+directory = /var/www/dayu
+command = php /var/www/dayu/artisan queue:listen withdraw
+process_name = %(program_name)s_%(process_num)s
+numprocs = 1
+autostart=true
+autorestart=true
+;startsecs=1
+;startretries=-1
+stdout_logfile=/var/www/dayu/app/storage/logs/supervisor/dayu-withdraw.log
+;redirect_stderr=true
+;exitcodes=0
+
+[program:dayu-send_commission]
+directory = /var/www/dayu
+command = php /var/www/dayu/artisan queue:listen send_commission
+process_name = %(program_name)s_%(process_num)s
+numprocs = 1
+autostart=true
+autorestart=true
+;startsecs=1
+;startretries=-1
+stdout_logfile=/var/www/dayu/app/storage/logs/supervisor/dayu-send_commission.log
+;redirect_stderr=true
+;exitcodes=0
+
+[program:dayu-SDWithdraw]
+directory = /var/www/dayu
+command = php /var/www/dayu/artisan queue:listen SDWithdraw
+process_name = %(program_name)s_%(process_num)s
+numprocs = 1
+autostart=true
+autorestart=true
+;startsecs=1
+;startretries=-1
+stdout_logfile=/var/www/dayu/app/storage/logs/supervisor/dayu-SDWithdraw.log
+;redirect_stderr=true
+;exitcodes=0
+
+[program:dayu-ProjectIdQueue]
+directory = /var/www/dayu
+command = php /var/www/dayu/artisan queue:listen ProjectIdQueue
+process_name = %(program_name)s_%(process_num)s
+numprocs = 1
+autostart=true
+autorestart=true
+;startsecs=1
+;startretries=-1
+stdout_logfile=/var/www/dayu/app/storage/logs/supervisor/dayu-ProjectIdQueue.log
+;redirect_stderr=true
+;exitcodes=0
+
+[program:dayu-get_trace_issue_code]
+directory = /var/www/dayu
+command = php /var/www/dayu/artisan queue:listen get_trace_issue_code
+process_name = %(program_name)s_%(process_num)s
+numprocs = 1
+autostart=true
+autorestart=true
+;startsecs=1
+;startretries=-1
+stdout_logfile=/var/www/dayu/app/storage/logs/supervisor/dayu-gettraceissuecode.log
+;redirect_stderr=true
+;exitcodes=0

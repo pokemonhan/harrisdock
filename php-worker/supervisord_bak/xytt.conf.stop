@@ -1,0 +1,79 @@
+[program:defaultqueue]
+command=php /var/www/apibomao/artisan queue:work
+process_name=%(program_name)s_%(process_num)02d
+numprocs=1
+directory=/var/www/apibomao
+autostart=true
+;user=chrism
+stdout_logfile=/var/www/apibomao/storage/logs/supervisord/defaultqueue
+stderr_logfile=/var/www/apibomao/storage/logs/supervisord/defaultqueue_err
+;environment=A="1",B="2"
+
+[program:task_jackpot_change]
+command=php /var/www/apibomao/artisan queue:work --queue=task_jackpot_change
+process_name=%(program_name)s_%(process_num)02d
+numprocs=1
+directory=/var/www/apibomao
+autostart=true
+;user=chrism
+stdout_logfile=/var/www/apibomao/storage/logs/supervisord/task_jackpot_change
+stderr_logfile=/var/www/apibomao/storage/logs/supervisord/task_jackpot_change_err
+;environment=A="1",B="2"
+
+
+[program:task_prize_send_distribution]
+command=php /var/www/apibomao/artisan queue:work --queue=task_prize_send_distribution
+process_name=%(program_name)s_%(process_num)02d
+numprocs=1
+directory=/var/www/apibomao
+autostart=true
+;user=chrism
+stdout_logfile=/var/www/apibomao/storage/logs/supervisord/task_prize_send_distribution
+stderr_logfile=/var/www/apibomao/storage/logs/supervisord/task_prize_send_distribution_err
+;environment=A="1",B="2"
+
+
+[program:task_prize_send]
+command=php /var/www/apibomao/artisan queue:work --queue=task_prize_send
+process_name=%(program_name)s_%(process_num)02d
+numprocs=1
+directory=/var/www/apibomao
+autostart=true
+;user=chrism
+startretries=2
+stdout_logfile=/var/www/apibomao/storage/logs/supervisord/task_prize_send
+stderr_logfile=/var/www/apibomao/storage/logs/supervisord/task_prize_send_change_err
+;environment=A="1",B="2"
+
+[program:task_notify_user_prize]
+command=php /var/www/apibomao/artisan queue:work --queue=task_notify_user_prize
+process_name=%(program_name)s_%(process_num)02d
+numprocs=1
+directory=/var/www/apibomao
+autostart=true
+;user=chrism
+stdout_logfile=/var/www/apibomao/storage/logs/supervisord/task_notify_user_prize
+stderr_logfile=/var/www/apibomao/storage/logs/supervisord/task_notify_user_prize_err
+;environment=A="1",B="2"
+
+[program:task_notify_specail_prize]
+command=php /var/www/apibomao/artisan queue:work --queue=task_notify_specail_prize
+process_name=%(program_name)s_%(process_num)02d
+numprocs=1
+directory=/var/www/apibomao
+autostart=true
+;user=chrism
+stdout_logfile=/var/www/apibomao/storage/logs/supervisord/task_notify_specail_prize
+stderr_logfile=/var/www/apibomao/storage/logs/supervisord/task_notify_specail_prize_err
+;environment=A="1",B="2"
+
+[program:task_cancel_project]
+command=php /var/www/apibomao/artisan queue:work --queue=task_cancel_project
+process_name=%(program_name)s_%(process_num)02d
+numprocs=1
+directory=/var/www/apibomao
+autostart=true
+;user=chrism
+stdout_logfile=/var/www/apibomao/storage/logs/supervisord/task_cancel_project
+stderr_logfile=/var/www/apibomao/storage/logs/supervisord/task_cancel_project_err
+;environment=A="1",B="2"

@@ -1,0 +1,3 @@
+#幸运天梯
+* * * * * laradock sleep 5;curl http://myxytt.com/api/notify/deadline/fake >/dev/null 2>&1
+* * * * * laradock sleep 15;curl http://myxytt.com/api/notify/winnumber/fake >/dev/null 2>&1

@@ -1,0 +1,14 @@
+# release account locks
+*/5 * * * * laradock php /var/www/brand/artisan releaseall-dead-accountlock
+*/3 * * * * laradock php /var/www/brand/artisan admin-tool:update-profits-from-other2
+#report
+#01 5 * * * laradock php /var/www/brand/artisan firecat:generate-profit-snapshot user_profits
+#31 7 * * * laradock php /var/www/brand/artisan firecat:generate-profit-snapshot profits
+
+31 6 * * * laradock php /var/www/brand/artisan firecat:generate-commission 2
+31 6 * * * laradock php /var/www/brand/artisan firecat:generate-commission 3
+31 5 * * * laradock php /var/www/brand/artisan prize-group:assess
+* * * * * laradock php /var/www/brand/artisan admin-tool:cron-generate-next-issue
+* * * * * laradock php /var/www/brand/artisan admin-tool:cron-get-trace-issue-code
+
+*/1 * * * * php /var/www/html/bomao/artisan h5api:createmissedlottery CQSSC
