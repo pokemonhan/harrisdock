@@ -381,8 +381,18 @@ services:
         - php-fpm
         - php-fpm7
       networks:
-        - frontend
-        - backend
+        frontend:
+          aliases:
+            - a.fund.me
+            - c.fund.me
+            - p.fund.me
+            - admin.chunqiu.net
+        backend:
+          aliases:
+            - a.fund.me
+            - c.fund.me
+            - p.fund.me
+            - admin.chunqiu.net
 
 ### Blackfire ########################################
     blackfire:
