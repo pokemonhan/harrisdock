@@ -199,6 +199,20 @@ RUN if [ ${INSTALL_SWOOLE} = true ]; then \
 ;fi
 
 ###########################################################################
+# Tom Swoole EXTENSION
+###########################################################################
+ARG INSTALL_TOM_SWOOLE=false
+
+COPY ./tom/swoole_loader71.so /tmp/swoole_loader71.so
+
+RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
+    # Install Tom Swoole Extension
+    mv /tmp/swoole_loader71.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so \
+    && \
+        docker-php-ext-enable swoole_loader71 \
+;fi
+
+###########################################################################
 # MongoDB:
 ###########################################################################
 
