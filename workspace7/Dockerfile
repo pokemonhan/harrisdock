@@ -387,6 +387,21 @@ RUN if [ ${INSTALL_SWOOLE} = true ]; then \
 ;fi
 
 ###########################################################################
+# Tom Swoole EXTENSION
+###########################################################################
+ARG INSTALL_TOM_SWOOLE=false
+
+COPY ./tom/swoole_loader71.so /tmp/swoole_loader71.so
+
+RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
+    # Install Tom Swoole Extension
+    mv /tmp/swoole_loader71.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so \
+    && echo "extension=swoole_loader71.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/swoole.ini \
+    && rm -rf /tmp/swoole* \
+    && ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/swoole.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/18-swoole.ini \
+;fi
+
+###########################################################################
 # Libpng16 EXTENSION
 ###########################################################################
 
