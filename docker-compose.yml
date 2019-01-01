@@ -342,6 +342,27 @@ services:
         - "myxytt.com:${WEBSERVER_IP}"
       networks:
         - backend
+  ### PHP Worker　parallel ############################################
+    php-worker7:
+      build:
+        context: ./php-worker7
+        args:
+          - PHP_VERSION=${PHP_SECONDARY_VERSION}
+          - INSTALL_PGSQL=${PHP_WORKER_INSTALL_PGSQL}
+          - INSTALL_BCMATH=${PHP_WORKER_INSTALL_BCMATH}
+          - INSTALL_PHPREDIS=${PHP_WORKER_INSTALL_PHPREDIS}
+          - INSTALL_SOAP=${PHP_WORKER_INSTALL_SOAP}
+          - INSTALL_ZIP_ARCHIVE=${PHP_WORKER_INSTALL_ZIP_ARCHIVE}
+          - INSTALL_TOM_SWOOLE=${PHP_WORKER_INSTALL_TOM_SWOOLE}
+      volumes:
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+        - ./php-worker7/supervisord.d:/etc/supervisord.d
+      depends_on:
+        - workspace7
+      extra_hosts:
+        - "dockerhost:${DOCKER_HOST_IP}"
+      networks:
+        - backend
 ### Laravel Horizon ############################################
     laravel-horizon:
       build:
