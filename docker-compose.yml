@@ -142,7 +142,7 @@ services:
           - INSTALL_PHPREDIS=${WORKSPACE7P_INSTALL_PHPREDIS}
           - INSTALL_MSSQL=${WORKSPACE7P_INSTALL_MSSQL}
           - INSTALL_NODE=${WORKSPACE7P_INSTALL_NODE}
-          - INSTALL_NPM_PM2=${WORKSPACE7_INSTALL_NPM_PM2}
+          - INSTALL_NPM_PM2=${WORKSPACE7P_INSTALL_NPM_PM2}
           - NPM_REGISTRY=${WORKSPACE7P_NPM_REGISTRY}
           - INSTALL_YARN=${WORKSPACE7P_INSTALL_YARN}
           - INSTALL_NPM_GULP=${WORKSPACE7P_INSTALL_NPM_GULP}
@@ -191,6 +191,85 @@ services:
         - "myxytt.com:${WEBSERVER_IP}"
       ports:
         - "${WORKSPACE7P_SSH_PORT}:22"
+      tty: true
+      environment:
+        - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
+        - DOCKER_HOST=tcp://docker-in-docker:2375
+      networks:
+        - frontend
+        - backend
+      links:
+        - docker-in-docker
+
+  ### Workspace7 Parallel Workspace Usage ##################################
+    workspace72:
+      build:
+        context: ./workspace7
+        args:
+          - LARADOCK_PHP_VERSION=${PHP_THIRD_VERSION}
+          - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
+          - INSTALL_SUBVERSION=${WORKSPACE72P_INSTALL_SUBVERSION}
+          - INSTALL_XDEBUG=${WORKSPACE72P_INSTALL_XDEBUG}
+          - INSTALL_PHPDBG=${WORKSPACE72P_INSTALL_PHPDBG}
+          - INSTALL_BLACKFIRE=${INSTALL_BLACKFIRE}
+          - INSTALL_SSH2=${WORKSPACE72P_INSTALL_SSH2}
+          - INSTALL_GMP=${WORKSPACE72P_INSTALL_GMP}
+          - INSTALL_SOAP=${WORKSPACE72P_INSTALL_SOAP}
+          - INSTALL_LDAP=${WORKSPACE72P_INSTALL_LDAP}
+          - INSTALL_IMAP=${WORKSPACE72P_INSTALL_IMAP}
+          - INSTALL_MONGO=${WORKSPACE72P_INSTALL_MONGO}
+          - INSTALL_AMQP=${WORKSPACE72P_INSTALL_AMQP}
+          - INSTALL_PHPREDIS=${WORKSPACE72P_INSTALL_PHPREDIS}
+          - INSTALL_MSSQL=${WORKSPACE72P_INSTALL_MSSQL}
+          - INSTALL_NODE=${WORKSPACE72P_INSTALL_NODE}
+          - INSTALL_NPM_PM2=${WORKSPACE72P_INSTALL_NPM_PM2}
+          - NPM_REGISTRY=${WORKSPACE72P_NPM_REGISTRY}
+          - INSTALL_YARN=${WORKSPACE72P_INSTALL_YARN}
+          - INSTALL_NPM_GULP=${WORKSPACE72P_INSTALL_NPM_GULP}
+          - INSTALL_NPM_BOWER=${WORKSPACE72P_INSTALL_NPM_BOWER}
+          - INSTALL_NPM_VUE_CLI=${WORKSPACE72P_INSTALL_NPM_VUE_CLI}
+          - INSTALL_DRUSH=${WORKSPACE72P_INSTALL_DRUSH}
+          - INSTALL_DRUPAL_CONSOLE=${WORKSPACE72P_INSTALL_DRUPAL_CONSOLE}
+          - INSTALL_AEROSPIKE=${WORKSPACE72P_INSTALL_AEROSPIKE}
+          - AEROSPIKE_PHP_REPOSITORY=${AEROSPIKE_PHP_REPOSITORY}
+          - INSTALL_V8JS=${WORKSPACE72P_INSTALL_V8JS}
+          - COMPOSER_GLOBAL_INSTALL=${WORKSPACE72P_COMPOSER_GLOBAL_INSTALL}
+          - COMPOSER_REPO_PACKAGIST=${WORKSPACE72P_COMPOSER_REPO_PACKAGIST}
+          - INSTALL_WORKSPACE_SSH=${WORKSPACE72P_INSTALL_WORKSPACE_SSH}
+          - INSTALL_LARAVEL_ENVOY=${WORKSPACE72P_INSTALL_LARAVEL_ENVOY}
+          - INSTALL_LARAVEL_INSTALLER=${WORKSPACE72P_INSTALL_LARAVEL_INSTALLER}
+          - INSTALL_DEPLOYER=${WORKSPACE72P_INSTALL_DEPLOYER}
+          - INSTALL_PRESTISSIMO=${WORKSPACE72P_INSTALL_PRESTISSIMO}
+          - INSTALL_LINUXBREW=${WORKSPACE72P_INSTALL_LINUXBREW}
+          - INSTALL_MC=${WORKSPACE72P_INSTALL_MC}
+          - INSTALL_SYMFONY=${WORKSPACE72P_INSTALL_SYMFONY}
+          - INSTALL_PYTHON=${WORKSPACE72P_INSTALL_PYTHON}
+          - INSTALL_IMAGE_OPTIMIZERS=${WORKSPACE72P_INSTALL_IMAGE_OPTIMIZERS}
+          - INSTALL_IMAGEMAGICK=${WORKSPACE72P_INSTALL_IMAGEMAGICK}
+          - INSTALL_TERRAFORM=${WORKSPACE72P_INSTALL_TERRAFORM}
+          - INSTALL_DUSK_DEPS=${WORKSPACE72P_INSTALL_DUSK_DEPS}
+          - INSTALL_PG_CLIENT=${WORKSPACE72P_INSTALL_PG_CLIENT}
+          - INSTALL_PHALCON=${WORKSPACE72P_INSTALL_PHALCON}
+          - INSTALL_SWOOLE=${WORKSPACE72P_INSTALL_SWOOLE}
+          - INSTALL_LIBPNG=${WORKSPACE72P_INSTALL_LIBPNG}
+          - INSTALL_IONCUBE=${WORKSPACE72P_INSTALL_IONCUBE}
+          - INSTALL_MYSQL_CLIENT=${WORKSPACE72P_INSTALL_MYSQL_CLIENT}
+          - PUID=${WORKSPACE72P_PUID}
+          - PGID=${WORKSPACE72P_PGID}
+          - CHROME_DRIVER_VERSION=${WORKSPACE72P_CHROME_DRIVER_VERSION}
+          - NODE_VERSION=${WORKSPACE72P_NODE_VERSION}
+          - YARN_VERSION=${WORKSPACE72P_YARN_VERSION}
+          - DRUSH_VERSION=${WORKSPACE72P_DRUSH_VERSION}
+          - TZ=${WORKSPACE72P_TIMEZONE}
+          - BLACKFIRE_CLIENT_ID=${BLACKFIRE_CLIENT_ID}
+          - BLACKFIRE_CLIENT_TOKEN=${BLACKFIRE_CLIENT_TOKEN}
+      volumes:
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+      extra_hosts:
+        - "dockerhost:${DOCKER_HOST_IP}"
+        - "myxytt.com:${WEBSERVER_IP}"
+      ports:
+        - "${WORKSPACE72P_SSH_PORT}:22"
       tty: true
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
@@ -262,7 +341,7 @@ services:
       links:
         - docker-in-docker
 
-      ### PHP-7 for parallel usage ##############################################
+### PHP-7 for parallel usage ##############################################
     php-fpm7:
       build:
         context: ./php-fpm
@@ -323,6 +402,67 @@ services:
         - backend
       links:
         - docker-in-docker
+  ### PHP-72 for parallel usage ##############################################
+    php-fpm72:
+      build:
+        context: ./php-fpm
+        args:
+          - LARADOCK_PHP_VERSION=${PHP_THIRD_VERSION}
+          - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
+          - INSTALL_XDEBUG=${PHP_FPM72P_INSTALL_XDEBUG}
+          - INSTALL_PHPDBG=${PHP_FPM72P_INSTALL_PHPDBG}
+          - INSTALL_BLACKFIRE=${INSTALL_BLACKFIRE}
+          - INSTALL_SSH2=${PHP_FPM72P_INSTALL_SSH2}
+          - INSTALL_SOAP=${PHP_FPM72P_INSTALL_SOAP}
+          - INSTALL_IMAP=${PHP_FPM72P_INSTALL_IMAP}
+          - INSTALL_MONGO=${PHP_FPM72P_INSTALL_MONGO}
+          - INSTALL_AMQP=${PHP_FPM72P_INSTALL_AMQP}
+          - INSTALL_MSSQL=${PHP_FPM72P_INSTALL_MSSQL}
+          - INSTALL_ZIP_ARCHIVE=${PHP_FPM72P_INSTALL_ZIP_ARCHIVE}
+          - INSTALL_BCMATH=${PHP_FPM72P_INSTALL_BCMATH}
+          - INSTALL_GMP=${PHP_FPM72P_INSTALL_GMP}
+          - INSTALL_PHPREDIS=${PHP_FPM72P_INSTALL_PHPREDIS}
+          - INSTALL_MEMCACHED=${PHP_FPM72P_INSTALL_MEMCACHED}
+          - INSTALL_LGVRAND=${PHP_FPM72P_INSTALL_LGVRAND}
+          - INSTALL_OPCACHE=${PHP_FPM72P_INSTALL_OPCACHE}
+          - INSTALL_EXIF=${PHP_FPM72P_INSTALL_EXIF}
+          - INSTALL_AEROSPIKE=${PHP_FPM72P_INSTALL_AEROSPIKE}
+          - AEROSPIKE_PHP_REPOSITORY=${AEROSPIKE_PHP_REPOSITORY}
+          - INSTALL_MYSQLI=${PHP_FPM72P_INSTALL_MYSQLI}
+          - INSTALL_PGSQL=${PHP_FPM72P_INSTALL_PGSQL}
+          - INSTALL_PG_CLIENT=${PHP_FPM72P_INSTALL_PG_CLIENT}
+          - INSTALL_INTL=${PHP_FPM72P_INSTALL_INTL}
+          - INSTALL_GHOSTSCRIPT=${PHP_FPM72P_INSTALL_GHOSTSCRIPT}
+          - INSTALL_LDAP=${PHP_FPM72P_INSTALL_LDAP}
+          - INSTALL_PHALCON=${PHP_FPM72P_INSTALL_PHALCON}
+          - INSTALL_SWOOLE=${PHP_FPM72P_INSTALL_SWOOLE}
+          - INSTALL_TOM_SWOOLE=${PHP_FPM72P_INSTALL_TOM_SWOOLE}
+          - INSTALL_IMAGE_OPTIMIZERS=${PHP_FPM72P_INSTALL_IMAGE_OPTIMIZERS}
+          - INSTALL_IMAGEMAGICK=${PHP_FPM72P_INSTALL_IMAGEMAGICK}
+          - INSTALL_CALENDAR=${PHP_FPM72P_INSTALL_CALENDAR}
+          - INSTALL_FAKETIME=${PHP_FPM72P_INSTALL_FAKETIME}
+          - INSTALL_IONCUBE=${PHP_FPM72P_INSTALL_IONCUBE}
+          - INSTALL_APCU=${PHP_FPM72P_INSTALL_APCU}
+          - INSTALL_YAML=${PHP_FPM72P_INSTALL_YAML}
+      volumes:
+        - ./php-fpm/php${PHP_THIRD_VERSION}.ini:/usr/local/etc/php/php.ini
+        - ./php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+      expose:
+        - "9000"
+      extra_hosts:
+        - "dockerhost:${DOCKER_HOST_IP}"
+        - "myxytt.com:${WEBSERVER_IP}"
+      environment:
+        - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
+        - DOCKER_HOST=tcp://docker-in-docker:2375
+        - FAKETIME=${PHP_FPM_FAKETIME}
+      depends_on:
+        - workspace72
+      networks:
+        - backend
+      links:
+        - docker-in-docker
 
 ### PHP Worker ############################################
     php-worker:
@@ -374,6 +514,30 @@ services:
         - "dockerhost:${DOCKER_HOST_IP}"
       networks:
         - backend
+  ### PHP Worker 72　parallel ############################################
+    php-worker72:
+      build:
+        context: ./php-worker7
+        args:
+          - PHP_VERSION=${PHP_THIRD_VERSION}
+          - PHALCON_VERSION=${PHALCON_VERSION}
+          - INSTALL_PGSQL=${PHP_WORKER72_INSTALL_PGSQL}
+          - INSTALL_BCMATH=${PHP_WORKER72_INSTALL_BCMATH}
+          - INSTALL_PHALCON=${PHP_WORKER72_INSTALL_PHALCON}
+          - INSTALL_PHPREDIS=${PHP_WORKER72_INSTALL_PHPREDIS}
+          - INSTALL_SOAP=${PHP_WORKER72_INSTALL_SOAP}
+          - INSTALL_ZIP_ARCHIVE=${PHP_WORKER72_INSTALL_ZIP_ARCHIVE}
+          - PUID=${PHP_WORKER72_PUID}
+          - PGID=${PHP_WORKER72_PGID}
+      volumes:
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+        - ./php-worker7/supervisord.d:/etc/supervisord.d
+      depends_on:
+        - workspace72
+      extra_hosts:
+        - "dockerhost:${DOCKER_HOST_IP}"
+      networks:
+        - backend
 ### Laravel Horizon ############################################
     laravel-horizon:
       build:
@@ -412,6 +576,7 @@ services:
       depends_on:
         - php-fpm
         - php-fpm7
+        - php-fpm72
       networks:
         frontend:
           aliases:
