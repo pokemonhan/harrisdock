@@ -517,7 +517,7 @@ services:
   ### PHP Worker 72　parallel ############################################
     php-worker72:
       build:
-        context: ./php-worker7
+        context: ./php-worker72
         args:
           - PHP_VERSION=${PHP_THIRD_VERSION}
           - PHALCON_VERSION=${PHALCON_VERSION}
@@ -531,7 +531,7 @@ services:
           - PGID=${PHP_WORKER72_PGID}
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
-        - ./php-worker7/supervisord.d:/etc/supervisord.d
+        - ./php-worker72/supervisord.d:/etc/supervisord.d
       depends_on:
         - workspace72
       extra_hosts:
