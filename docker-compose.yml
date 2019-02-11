@@ -122,6 +122,7 @@ services:
         - backend
       links:
         - docker-in-docker
+
 ### Workspace7 Parallel Workspace Usage ##################################
     workspace7:
       build:
@@ -150,6 +151,7 @@ services:
           - INSTALL_NPM_BOWER=${WORKSPACE7P_INSTALL_NPM_BOWER}
           - INSTALL_NPM_VUE_CLI=${WORKSPACE7P_INSTALL_NPM_VUE_CLI}
           - INSTALL_DRUSH=${WORKSPACE7P_INSTALL_DRUSH}
+          - INSTALL_WP_CLI=${WORKSPACE7P_INSTALL_WP_CLI}
           - INSTALL_DRUPAL_CONSOLE=${WORKSPACE7P_INSTALL_DRUPAL_CONSOLE}
           - INSTALL_AEROSPIKE=${WORKSPACE7P_INSTALL_AEROSPIKE}
           - AEROSPIKE_PHP_REPOSITORY=${AEROSPIKE_PHP_REPOSITORY}
@@ -186,7 +188,7 @@ services:
           - BLACKFIRE_CLIENT_ID=${BLACKFIRE_CLIENT_ID}
           - BLACKFIRE_CLIENT_TOKEN=${BLACKFIRE_CLIENT_TOKEN}
       volumes:
-        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "myxytt.com:${WEBSERVER_IP}"
@@ -230,6 +232,7 @@ services:
           - INSTALL_NPM_BOWER=${WORKSPACE72P_INSTALL_NPM_BOWER}
           - INSTALL_NPM_VUE_CLI=${WORKSPACE72P_INSTALL_NPM_VUE_CLI}
           - INSTALL_DRUSH=${WORKSPACE72P_INSTALL_DRUSH}
+          - INSTALL_WP_CLI=${WORKSPACE72P_INSTALL_WP_CLI}
           - INSTALL_DRUPAL_CONSOLE=${WORKSPACE72P_INSTALL_DRUPAL_CONSOLE}
           - INSTALL_AEROSPIKE=${WORKSPACE72P_INSTALL_AEROSPIKE}
           - AEROSPIKE_PHP_REPOSITORY=${AEROSPIKE_PHP_REPOSITORY}
@@ -265,7 +268,7 @@ services:
           - BLACKFIRE_CLIENT_ID=${BLACKFIRE_CLIENT_ID}
           - BLACKFIRE_CLIENT_TOKEN=${BLACKFIRE_CLIENT_TOKEN}
       volumes:
-        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "myxytt.com:${WEBSERVER_IP}"
@@ -281,7 +284,7 @@ services:
       links:
         - docker-in-docker
 
-### PHP-FPM ##############################################
+      ### PHP-FPM ##############################################
     php-fpm:
       build:
         context: ./php-fpm
@@ -387,7 +390,7 @@ services:
       volumes:
         - ./php-fpm/php${PHP_SECONDARY_VERSION}.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
-        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
       expose:
         - "9000"
       extra_hosts:
@@ -448,7 +451,7 @@ services:
       volumes:
         - ./php-fpm/php${PHP_THIRD_VERSION}.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
-        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
       expose:
         - "9000"
       extra_hosts:
@@ -492,6 +495,7 @@ services:
         - "myxytt.com:${WEBSERVER_IP}"
       networks:
         - backend
+
   ### PHP Worker　parallel ############################################
     php-worker7:
       build:
@@ -506,10 +510,12 @@ services:
           - INSTALL_SOAP=${PHP_WORKER71_INSTALL_SOAP}
           - INSTALL_ZIP_ARCHIVE=${PHP_WORKER71_INSTALL_ZIP_ARCHIVE}
           - INSTALL_TOM_SWOOLE=${PHP_WORKER71_INSTALL_TOM_SWOOLE}
+          - INSTALL_MYSQL_CLIENT=${PHP_WORKER71_INSTALL_MYSQL_CLIENT}
+          - INSTALL_AMQP=${PHP_WORKER71_INSTALL_AMQP}
           - PUID=${PHP_WORKER71_PUID}
           - PGID=${PHP_WORKER71_PGID}
       volumes:
-        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         - ./php-worker7/supervisord.d:/etc/supervisord.d
       depends_on:
         - workspace7
@@ -517,6 +523,7 @@ services:
         - "dockerhost:${DOCKER_HOST_IP}"
       networks:
         - backend
+
   ### PHP Worker 72　parallel ############################################
     php-worker72:
       build:
@@ -530,10 +537,12 @@ services:
           - INSTALL_PHPREDIS=${PHP_WORKER72_INSTALL_PHPREDIS}
           - INSTALL_SOAP=${PHP_WORKER72_INSTALL_SOAP}
           - INSTALL_ZIP_ARCHIVE=${PHP_WORKER72_INSTALL_ZIP_ARCHIVE}
+          - INSTALL_MYSQL_CLIENT=${PHP_WORKER72_INSTALL_MYSQL_CLIENT}
+          - INSTALL_AMQP=${PHP_WORKER72_INSTALL_AMQP}
           - PUID=${PHP_WORKER72_PUID}
           - PGID=${PHP_WORKER72_PGID}
       volumes:
-        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         - ./php-worker72/supervisord.d:/etc/supervisord.d
       depends_on:
         - workspace72
@@ -541,7 +550,8 @@ services:
         - "dockerhost:${DOCKER_HOST_IP}"
       networks:
         - backend
-### Laravel Horizon ############################################
+
+      ### Laravel Horizon ############################################
     laravel-horizon:
       build:
         context: ./laravel-horizon
