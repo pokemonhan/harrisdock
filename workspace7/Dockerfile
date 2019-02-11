@@ -41,7 +41,7 @@ RUN apt-get update -yqq && \
     pecl channel-update pecl.php.net && \
     groupadd -g ${PGID} laradock && \
     useradd -u ${PUID} -g laradock -m laradock -G docker_env && \
-    usermod -p "*" laradock
+    usermod -p "*" laradock -s /bin/bash
 
 #
 #--------------------------------------------------------------------------
@@ -172,6 +172,21 @@ RUN if [ ${INSTALL_DRUSH} = true ]; then \
     curl -fsSL -o /usr/local/bin/drush https://github.com/drush-ops/drush/releases/download/${DRUSH_VERSION}/drush.phar | bash && \
     chmod +x /usr/local/bin/drush && \
     drush core-status \
+;fi
+
+###########################################################################
+# WP CLI:
+###########################################################################
+
+# The command line interface for WordPress
+
+USER root
+
+ARG INSTALL_WP_CLI=false
+
+RUN if [ ${INSTALL_WP_CLI} = true ]; then \
+    curl -fsSL -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar | bash && \
+    chmod +x /usr/local/bin/wp \
 ;fi
 
 ###########################################################################

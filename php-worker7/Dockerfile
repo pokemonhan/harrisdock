@@ -86,6 +86,22 @@ RUN if [ ${INSTALL_ZIP_ARCHIVE} = true ]; then \
     docker-php-ext-install zip \
 ;fi
 
+# Install MySQL Client:
+ARG INSTALL_MYSQL_CLIENT=false
+RUN if [ ${INSTALL_MYSQL_CLIENT} = true ]; then \
+    apk --update add mysql-client \
+;fi
+
+# Install AMQP:
+ARG INSTALL_AMQP=false
+
+RUN if [ ${INSTALL_AMQP} = true ]; then \
+    apk --update add rabbitmq-c rabbitmq-c-dev && \
+    pecl install amqp && \
+    docker-php-ext-enable amqp && \
+    docker-php-ext-install sockets \
+;fi
+
 ###########################################################################
 # Tom Swoole EXTENSION
 ###########################################################################
@@ -104,9 +120,6 @@ RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
     && rm -rf /tmp/swoole* \
 ;fi
 
-RUN rm /var/cache/apk/* \
-    && mkdir -p /var/www
-
 # Install Phalcon ext
 ARG INSTALL_PHALCON=false
 ARG PHALCON_VERSION
@@ -120,6 +133,9 @@ RUN if [ $INSTALL_PHALCON = true ]; then \
     && ./install \
     && rm -rf /tmp/cphalcon* \
 ;fi
+
+RUN rm /var/cache/apk/* \
+    && mkdir -p /var/www
 
 #
 #--------------------------------------------------------------------------
