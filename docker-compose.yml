@@ -9,6 +9,8 @@ networks:
 volumes:
   mysql:
     driver: ${VOLUMES_DRIVER}
+  mysql5:
+    driver: ${VOLUMES_DRIVER}
   percona:
     driver: ${VOLUMES_DRIVER}
   mssql:
@@ -682,6 +684,26 @@ services:
         - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
       ports:
         - "${MYSQL_PORT}:3306"
+      networks:
+        - backend
+
+  ### MySQL ################################################
+    mysql5:
+      build:
+        context: ./mysql5
+        args:
+          - MYSQL_VERSION=${MYSQL5_VERSION}
+      environment:
+        - MYSQL_DATABASE=${MYSQL5_DATABASE}
+        - MYSQL_USER=${MYSQL5_USER}
+        - MYSQL_PASSWORD=${MYSQL5_PASSWORD}
+        - MYSQL_ROOT_PASSWORD=${MYSQL5_ROOT_PASSWORD}
+        - TZ=${WORKSPACE_TIMEZONE}
+      volumes:
+        - ${DATA_PATH_HOST}/mysql5:/var/lib/mysql
+        - ${MYSQL5_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
+      ports:
+        - "${MYSQL5_PORT}:3306"
       networks:
         - backend
 
