@@ -1,0 +1,16 @@
+#1 17 * * * laradock php /var/www/chenxing_web/artisan admin-tool:send-warning-to-TG
+#0 20 * * * laradock php /var/www/chenxing_web/artisan dailysalary:2018compute
+#*/1 * * * * laradock php /var/www/chenxing_web/artisan kevincheckxinftcommand:check
+#*/1 * * * * laradock php /var/www/chenxing_web/artisan kevincheckbfbcommand:check
+#*/1 * * * * laradock php /var/www/chenxing_web/artisan kevincheckfengyunpaycommand:check
+#*/1 * * * * laradock php /var/www/chenxing_web/artisan kevincheckslcommand:check
+#*/1 * * * * laradock php /var/www/chenxing_web/artisan mmc:getcode 65
+#*/2 * * * * laradock php /var/www/chenxing_web/artisan mmc:getcode 66
+#*/5 * * * * laradock php /var/www/chenxing_web/artisan mmc:getcode 67
+#*/1 * * * * laradock php /var/www/chenxing_web/artisan mmc:getcode 68
+#*/1 * * * * laradock php /var/www/chenxing_web/artisan mmc:getcode 69
+#*/3 * * * * laradock php /var/www/chenxing_web/artisan mmc:getcode 70
+#*/5 * * * * laradock php /var/www/chenxing_web/artisan mmc:getcode 71
+#*/10 * * * * laradock php /var/www/chenxing_web/artisan mmc:getcode 72
+#*/5 * * * * laradock php /var/www/chenxing_web/artisan mmc:getcode 74
+#*/10 * * * * laradock php /var/www/chenxing_web/artisan mmc:getcode 76
