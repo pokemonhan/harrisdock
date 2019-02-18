@@ -391,6 +391,8 @@ services:
           - INSTALL_IONCUBE=${PHP_FPM7P_INSTALL_IONCUBE}
           - INSTALL_APCU=${PHP_FPM7P_INSTALL_APCU}
           - INSTALL_YAML=${PHP_FPM7P_INSTALL_YAML}
+          - INSTALL_ADDITIONAL_LOCALES=${PHP_FPM7P_INSTALL_ADDITIONAL_LOCALES}
+          - ADDITIONAL_LOCALES=${PHP_FPM7P_ADDITIONAL_LOCALES}
       volumes:
         - ./php-fpm/php${PHP_SECONDARY_VERSION}.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
@@ -444,7 +446,6 @@ services:
           - INSTALL_LDAP=${PHP_FPM72P_INSTALL_LDAP}
           - INSTALL_PHALCON=${PHP_FPM72P_INSTALL_PHALCON}
           - INSTALL_SWOOLE=${PHP_FPM72P_INSTALL_SWOOLE}
-          - INSTALL_TOM_SWOOLE=${PHP_FPM72P_INSTALL_TOM_SWOOLE}
           - INSTALL_IMAGE_OPTIMIZERS=${PHP_FPM72P_INSTALL_IMAGE_OPTIMIZERS}
           - INSTALL_IMAGEMAGICK=${PHP_FPM72P_INSTALL_IMAGEMAGICK}
           - INSTALL_CALENDAR=${PHP_FPM72P_INSTALL_CALENDAR}
@@ -452,6 +453,8 @@ services:
           - INSTALL_IONCUBE=${PHP_FPM72P_INSTALL_IONCUBE}
           - INSTALL_APCU=${PHP_FPM72P_INSTALL_APCU}
           - INSTALL_YAML=${PHP_FPM72P_INSTALL_YAML}
+          - INSTALL_ADDITIONAL_LOCALES=${PHP_FPM72P_INSTALL_ADDITIONAL_LOCALES}
+          - ADDITIONAL_LOCALES=${PHP_FPM72P_ADDITIONAL_LOCALES}
       volumes:
         - ./php-fpm/php${PHP_THIRD_VERSION}.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
