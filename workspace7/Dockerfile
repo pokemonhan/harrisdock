@@ -516,6 +516,7 @@ RUN if [ ${INSTALL_NODE} = true ]; then \
         ;fi \
         && if [ ${INSTALL_NPM_ANGULAR_CLI} = true ]; then \
         npm install -g @angular/cli \
+        ;fi \
         && if [ ${INSTALL_NPM_PM2} = true ]; then \
         npm install -g pm2 \
         ;fi \
