@@ -53,6 +53,12 @@ RUN apt-get update -yqq && \
 # to add more Software's or remove existing one, you need to edit the
 # base image (https://github.com/Laradock/workspace).
 #
+# next lines are here becase there is no auto build on dockerhub see https://github.com/laradock/laradock/pull/1903#issuecomment-463142846
+USER root
+
+RUN apt-get install -y libzip-dev zip unzip \
+    # Install the zip extension
+    php${LARADOCK_PHP_VERSION}-zip
 
 #
 #--------------------------------------------------------------------------
@@ -228,6 +234,20 @@ RUN if [ ${INSTALL_SOAP} = true ]; then \
   # Install the PHP SOAP extension
   apt-get -y install libxml2-dev php${LARADOCK_PHP_VERSION}-soap \
 ;fi
+
+###########################################################################
+# XSL:
+###########################################################################
+
+USER root
+
+ARG INSTALL_XSL=false
+
+RUN if [ ${INSTALL_XSL} = true ]; then \
+  # Install the PHP XSL extension
+  apt-get -y install libxslt-dev php${LARADOCK_PHP_VERSION}-xsl \
+;fi
+
 
 ###########################################################################
 # LDAP:
@@ -452,6 +472,7 @@ ARG INSTALL_NODE=false
 ARG INSTALL_NPM_GULP=false
 ARG INSTALL_NPM_BOWER=false
 ARG INSTALL_NPM_VUE_CLI=false
+ARG INSTALL_NPM_ANGULAR_CLI=false
 ARG NPM_REGISTRY
 ENV NPM_REGISTRY ${NPM_REGISTRY}
 ENV NVM_DIR /home/laradock/.nvm
@@ -475,6 +496,9 @@ RUN if [ ${INSTALL_NODE} = true ]; then \
         ;fi \
         && if [ ${INSTALL_NPM_VUE_CLI} = true ]; then \
         npm install -g @vue/cli \
+        ;fi \
+        && if [ ${INSTALL_NPM_ANGULAR_CLI} = true ]; then \
+        npm install -g @angular/cli \
         ;fi \
         && ln -s `npm bin --global` /home/laradock/.node-bin \
 ;fi

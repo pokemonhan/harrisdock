@@ -709,6 +709,44 @@ composer require predis/predis:^1.0
 
 
 <br>
+<a name="Use-Redis-Cluster"></a>
+## Use Redis Cluster
+
+1 - First make sure you run the Redis-Cluster Container (`redis-cluster`) with the `docker-compose up` command.
+
+```bash
+docker-compose up -d redis-cluster
+```
+
+2 - Open your Laravel's `config/database.php` and set the redis cluster configuration. Below is example configuration with phpredis.
+
+Read the [Laravel official documentation](https://laravel.com/docs/5.7/redis#configuration) for more details.
+
+```php
+'redis' => [
+    'client' => 'phpredis',
+    'options' => [
+        'cluster' => 'redis',
+    ],
+    'clusters' => [
+        'default' => [
+            [
+                'host' => 'redis-cluster',
+                'password' => null,
+                'port' => 7000,
+                'database' => 0,
+            ],
+        ],
+    ],
+],
+```
+
+
+
+
+
+
+<br>
 <a name="Use-Mongo"></a>
 ## Use Mongo
 
@@ -1606,6 +1644,22 @@ To install NPM VUE CLI in the Workspace container
 1 - Open the `.env` file
 
 2 - Search for the `WORKSPACE_INSTALL_NPM_VUE_CLI` argument under the Workspace Container and set it to `true`
+
+3 - Re-build the container `docker-compose build workspace`
+
+
+
+
+
+<br>
+<a name="Install-NPM-ANGULAR-CLI"></a>
+## Install NPM ANGULAR CLI
+
+To install NPM ANGULAR CLI in the Workspace container
+
+1 - Open the `.env` file
+
+2 - Search for the `WORKSPACE_INSTALL_NPM_ANGULAR_CLI` argument under the Workspace Container and set it to `true`
 
 3 - Re-build the container `docker-compose build workspace`
 
