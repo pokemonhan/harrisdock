@@ -132,7 +132,7 @@ services:
       build:
         context: ./workspace7
         args:
-          - LARADOCK_PHP_VERSION=${PHP_SECONDARY_VERSION}
+          - LARADOCK_PHP_VERSION=${PHP_TOM_BUDGET_VERSION}
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_SUBVERSION=${WORKSPACETOM_INSTALL_SUBVERSION}
           - INSTALL_XDEBUG=${WORKSPACETOM_INSTALL_XDEBUG}
@@ -355,7 +355,7 @@ services:
       build:
         context: ./php-fpm
         args:
-          - LARADOCK_PHP_VERSION=${PHP_SECONDARY_VERSION}
+          - LARADOCK_PHP_VERSION=${PHP_TOM_BUDGET_VERSION}
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_XDEBUG=${PHP_FPM_TOM_INSTALL_XDEBUG}
           - INSTALL_PHPDBG=${PHP_FPM_TOM_INSTALL_PHPDBG}
@@ -394,7 +394,7 @@ services:
           - INSTALL_ADDITIONAL_LOCALES=${PHP_FPM_TOM_INSTALL_ADDITIONAL_LOCALES}
           - ADDITIONAL_LOCALES=${PHP_FPM_TOM_ADDITIONAL_LOCALES}
       volumes:
-        - ./php-fpm/php${PHP_SECONDARY_VERSION}.ini:/usr/local/etc/php/php.ini
+        - ./php-fpm/php${PHP_TOM_BUDGET_VERSION}.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
       expose:
@@ -505,9 +505,9 @@ services:
   ### PHP Worker　parallel ############################################
     php-worker-tom:
       build:
-        context: ./php-worker7
+        context: ./php-worker-tom
         args:
-          - PHP_VERSION=${PHP_SECONDARY_VERSION}
+          - PHP_VERSION=${PHP_TOM_BUDGET_VERSION}
           - PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_PGSQL=${PHP_WORKER_TOM_INSTALL_PGSQL}
           - INSTALL_BCMATH=${PHP_WORKER_TOM_INSTALL_BCMATH}
@@ -522,7 +522,7 @@ services:
           - PGID=${PHP_WORKER_TOM_PGID}
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
-        - ./php-worker7/supervisord.d/tom:/etc/supervisord.d
+        - ./php-worker-tom/supervisord.d:/etc/supervisord.d
       depends_on:
         - workspace-tom
       extra_hosts:
