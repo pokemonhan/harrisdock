@@ -147,9 +147,9 @@ RUN echo "" >> ~/.bashrc && \
 # Crontab
 ###########################################################################
 
+#从外面编辑crontab 不需要拷贝到里面去执行
 USER root
-
-#COPY ./crontab /etc/cron.d   #从外面编辑crontab 不需要拷贝到里面去执行
+COPY ./crontab /etc/cron.d
 
 RUN chmod -R 644 /etc/cron.d
 
