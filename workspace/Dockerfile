@@ -155,6 +155,7 @@ RUN echo "" >> ~/.bashrc && \
 
 #从外面编辑crontab 不需要拷贝到里面去执行
 USER root
+
 COPY ./crontab /etc/cron.d
 
 RUN chmod -R 644 /etc/cron.d
@@ -293,6 +294,7 @@ ARG INSTALL_XDEBUG=false
 
 RUN if [ ${INSTALL_XDEBUG} = true ]; then \
     # Load the xdebug extension only with phpunit commands
+    apt-get update --fix-missing && \
     apt-get install -y php${LARADOCK_PHP_VERSION}-xdebug && \
     sed -i 's/^;//g' /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-xdebug.ini && \
     echo "alias phpunit='php -dzend_extension=xdebug.so /var/www/vendor/bin/phpunit'" >> ~/.bashrc \
