@@ -646,6 +646,33 @@ services:
       networks:
         - backend
 
+  ### PHP Worker 7.1 parallel ##################################
+    php-worker7:
+      build:
+        context: ./php-worker7
+        args:
+          - PHP_VERSION=${PHP_SECONDARY_VERSION}
+          - PHALCON_VERSION=${PHALCON_VERSION}
+          - INSTALL_PGSQL=${PHP_WORKER71_INSTALL_PGSQL}
+          - INSTALL_BCMATH=${PHP_WORKER71_INSTALL_BCMATH}
+          - INSTALL_PHALCON=${PHP_WORKER71_INSTALL_PHALCON}
+          - INSTALL_PHPREDIS=${PHP_WORKER71_INSTALL_PHPREDIS}
+          - INSTALL_SOAP=${PHP_WORKER71_INSTALL_SOAP}
+          - INSTALL_ZIP_ARCHIVE=${PHP_WORKER71_INSTALL_ZIP_ARCHIVE}
+          - INSTALL_MYSQL_CLIENT=${PHP_WORKER71_INSTALL_MYSQL_CLIENT}
+          - INSTALL_AMQP=${PHP_WORKER71_INSTALL_AMQP}
+          - PUID=${PHP_WORKER71_PUID}
+          - PGID=${PHP_WORKER71_PGID}
+      volumes:
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - ./php-worker7/supervisord.d/php71:/etc/supervisord.d
+      depends_on:
+        - workspace7
+      extra_hosts:
+        - "dockerhost:${DOCKER_HOST_IP}"
+      networks:
+        - backend
+
   ### PHP Worker　parallel ############################################
     php-worker-tom:
       build:
@@ -677,7 +704,7 @@ services:
   ### PHP Worker 72　parallel ############################################
     php-worker72:
       build:
-        context: ./php-worker72
+        context: ./php-worker7
         args:
           - PHP_VERSION=${PHP_THIRD_VERSION}
           - PHALCON_VERSION=${PHALCON_VERSION}
@@ -693,7 +720,7 @@ services:
           - PGID=${PHP_WORKER72_PGID}
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
-        - ./php-worker72/supervisord.d/php72:/etc/supervisord.d
+        - ./php-worker7/supervisord.d/php72:/etc/supervisord.d
       depends_on:
         - workspace72
       extra_hosts:
