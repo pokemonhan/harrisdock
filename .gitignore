@@ -11,3 +11,5 @@
 /nginx/ssl/*.crt
 /nginx/ssl/*.key
 /nginx/ssl/*.csr
+
+databases/*

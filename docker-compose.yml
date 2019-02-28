@@ -434,6 +434,70 @@ services:
       links:
         - docker-in-docker
 
+  ### PHP-FPM 5.6.40 latest ##############################################
+    php-fpm56:
+      build:
+        context: ./php-fpm56
+        args:
+          - LARADOCK_PHP_VERSION=${PHP_VERSION_5}
+          - PHP_VERSION_TAG=${PHP_VERSION_5_TAG}
+          - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
+          - INSTALL_XDEBUG=${PHP_FPM5_INSTALL_XDEBUG}
+          - INSTALL_PHPDBG=${PHP_FPM5_INSTALL_PHPDBG}
+          - INSTALL_BLACKFIRE=${INSTALL_BLACKFIRE}
+          - INSTALL_SSH2=${PHP_FPM5_INSTALL_SSH2}
+          - INSTALL_SOAP=${PHP_FPM5_INSTALL_SOAP}
+          - INSTALL_XSL=${PHP_FPM5_INSTALL_XSL}
+          - INSTALL_IMAP=${PHP_FPM5_INSTALL_IMAP}
+          - INSTALL_MONGO=${PHP_FPM5_INSTALL_MONGO}
+          - INSTALL_AMQP=${PHP_FPM5_INSTALL_AMQP}
+          - INSTALL_MSSQL=${PHP_FPM5_INSTALL_MSSQL}
+          - INSTALL_BCMATH=${PHP_FPM5_INSTALL_BCMATH}
+          - INSTALL_GMP=${PHP_FPM5_INSTALL_GMP}
+          - INSTALL_PHPREDIS=${PHP_FPM5_INSTALL_PHPREDIS}
+          - INSTALL_MEMCACHED=${PHP_FPM5_INSTALL_MEMCACHED}
+          - INSTALL_LGVRAND=${PHP_FPM5_INSTALL_LGVRAND}
+          - INSTALL_OPCACHE=${PHP_FPM5_INSTALL_OPCACHE}
+          - INSTALL_EXIF=${PHP_FPM5_INSTALL_EXIF}
+          - INSTALL_AEROSPIKE=${PHP_FPM5_INSTALL_AEROSPIKE}
+          - INSTALL_MYSQLI=${PHP_FPM5_INSTALL_MYSQLI}
+          - INSTALL_PGSQL=${PHP_FPM5_INSTALL_PGSQL}
+          - INSTALL_PG_CLIENT=${PHP_FPM5_INSTALL_PG_CLIENT}
+          - INSTALL_INTL=${PHP_FPM5_INSTALL_INTL}
+          - INSTALL_GHOSTSCRIPT=${PHP_FPM5_INSTALL_GHOSTSCRIPT}
+          - INSTALL_LDAP=${PHP_FPM5_INSTALL_LDAP}
+          - INSTALL_PHALCON=${PHP_FPM5_INSTALL_PHALCON}
+          - INSTALL_SWOOLE=${PHP_FPM5_INSTALL_SWOOLE}
+          - INSTALL_IMAGE_OPTIMIZERS=${PHP_FPM5_INSTALL_IMAGE_OPTIMIZERS}
+          - INSTALL_IMAGEMAGICK=${PHP_FPM5_INSTALL_IMAGEMAGICK}
+          - INSTALL_CALENDAR=${PHP_FPM5_INSTALL_CALENDAR}
+          - INSTALL_FAKETIME=${PHP_FPM5_INSTALL_FAKETIME}
+          - INSTALL_IONCUBE=${PHP_FPM5_INSTALL_IONCUBE}
+          - INSTALL_APCU=${PHP_FPM5_INSTALL_APCU}
+          - INSTALL_YAML=${PHP_FPM5_INSTALL_YAML}
+          - INSTALL_ADDITIONAL_LOCALES=${PHP_FPM5_INSTALL_ADDITIONAL_LOCALES}
+          - INSTALL_MYSQL_CLIENT=${PHP_FPM5_INSTALL_MYSQL_CLIENT}
+          - ADDITIONAL_LOCALES=${PHP_FPM5_ADDITIONAL_LOCALES}
+      volumes:
+        - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
+        - ./php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+      expose:
+        - "9000"
+      extra_hosts:
+        - "dockerhost:${DOCKER_HOST_IP}"
+        - "myxytt.com:${WEBSERVER_IP}"
+      environment:
+        - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
+        - DOCKER_HOST=tcp://docker-in-docker:2375
+        - FAKETIME=${PHP_FPM5_FAKETIME}
+      depends_on:
+        - workspace
+      networks:
+        - backend
+      links:
+        - docker-in-docker
+
   ### PHP-FPM  7.1 parallel usage ##############################################
     php-fpm7:
       build:
