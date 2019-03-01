@@ -1063,6 +1063,37 @@ services:
       networks:
         - backend
 
+  ### gray log ###############################################
+    graylog:
+      build:
+        context: ./graylog
+        args:
+          - GRAYLOG_TAG=${GRAYLOG_TAG}
+      environment:
+        GRAYLOG_PASSWORD_SECRET: somepasswordpepper
+        GRAYLOG_ROOT_PASSWORD_SHA2: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+        GRAYLOG_WEB_ENDPOINT_URI: http://127.0.0.1:${GRAYLOG_PORT}/api/
+      links:
+        - mongo:mongo
+#        - first mongo is from the above links the other mongo is from inside docker
+        - elasticsearch
+      depends_on:
+        - mongo
+        - elasticsearch
+      ports:
+        - "${GRAYLOG_PORT}:9000"
+        # Syslog TCP
+        - "${GRAYLOG_SYSTEMLOG_TCP_PORT}:514"
+        # Syslog UDP
+        - "${GRAYLOG_SYSTEMLOG_UDP_PORT}:514/udp"
+        # GELF TCP
+        - "${GRAYLOG_GELF_TCP_PORT}:12201"
+        # GELF UDP
+        - "${GRAYLOG_GELF_TCP_PORT}:12201/udp"
+      networks:
+        - frontend
+        - backend
+
 ### RethinkDB ##############################################
     rethinkdb:
       build: ./rethinkdb
@@ -1232,8 +1263,11 @@ services:
     elasticsearch:
       build: ./elasticsearch
       volumes:
-        - elasticsearch:/usr/share/elasticsearch/data
+        - ./elasticsearch:/usr/share/elasticsearch/data
       environment:
+        - http.host=0.0.0.0
+        - transport.host=localhost
+        - network.host=0.0.0.0
         - cluster.name=laradock-cluster
         - bootstrap.memory_lock=true
         - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
