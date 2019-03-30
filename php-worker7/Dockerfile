@@ -30,8 +30,11 @@ RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
 	if [ ${PHP_VERSION} = "7.2.16" ]; then \
 		docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
 		&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 && docker-php-ext-enable memcached \
+	;elif [ ${PHP_VERSION} = "7.3.3" ]; then \
+	  docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
+			&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 && docker-php-ext-enable memcached \
 	;else \
-#	$("echo This is, $PHP_VERSION") \
+	$("echo This is, $PHP_VERSION") \
     	docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
     	&& pecl channel-update pecl.php.net && pecl install memcached && docker-php-ext-enable memcached \
 	;fi \
@@ -122,6 +125,28 @@ RUN if [ $INSTALL_GHOSTSCRIPT = true ]; then \
 
 RUN rm /var/cache/apk/* \
     && mkdir -p /var/www
+
+
+###########################################################################
+# Swoole EXTENSION
+###########################################################################
+
+ARG INSTALL_SWOOLE=false
+
+RUN if [ ${INSTALL_SWOOLE} = true ]; then \
+    # Install Php Swoole Extension
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
+      pecl -q install swoole-2.0.10; \
+    else \
+      if [ $(php -r "echo PHP_MINOR_VERSION;") = "0" ]; then \
+        pecl install swoole-2.2.0; \
+      else \
+        pecl install swoole; \
+      fi \
+    fi \
+    && docker-php-ext-enable swoole \
+;fi
+
 
 #
 #--------------------------------------------------------------------------

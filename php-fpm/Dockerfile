@@ -315,15 +315,29 @@ RUN if [ ${INSTALL_GMP} = true ]; then \
 
 ARG INSTALL_MEMCACHED=false
 
+#https://launchpad.net/libmemcached
+#http://pecl.php.net/package/memcached
+#http://pecl.php.net/get/memcached-3.1.3.tgz
+COPY ./libmem/libmemcached-1.0.18.tar.gz /tmp/libmemcached-1.0.18.tar.gz
+
 RUN if [ ${INSTALL_MEMCACHED} = true ]; then \
     # Install the php memcached extension
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
       curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-memcached/archive/2.2.0.tar.gz"; \
     else \
-      curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-memcached/archive/php7.tar.gz"; \
+#    $(php --version | head -n 1 | cut -d " " -f 2 | cut -c 1,3) = "73"
+      curl -L -o /tmp/memcached.tar.gz "http://pecl.php.net/get/memcached-3.1.3.tgz"; \
     fi \
     && mkdir -p memcached \
+    && tar zxvf /tmp/libmemcached-1.0.18.tar.gz \
+    && mv libmemcached-1.0.18 libmemcached \
     && tar -C memcached -zxvf /tmp/memcached.tar.gz --strip 1 \
+    && ( \
+            cd libmemcached \
+            && ./configure --prefix=/usr/local/libmemcached --with-memcached \
+            && make \
+            && make install \
+        ) \
     && ( \
         cd memcached \
         && phpize \
