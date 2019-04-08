@@ -1036,12 +1036,14 @@ services:
             - c.fund.me
             - p.fund.me
             - admin.chunqiu.net
+            - local.multisites.com
         backend:
           aliases:
             - a.fund.me
             - c.fund.me
             - p.fund.me
             - admin.chunqiu.net
+            - local.multisites.com
 
 ### Blackfire ########################################
     blackfire:
