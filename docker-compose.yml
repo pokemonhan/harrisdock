@@ -1611,6 +1611,7 @@ services:
       volumes:
         - ${JENKINS_HOME}:/var/jenkins_home
         - /var/run/docker.sock:/var/run/docker.sock
+        - ${APP_CODE_PATH_HOST}:/var/jenkins_workspace
       networks:
         - frontend
         - backend
