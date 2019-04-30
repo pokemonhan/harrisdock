@@ -1,0 +1,2 @@
+* * * * * laradock php /var/www/multisites/artisan schedule:run >> /dev/null 2>&1
+
