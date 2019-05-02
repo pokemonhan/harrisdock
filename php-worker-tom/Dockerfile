@@ -105,21 +105,42 @@ RUN if [ ${INSTALL_AMQP} = true ]; then \
 ###########################################################################
 # Tom Swoole EXTENSION
 ###########################################################################
-ARG INSTALL_TOM_SWOOLE=false
+#ARG INSTALL_TOM_SWOOLE=false
+#COPY ./tom/swoole_loader71.so /tmp/swoole_loader71.so
+##COPY ./tom/swoole.ini /usr/local/etc/php/conf.d/docker-php-ext-swoole-loader71.ini
+#
+#RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
+#    # Install Tom Swoole Extension
+#    ls /tmp -la \
+#    && mv /tmp/swoole_loader71.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so \
+#    #&& ls $(php -r "echo ini_get('extension_dir');") -la \
+#    && docker-php-ext-enable swoole_loader71 \
+#    #&& ls /usr/local/etc/php/conf.d/ -la && cat /usr/local/etc/php/conf.d/docker-php-ext-swoole_loader71.ini \
+#    && rm -rf /tmp/swoole* \
+#;fi
 
-COPY ./tom/swoole_loader71.so /tmp/swoole_loader71.so
-#COPY ./tom/swoole.ini /usr/local/etc/php/conf.d/docker-php-ext-swoole-loader71.ini
+ARG INSTALL_TOM_SWOOLE=false
+ARG TOM_SWOOLE_ProjectName
+#ENV TOM_SWOOLE_ProjectName ${TOM_SWOOLE_ProjectName}
+ADD ./tom/* /tom/
+RUN chmod -R 777 /tom/
+#RUN echo ${TOM_SWOOLE_ProjectName}
+RUN ls -la /tom/*
 
 RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
     # Install Tom Swoole Extension
     ls /tmp -la \
-    && mv /tmp/swoole_loader71.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so \
-    #&& ls $(php -r "echo ini_get('extension_dir');") -la \
-    && docker-php-ext-enable swoole_loader71 \
-    #&& ls /usr/local/etc/php/conf.d/ -la && cat /usr/local/etc/php/conf.d/docker-php-ext-swoole_loader71.ini \
-    && rm -rf /tmp/swoole* \
+    if [ ${TOM_SWOOLE_ProjectName} = "redpacket" ]; then \
+      mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
+    else \
+      mv /tom/swoole_loader71.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
+    fi && \
+     docker-php-ext-enable swoole_loader71 \
+     && rm -rf /tom \
 ;fi
 
+RUN php -m
+#######################################################################################
 # Install Phalcon ext
 ARG INSTALL_PHALCON=false
 ARG PHALCON_VERSION

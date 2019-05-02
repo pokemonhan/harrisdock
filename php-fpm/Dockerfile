@@ -223,16 +223,24 @@ RUN if [ ${INSTALL_SWOOLE} = true ]; then \
 # Tom Swoole EXTENSION
 ###########################################################################
 ARG INSTALL_TOM_SWOOLE=false
-
-COPY ./tom/swoole_loader71.so /tmp/swoole_loader71.so
+ARG TOM_SWOOLE_ProjectName
+#ENV TOM_SWOOLE_ProjectName ${TOM_SWOOLE_ProjectName}
+ADD ./tom/* /tom/
+RUN chmod -R 777 /tom/
+#RUN echo ${TOM_SWOOLE_ProjectName}
+RUN ls -la /tom/*
 
 RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
     # Install Tom Swoole Extension
-    mv /tmp/swoole_loader71.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so \
-    && \
-        docker-php-ext-enable swoole_loader71 \
+    if [ ${TOM_SWOOLE_ProjectName} = "redpacket" ]; then \
+      mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
+    else \
+      mv /tom/swoole_loader71.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
+    fi && \
+     docker-php-ext-enable swoole_loader71 \
 ;fi
 
+RUN php -m
 ###########################################################################
 # MongoDB:
 ###########################################################################
