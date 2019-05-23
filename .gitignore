@@ -13,3 +13,4 @@
 /nginx/ssl/*.csr
 
 databases/*
+.DS_Store
