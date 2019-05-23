@@ -1,0 +1,8 @@
+#ARG GRAYLOG_TAG
+#FROM openproject/community:${GRAYLOG_TAG}
+FROM openproject/community:latest
+#latest
+LABEL maintainer="harris <harrisdt15f@gmail.com>"
+USER root
+RUN chown -R postgres:postgres /var/openproject/pgdata
+#EXPOSE 8083
