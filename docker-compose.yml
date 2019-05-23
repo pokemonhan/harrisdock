@@ -2324,6 +2324,8 @@ services:
         - SMTP_PORT=587
         - SMTP_USER="harrisdt15f@mail.com"
         - SMTP_PASSWORD=${MY_SMTP_PASSWORD}
+      volumes:
+        - ./redmine/datas:/usr/src/redmine/files
       ports:
         - 8084:3000
       networks:
