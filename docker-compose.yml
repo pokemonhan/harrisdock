@@ -1871,7 +1871,7 @@ services:
           gitlab_rails['smtp_enable'] = true
           gitlab_rails['smtp_address'] = "smtp.gmail.com"
           gitlab_rails['smtp_port'] = 587
-          gitlab_rails['smtp_user_name'] = "xuanwuharris@gmail.com"
+          gitlab_rails['smtp_user_name'] = "hahaxuanwu@gmail.com"
           gitlab_rails['smtp_password'] = "xu@nwuHarri5"
           gitlab_rails['smtp_domain'] = "smtp.gmail.com"
           gitlab_rails['smtp_authentication'] = "login"
