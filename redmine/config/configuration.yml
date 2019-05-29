@@ -8,18 +8,14 @@
 # DO NOT USE TABS! Use 2 spaces instead of tabs for indentation.
 
 # default configuration options for all environments
-production:
-  # Outgoing emails configuration
-  # See the examples below and the Rails guide for more configuration options:
-  # http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+default:
   email_delivery:
     delivery_method: :smtp
-      smtp_settings:
-        address: smtp.mail.com
-        port: 587
-        domain: mail.com
-        authentication: :plain
-        user_name: 'harrisdt15f@mail.com'
-        password: 'drt$10rs'
-        enable_starttls_auto: true
-        openssl_verify_mode: 'none'
+    smtp_settings:
+      enable_starttls_auto: true
+      address: "smtp.gmail.com"
+      port: 465
+      domain: "smtp.gmail.com"
+      authentication: :plain
+      user_name: "hahaxuanwu@gmail.com"
+      password: "xu@nwuHarri5"

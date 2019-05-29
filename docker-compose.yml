@@ -2375,7 +2375,7 @@ services:
         - REDMINE_DB_PORT=3306
       volumes:
         - ./redmine/datas:/usr/src/redmine/files
-#        - ./redmine/config/configuration.yml:/usr/src/redmine/config/configuration.yml
+        - ./redmine/config/configuration.yml:/usr/src/redmine/config/configuration.yml
       ports:
         - 8084:3000
       networks:
