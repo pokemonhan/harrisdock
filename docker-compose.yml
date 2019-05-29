@@ -45,7 +45,8 @@ volumes:
     driver: ${VOLUMES_DRIVER}
   sonarqube:
     driver: ${VOLUMES_DRIVER}
-
+  mongodbdata:
+    external: true
 services:
 
 ### Workspace Utilities ##################################
@@ -1295,7 +1296,9 @@ services:
       ports:
         - "${MONGODB_PORT}:27017"
       volumes:
-        - ${DATA_PATH_HOST}/mongo:/data/db
+        #- ${DATA_PATH_HOST}/mongo:/data/db
+         - "mongodbdata:/data/db"
+      #command: mongod --smallfiles --logpath=/dev/null
       networks:
         - backend
 
