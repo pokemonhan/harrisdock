@@ -394,6 +394,37 @@ Always download the latest version of [Loaders for ionCube ](http://www.ioncube.
 
 
 
+<br>
+<a name="Install-SonarQube"></a>
+
+## Install SonarQube (automatic code review tool)
+SonarQube® is an automatic code review tool to detect bugs, vulnerabilities and code smells in your code. It can integrate with your existing workflow to enable continuous code inspection across your project branches and pull requests.  
+<br>
+1 - Open the `.env` file  
+<br>
+2 - Search for the `SONARQUBE_HOSTNAME=sonar.example.com` argument  
+<br>
+3 - Set it to your-domain `sonar.example.com`  
+<br>
+4 - `docker-compose up -d sonarqube`  
+<br>
+5 - Open your browser: http://localhost:9000/
+
+Troubleshooting:  
+
+if you encounter a database error:
+```
+docker-compose exec --user=root postgres 
+source docker-entrypoint-initdb.d/init_sonarqube_db.sh
+```
+
+If you encounter logs error:
+```
+docker-compose run --user=root --rm sonarqube chown sonarqube:sonarqube /opt/sonarqube/logs 
+```
+[**SonarQube Documentation Here**](https://docs.sonarqube.org/latest/)
+
+
 
 
 
@@ -409,7 +440,9 @@ Always download the latest version of [Loaders for ionCube ](http://www.ioncube.
 <a name="Laradock-for-Production"></a>
 ## Prepare Laradock for Production
 
-It's recommended for production to create a custom `docker-compose.yml` file. For that reason, Laradock is shipped with `production-docker-compose.yml` which should contain only the containers you are planning to run on production (usage example: `docker-compose -f production-docker-compose.yml up -d nginx mysql redis ...`).
+It's recommended for production to create a custom `docker-compose.yml` file, for example `production-docker-compose.yml`
+
+In your new production `docker-compose.yml` file you should contain only the containers you are planning to run in production (usage example: `docker-compose -f production-docker-compose.yml up -d nginx mysql redis ...`).
 
 Note: The Database (MySQL/MariaDB/...) ports should not be forwarded on production, because Docker will automatically publish the port on the host, which is quite insecure, unless specifically told not to. So make sure to remove these lines:
 
