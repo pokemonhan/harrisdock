@@ -285,7 +285,7 @@ ARG INSTALL_XHPROF=false
 RUN if [ ${INSTALL_XHPROF} = true ]; then \
     # Install the php xhprof extension 
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = 7 ]; then \
-      curl -L -o /tmp/xhprof.tar.gz "https://github.com/tideways/php-xhprof-extension/archive/v4.1.6.tar.gz"; \
+      curl -L -o /tmp/xhprof.tar.gz "https://github.com/tideways/php-xhprof-extension/archive/v4.1.7.tar.gz"; \
     else \ 
       curl -L -o /tmp/xhprof.tar.gz "https://codeload.github.com/phacility/xhprof/tar.gz/master"; \
     fi \
@@ -303,6 +303,10 @@ RUN if [ ${INSTALL_XHPROF} = true ]; then \
 ;fi
 
 COPY ./xhprof.ini /usr/local/etc/php/conf.d
+
+RUN if [ ${INSTALL_XHPROF} = false ]; then \
+    rm /usr/local/etc/php/conf.d/xhprof.ini \
+;fi
 
 ###########################################################################
 # AMQP:
@@ -610,7 +614,6 @@ ARG INSTALL_IMAP=false
 
 RUN if [ ${INSTALL_IMAP} = true ]; then \
     apt-get install -y libc-client-dev libkrb5-dev && \
-    rm -r /var/lib/apt/lists/* && \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
     docker-php-ext-install imap \
 ;fi
