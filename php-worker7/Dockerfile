@@ -30,7 +30,7 @@ RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
 	if [ ${PHP_VERSION} = "7.2.20" ]; then \
 		docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
 		&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 && docker-php-ext-enable memcached \
-	;elif [ ${PHP_VERSION} = "7.3.7" ]; then \
+	;elif [ ${PHP_VERSION} = "7.3.8" ]; then \
 	  docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
 			&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 && docker-php-ext-enable memcached \
 	;else \

@@ -1051,8 +1051,7 @@ services:
         - "dockerhost:${DOCKER_HOST_IP}"
       networks:
         - backend
-
-      ### Laravel Horizon ############################################
+### Laravel Horizon ############################################
     laravel-horizon:
       build:
         context: ./laravel-horizon
@@ -1338,38 +1337,6 @@ services:
         #- ${DATA_PATH_HOST}/mongo:/data/db
          - "mongodbdata:/data/db"
       #command: mongod --smallfiles --logpath=/dev/null
-      networks:
-        - backend
-
-  ### gray log ###############################################
-    graylog:
-      build:
-        context: ./graylog
-        args:
-          - GRAYLOG_TAG=${GRAYLOG_TAG}
-      environment:
-        GRAYLOG_PASSWORD_SECRET: somepasswordpepper
-        GRAYLOG_ROOT_PASSWORD_SHA2: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
-        GRAYLOG_HTTP_EXTERNAL_URI: http://127.0.0.1:${GRAYLOG_PORT}/api/
-#      volumes:
-#          - ./graylog/config/graylog.conf:/usr/share/graylog/data/config/graylog.conf
-      links:
-        - mongo:mongo
-#        - first mongo is from the above links the other mongo is from inside docker
-        - elasticsearch
-      depends_on:
-        - mongo
-        - elasticsearch
-      ports:
-        - "${GRAYLOG_PORT}:9000"
-        # Syslog TCP
-        - "${GRAYLOG_SYSTEMLOG_TCP_PORT}:514"
-        # Syslog UDP
-        - "${GRAYLOG_SYSTEMLOG_UDP_PORT}:514/udp"
-        # GELF TCP
-        - "${GRAYLOG_GELF_TCP_PORT}:12201"
-        # GELF UDP
-        - "${GRAYLOG_GELF_TCP_PORT}:12201/udp"
       networks:
         - frontend
         - backend
@@ -1750,7 +1717,10 @@ services:
 
 ### Graylog #######################################
     graylog:
-        build: ./graylog
+        build:
+          context: ./graylog
+          args:
+              - GRAYLOG_TAG=${GRAYLOG_TAG}
         environment:
           - GRAYLOG_PASSWORD_SECRET=${GRAYLOG_PASSWORD}
           - GRAYLOG_ROOT_PASSWORD_SHA2=${GRAYLOG_SHA256_PASSWORD}
@@ -1776,6 +1746,7 @@ services:
         volumes:
           - ./graylog/config:/usr/share/graylog/data/config
         networks:
+          - frontend
           - backend
 
 ### Laravel Echo Server #######################################
