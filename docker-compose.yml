@@ -477,6 +477,9 @@ services:
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "myxytt.com:${WEBSERVER_IP}"
+        - "local.multisites.frontend:${DOCKER_HOST_IP}"
+        - "local.multisites.backend:${DOCKER_HOST_IP}"
+        - "local.multisites.com:${DOCKER_HOST_IP}"
       ports:
         - "${WORKSPACE73_SSH_PORT}:22"
       tty: true
@@ -1101,19 +1104,14 @@ services:
       networks:
         frontend:
           aliases:
-            - a.fund.me
-            - c.fund.me
-            - p.fund.me
+            - local.multisites.frontend
+            - local.multisites.backend
             - admin.chunqiu.net
             - local.multisites.com
         backend:
           aliases:
-            - a.fund.me
-            - c.fund.me
-            - p.fund.me
-            - admin.chunqiu.net
             - local.multisites.com
-
+            - admin.chunqiu.net
 ### Blackfire ########################################
     blackfire:
       image: blackfire/blackfire
