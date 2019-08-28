@@ -388,15 +388,15 @@ RUN if [ ${INSTALL_MEMCACHED} = true ]; then \
       curl -L -o /tmp/memcached.tar.gz "http://pecl.php.net/get/memcached-3.1.3.tgz"; \
     fi \
     && mkdir -p memcached \
-    && tar zxvf /tmp/libmemcached-1.0.18.tar.gz \
-    && mv libmemcached-1.0.18 libmemcached \
+#    && tar zxvf /tmp/libmemcached-1.0.18.tar.gz \
+#    && mv libmemcached-1.0.18 libmemcached \
     && tar -C memcached -zxvf /tmp/memcached.tar.gz --strip 1 \
-    && ( \
-            cd libmemcached \
-            && ./configure --prefix=/usr/local/libmemcached --with-memcached \
-            && make \
-            && make install \
-        ) \
+#    && ( \
+#            cd libmemcached \
+#            && ./configure --prefix=/usr/local/libmemcached --with-memcached \
+#            && make \
+#            && make install \
+#        ) \
     && ( \
         cd memcached \
         && phpize \
