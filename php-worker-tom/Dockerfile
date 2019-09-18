@@ -24,17 +24,22 @@ RUN apk --update add wget \
   supervisor
 
 RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
+       $("echo This is 5, $PHP_VERSION") \
        docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
         && pecl channel-update pecl.php.net && pecl install memcached-2.2.0 && docker-php-ext-enable memcached \
-;else \
-	if [ ${PHP_VERSION} = "7.2.14" ]; then \
+#;else \
+	;elif [ ${PHP_VERSION} = "7.2.22" ]; then \
+	  $("echo This is 7.2, $PHP_VERSION") \
 		docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
 		&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 && docker-php-ext-enable memcached \
+		;elif [ ${PHP_VERSION} = "7.3.9" ]; then \
+    	  $("echo This is 7.3, $PHP_VERSION") \
+    		docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
+    		&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 && docker-php-ext-enable memcached \
 	;else \
-#	$("echo This is, $PHP_VERSION") \
+	    $("echo This is other, $PHP_VERSION") \
     	docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
     	&& pecl channel-update pecl.php.net && pecl install memcached && docker-php-ext-enable memcached \
-	;fi \
 ;fi
 
 # Add a non-root user:
