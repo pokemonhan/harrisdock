@@ -134,7 +134,7 @@ RUN ls -la /tom/*
 
 RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
     # Install Tom Swoole Extension
-    ls /tmp -la \
+    ls /tmp -la && \
     if [ $TOM_SWOOLE_ProjectName = "xuanwu" ]; then \
       echo "i am at xuanwu clause"; \
       mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
