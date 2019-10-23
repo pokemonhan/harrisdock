@@ -26,20 +26,20 @@ RUN apk --update add wget \
 RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
        $("echo This is 5, $PHP_VERSION") \
        docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
-        && pecl channel-update pecl.php.net && pecl install memcached-2.2.0 && docker-php-ext-enable memcached \
+        && pecl channel-update pecl.php.net && pecl install memcached-2.2.0 mongodb && docker-php-ext-enable memcached mongodb \
 #;else \
 	;elif [ ${PHP_VERSION} = "7.2.22" ]; then \
 	  $("echo This is 7.2, $PHP_VERSION") \
 		docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
-		&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 && docker-php-ext-enable memcached \
-		;elif [ ${PHP_VERSION} = "7.3.9" ]; then \
+		&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 mongodb && docker-php-ext-enable memcached mongodb \
+		;elif [ ${PHP_VERSION} = "7.3.10" ]; then \
     	  $("echo This is 7.3, $PHP_VERSION") \
     		docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
-    		&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 && docker-php-ext-enable memcached \
+    		&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 mongodb && docker-php-ext-enable memcached mongodb \
 	;else \
 	    $("echo This is other, $PHP_VERSION") \
     	docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
-    	&& pecl channel-update pecl.php.net && pecl install memcached && docker-php-ext-enable memcached \
+    	&& pecl channel-update pecl.php.net && pecl install memcached mongodb && docker-php-ext-enable memcached mongodb \
 ;fi
 
 # Add a non-root user:
@@ -97,6 +97,12 @@ RUN if [ ${INSTALL_MYSQL_CLIENT} = true ]; then \
     apk --update add mysql-client \
 ;fi
 
+# Install FFMPEG:
+ARG INSTALL_FFMPEG=false
+RUN if [ ${INSTALL_FFMPEG} = true ]; then \
+    apk --update add ffmpeg \
+;fi
+
 # Install AMQP:
 ARG INSTALL_AMQP=false
 
@@ -105,6 +111,33 @@ RUN if [ ${INSTALL_AMQP} = true ]; then \
     pecl install amqp && \
     docker-php-ext-enable amqp && \
     docker-php-ext-install sockets \
+;fi
+
+# Install Gearman:
+ARG INSTALL_GEARMAN=false
+
+RUN if [ ${INSTALL_GEARMAN} = true ]; then \
+    docker-php-ext-install gearman \
+;fi
+
+# Install Cassandra drivers:
+ARG INSTALL_CASSANDRA=false
+RUN if [ ${INSTALL_CASSANDRA} = true ]; then \
+  apk --update add cassandra-cpp-driver \
+  ;fi
+
+WORKDIR /usr/src
+RUN if [ ${INSTALL_CASSANDRA} = true ]; then \
+  git clone https://github.com/datastax/php-driver.git \
+  && cd php-driver/ext \
+  && phpize \
+  && mkdir -p /usr/src/php-driver/build \
+  && cd /usr/src/php-driver/build \
+  && ../ext/configure --with-php-config=/usr/bin/php-config7.1 > /dev/null \
+  && make clean >/dev/null \
+  && make >/dev/null 2>&1 \
+  && make install \
+  && docker-php-ext-enable cassandra \
 ;fi
 
 ###########################################################################
@@ -169,9 +202,21 @@ RUN if [ $INSTALL_GHOSTSCRIPT = true ]; then \
     apk --update add ghostscript \
 ;fi
 
-RUN rm /var/cache/apk/* \
-    && mkdir -p /var/www
+#Install GMP package:
+ARG INSTALL_GMP=false
+RUN if [ ${INSTALL_GMP} = true ]; then \
+   apk add --update --no-cache gmp gmp-dev \
+   && docker-php-ext-install gmp \
+;fi
 
+# Install Redis package:
+ARG INSTALL_REDIS=false
+RUN if [ ${INSTALL_REDIS} = true ]; then \
+    # Install Redis Extension
+    printf "\n" | pecl install -o -f redis \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable redis \
+;fi
 
 ###########################################################################
 # Swoole EXTENSION
@@ -193,6 +238,19 @@ RUN if [ ${INSTALL_SWOOLE} = true ]; then \
     && docker-php-ext-enable swoole \
 ;fi
 
+###########################################################################
+# Taint EXTENSION
+###########################################################################
+
+ARG INSTALL_TAINT=false
+
+RUN if [ ${INSTALL_TAINT} = true ]; then \
+    # Install Php TAINT Extension
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
+      pecl install taint; \
+    fi && \
+    docker-php-ext-enable taint \
+;fi
 
 #
 #--------------------------------------------------------------------------
@@ -229,5 +287,9 @@ RUN php -v | head -n 1 | grep -q "PHP ${PHP_VERSION}."
 # Final Touch
 #--------------------------------------------------------------------------
 #
+
+# Clean up
+RUN rm /var/cache/apk/* \
+    && mkdir -p /var/www
 
 WORKDIR /etc/supervisor/conf.d/

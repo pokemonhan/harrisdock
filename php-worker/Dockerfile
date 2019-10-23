@@ -27,11 +27,11 @@ RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
        docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
         && pecl channel-update pecl.php.net && pecl install memcached-2.2.0 mongodb && docker-php-ext-enable memcached mongodb \
 ;else \
-	if [ ${PHP_VERSION} = "7.2.14" ]; then \
+	if [ ${PHP_VERSION} = "7.2.22" ]; then \
 		docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
 		&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 mongodb && docker-php-ext-enable memcached mongodb \
 	;else \
-#	$("echo This is, $PHP_VERSION") \
+	$("echo This is, $PHP_VERSION") \
     	docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
     	&& pecl channel-update pecl.php.net && pecl install memcached mongodb && docker-php-ext-enable memcached mongodb \
 	;fi \
