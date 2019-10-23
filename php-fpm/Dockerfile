@@ -14,8 +14,7 @@
 
 ARG LARADOCK_PHP_VERSION
 
-# FROM laradock/php-fpm:2.2-${LARADOCK_PHP_VERSION}
-FROM letsdockerize/laradock-php-fpm:2.4.1-${LARADOCK_PHP_VERSION}
+FROM laradock/php-fpm:2.5-${LARADOCK_PHP_VERSION}
 
 LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
 
@@ -23,6 +22,12 @@ ARG LARADOCK_PHP_VERSION
 
 # Set Environment Variables
 ENV DEBIAN_FRONTEND noninteractive
+
+ARG CHANGE_SOURCE=false
+RUN if [ ${CHANGE_SOURCE} = true ]; then \
+    # Change application source from deb.debian.org to aliyun source
+    sed -i 's/deb.debian.org/mirrors.aliyun.com/' /etc/apt/sources.list \
+;fi
 
 # always run apt update when start and after add new source list, then clean up at end.
 RUN set -xe; \
@@ -193,14 +198,18 @@ RUN if [ ${INSTALL_XDEBUG} = false -a ${INSTALL_BLACKFIRE} = true ]; then \
 # PHP REDIS EXTENSION
 ###########################################################################
 
-#ARG INSTALL_PHPREDIS=false
-#
-#RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
-#    # Install Php Redis Extension
-#    printf "\n" | pecl install -o -f redis \
-#    &&  rm -rf /tmp/pear \
-#    &&  docker-php-ext-enable redis \
-#;fi
+ARG INSTALL_PHPREDIS=false
+
+RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
+    # Install Php Redis Extension
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
+      printf "\n" |pecl install -o -f redis-4.3.0; \
+    else \
+      printf "\n" |pecl install -o -f redis; \
+    fi \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable redis \
+;fi
 
 ###########################################################################
 # Swoole EXTENSION
@@ -340,6 +349,30 @@ RUN if [ ${INSTALL_AMQP} = true ]; then \
 ;fi
 
 ###########################################################################
+# GEARMAN:
+###########################################################################
+
+ARG INSTALL_GEARMAN=false
+
+RUN if [ ${INSTALL_GEARMAN} = true ]; then \
+    apt-get update && \
+    apt-get -y install libgearman-dev && \
+    cd /tmp && \
+    curl -L https://github.com/wcgallego/pecl-gearman/archive/gearman-2.0.5.zip -O && \
+    unzip gearman-2.0.5.zip && \
+    mv pecl-gearman-gearman-2.0.5 pecl-gearman && \
+    cd /tmp/pecl-gearman && \
+    phpize && \
+    ./configure && \
+    make -j$(nproc) && \
+    make install && \
+    cd / && \
+    rm /tmp/gearman-2.0.5.zip && \
+    rm -r /tmp/pecl-gearman && \
+    docker-php-ext-enable gearman \
+;fi
+
+###########################################################################
 # pcntl
 ###########################################################################
 
@@ -389,30 +422,10 @@ COPY ./libmem/libmemcached-1.0.18.tar.gz /tmp/libmemcached-1.0.18.tar.gz
 RUN if [ ${INSTALL_MEMCACHED} = true ]; then \
     # Install the php memcached extension
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
-      curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-memcached/archive/2.2.0.tar.gz"; \
+      pecl install memcached-2.2.0; \
     else \
-#    $(php --version | head -n 1 | cut -d " " -f 2 | cut -c 1,3) = "73"
-      curl -L -o /tmp/memcached.tar.gz "http://pecl.php.net/get/memcached-3.1.3.tgz"; \
+      pecl install memcached-3.1.3; \
     fi \
-    && mkdir -p memcached \
-#    && tar zxvf /tmp/libmemcached-1.0.18.tar.gz \
-#    && mv libmemcached-1.0.18 libmemcached \
-    && tar -C memcached -zxvf /tmp/memcached.tar.gz --strip 1 \
-#    && ( \
-#            cd libmemcached \
-#            && ./configure --prefix=/usr/local/libmemcached --with-memcached \
-#            && make \
-#            && make install \
-#        ) \
-    && ( \
-        cd memcached \
-        && phpize \
-        && ./configure \
-        && make -j$(nproc) \
-        && make install \
-    ) \
-    && rm -r memcached \
-    && rm /tmp/memcached.tar.gz \
     && docker-php-ext-enable memcached \
 ;fi
 
@@ -770,6 +783,19 @@ ARG INSTALL_FFMPEG=false
 RUN if [ ${INSTALL_FFMPEG} = true ]; then \
     apt-get update -yqq && \
     apt-get -y install ffmpeg \
+;fi
+
+###########################################################################
+# Mailparse extension:
+###########################################################################
+
+ARG INSTALL_MAILPARSE=false
+
+RUN if [ ${INSTALL_MAILPARSE} = true ]; then \
+    # Install mailparse extension
+    printf "\n" | pecl install -o -f mailparse \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable mailparse \
 ;fi
 
 ###########################################################################

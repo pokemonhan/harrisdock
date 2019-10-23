@@ -108,6 +108,13 @@ RUN if [ ${INSTALL_AMQP} = true ]; then \
     docker-php-ext-install sockets \
 ;fi
 
+# Install Gearman:
+ARG INSTALL_GEARMAN=false
+
+RUN if [ ${INSTALL_GEARMAN} = true ]; then \
+    docker-php-ext-install gearman \
+;fi
+
 # Install Cassandra drivers:
 ARG INSTALL_CASSANDRA=false
 RUN if [ ${INSTALL_CASSANDRA} = true ]; then \
@@ -153,10 +160,14 @@ RUN if [ ${INSTALL_GMP} = true ]; then \
    && docker-php-ext-install gmp \
 ;fi
 
-
-RUN rm /var/cache/apk/* \
-    && mkdir -p /var/www
-
+# Install Redis package:
+ARG INSTALL_REDIS=false
+RUN if [ ${INSTALL_REDIS} = true ]; then \
+    # Install Redis Extension
+    printf "\n" | pecl install -o -f redis \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable redis \
+;fi
 
 ###########################################################################
 # Swoole EXTENSION
@@ -227,5 +238,9 @@ RUN php -v | head -n 1 | grep -q "PHP ${PHP_VERSION}."
 # Final Touch
 #--------------------------------------------------------------------------
 #
+
+# Clean up
+RUN rm /var/cache/apk/* \
+    && mkdir -p /var/www
 
 WORKDIR /etc/supervisor/conf.d/

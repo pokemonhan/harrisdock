@@ -14,8 +14,7 @@
 
 ARG LARADOCK_PHP_VERSION
 
-# FROM laradock/workspace:2.2-${LARADOCK_PHP_VERSION}
-FROM letsdockerize/laradock-workspace:2.4-${LARADOCK_PHP_VERSION}
+FROM laradock/workspace:2.5-${LARADOCK_PHP_VERSION}
 
 LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
 
@@ -437,6 +436,18 @@ RUN if [ ${INSTALL_CASSANDRA} = true ]; then \
     make install && \
     echo "extension=cassandra.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/cassandra.ini && \
     ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/cassandra.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/30-cassandra.ini \
+;fi
+
+###########################################################################
+# Gearman:
+###########################################################################
+
+ARG INSTALL_GEARMAN=false
+
+RUN if [ ${INSTALL_GEARMAN} = true ]; then \
+    add-apt-repository -y ppa:ondrej/pkg-gearman && \
+    apt-get update && \
+    apt-get install php-gearman -y  \
 ;fi
 
 ###########################################################################
@@ -1088,6 +1099,16 @@ ARG INSTALL_FFMPEG=false
 
 RUN if [ ${INSTALL_FFMPEG} = true ]; then \
   apt-get -y install ffmpeg \
+;fi
+
+###########################################################################
+# Mailparse extension:
+###########################################################################
+
+ARG INSTALL_MAILPARSE=false
+
+RUN if [ ${INSTALL_MAILPARSE} = true ]; then \
+    apt-get install -yqq php-mailparse \
 ;fi
 
 ###########################################################################
