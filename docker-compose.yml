@@ -2641,3 +2641,15 @@ services:
         - postgres
       volumes:
         - ${DATA_PATH_HOST}/Confluence:/var/atlassian/application-data
+
+  ### yapi 接口管理服务器 ########################################
+    yapi:
+      build:
+        context: ./yapi
+      ports:
+          - 8090:3000
+      volumes:
+        - ./yapi/config/config.js:/yapi/config.js
+        - ./logs/yapi/:/yapi/log
+      networks:
+        - frontend
