@@ -13,4 +13,7 @@
 /nginx/ssl/*.csr
 
 databases/*
+/.devcontainer/*
+!/.devcontainer/devcontainer.example.json
+
 .DS_Store
