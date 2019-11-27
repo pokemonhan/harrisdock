@@ -20,6 +20,15 @@ RUN groupadd -g ${gid} ${group} \
 # can be persisted and survive image upgrades
 VOLUME /var/jenkins_home
 
+###########################################################################
+# Set Timezone
+###########################################################################
+
+ARG TZ=UTC
+ENV TZ ${TZ}
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # `/usr/share/jenkins/ref/` contains all reference configuration we want 
 # to set on a fresh new installation. Use it to bundle additional plugins 
 # or config file with your custom jenkins Docker image.
@@ -36,11 +45,11 @@ COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groov
 
 # jenkins version being bundled in this docker image
 ARG JENKINS_VERSION
-ENV JENKINS_VERSION ${JENKINS_VERSION:-2.89.2}
-
+ENV JENKINS_VERSION ${JENKINS_VERSION:-2.204}
+#https://updates.jenkins-ci.org/download/war/
 # jenkins.war checksum, download will be validated using it
 # 2.89.2
-ARG JENKINS_SHA=014f669f32bc6e925e926e260503670b32662f006799b133a031a70a794c8a14
+ARG JENKINS_SHA=cebd93d4f15b8827bf1caab3865396f81a47be0f4393586d74809e2bf1524432
 
 
 # Can be used to customize where jenkins.war get downloaded from

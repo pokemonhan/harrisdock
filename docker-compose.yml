@@ -1843,7 +1843,8 @@ services:
     jenkins:
       build: ./jenkins
       environment:
-        JAVA_OPTS: "-Djava.awt.headless=true"
+        - JAVA_OPTS="-Djava.awt.headless=true"
+        - TZ=${JENKINS_TIMEZONE}
       ports:
         - "${JENKINS_HOST_SLAVE_AGENT_PORT}:50000"
         - "${JENKINS_HOST_HTTP_PORT}:8080"
@@ -2105,6 +2106,7 @@ services:
         - ${DATA_PATH_HOST}/gitlab/config:/etc/gitlab
         - ${DATA_PATH_HOST}/gitlab/data:/var/opt/gitlab
         - ${GITLAB_HOST_LOG_PATH}:/var/log/gitlab
+        - ${APP_CODE_PATH_HOST}:/var/www
       ports:
         - "${GITLAB_HOST_HTTP_PORT}:80"
         - "${GITLAB_HOST_HTTPS_PORT}:443"
@@ -2591,11 +2593,12 @@ services:
       build:
         context: ./redmine
       environment:
-        - REDMINE_DB_MYSQL=mysql5
-        - REDMINE_DB_USERNAME=root
-        - REDMINE_DB_PASSWORD=root
-        - REDMINE_DB_DATABASE=redmine
-        - REDMINE_DB_PORT=3306
+        - REDMINE_DB_MYSQL=${REDMINE_DB_HOST}
+        - REDMINE_DB_USERNAME=${REDMINE_DB_USERNAME}
+        - REDMINE_DB_PASSWORD=${REDMINE_DB_PASSWORD}
+        - REDMINE_DB_DATABASE=${REDMINE_DB_NAME}
+        - REDMINE_DB_PORT=${REDMINE_DB_PORT}
+        - TZ=${REDMINE_TIMEZONE}
       volumes:
         - ./redmine/datas:/usr/src/redmine/files
         - ./redmine/config/configuration.yml:/usr/src/redmine/config/configuration.yml
