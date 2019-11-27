@@ -76,7 +76,7 @@ docker-compose exec mysql bash
 *Example: enter to MySQL prompt within MySQL container*
 
 ```bash
-docker-compose exec mysql mysql -u homestead -psecret
+docker-compose exec mysql mysql -udefault -psecret
 ```
 
 3 - To exit a container, type `exit`.
@@ -1575,7 +1575,7 @@ The default username and password for the root MySQL user are `root` and `root `
 
 1 - Enter the MySQL container: `docker-compose exec mysql bash`.
 
-2 - Enter mysql: `mysql -uroot -proot` for non root access use `mysql -uhomestead -psecret`.
+2 - Enter mysql: `mysql -uroot -proot` for non root access use `mysql -udefault -psecret`.
 
 3 - See all users: `SELECT User FROM mysql.user;`
 
@@ -1859,6 +1859,27 @@ To install GNU Parallel in the Workspace container
 2 - Search for the `WORKSPACE_INSTALL_GNU_PARALLEL` argument under the Workspace Container and set it to `true`
 
 3 - Re-build the container `docker-compose build workspace`
+
+
+
+
+
+
+<br>
+<a name="Install-Supervisor"></a>
+## Install Supervisor
+
+Supervisor is a client/server system that allows its users to monitor and control a number of processes on UNIX-like operating systems.
+
+(see http://supervisord.org/index.html)
+
+To install Supervisor in the Workspace container
+
+1 - Open the `.env` file
+
+2 - Set `WORKSPACE_INSTALL_SUPERVISOR` and `WORKSPACE_INSTALL_PYTHON` to `true`.
+
+3 - Re-build the container `docker-compose build workspace` Or `docker-composer up --build -d workspace` 
 
 
 
