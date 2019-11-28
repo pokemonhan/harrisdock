@@ -1426,6 +1426,7 @@ services:
         - POSTGRES_CONFLUENCE_DB=${CONFLUENCE_POSTGRES_DB}
         - POSTGRES_CONFLUENCE_USER=${CONFLUENCE_POSTGRES_USER}
         - POSTGRES_CONFLUENCE_PASSWORD=${CONFLUENCE_POSTGRES_PASSWORD}
+#        - PGDATA="/tmp"
       networks:
         - backend
 
@@ -2573,31 +2574,30 @@ services:
     openproject:
       build:
         context: ./openproject
-#        args:
-#          - GRAYLOG_TAG=${GRAYLOG_TAG}
-      links:
-        - "mysql5:db"
-#      environment:
-#          - DATABASE\_URL="mysql2://root:root@10.0.75.1:3308/openproject"
-#          - SECRET_KEY_BASE=secret
-#          - EMAIL_DELIVERY_METHOD="smtp"
-#          - SMTP_ADDRESS="smtp.mail.com"
-#          - SMTP_PORT="587"
-#          - SMTP_DOMAIN="mail.com"
-#          - SMTP_AUTHENTICATION="plain"
-#          - SMTP_USER_NAME="harrisdt15f@mail.com"
-#          - SMTP_PASSWORD=${MY_SMTP_PASSWORD}
-#          - SMTP_ENABLE_STARTTLS_AUTO="true"
+      environment:
+       - SECRET_KEY_BASE="secret"
+       - EMAIL_DELIVERY_METHOD="smtp"
+       - SMTP_ADDRESS="smtp.mail.com"
+       - SMTP_PORT=587
+       - SMTP_DOMAIN="mail.com"
+       - SMTP_AUTHENTICATION=login
+       - SMTP_ENABLE_STARTTLS_AUTO=true
+       - SMTP_USER_NAME="harrisdt15f@mail.com"
+       - SMTP_PASSWORD=${MY_SMTP_PASSWORD}
+#           - DATABASE_URL="jdbc:mysql://root:root@10.10.50.117:3307/openproject"
+#       - DATABASE_URL=postgresql://default:secret@openprojectdb:${OPENPROJ_POSTGRES_PORT}/openproject
       ports:
         - 8083:80
+        - 5432:5432
       volumes:
-#        - ./databases/openproject/static:/var/openproject/assets
-        - ./openproject/config:/var/config
-        - ./databases/openproject/files:/home/openproject/openproject/files
-#        - ./databases/openproject/logs:/var/log/supervisor
+        - ./databases/openproject/static:/var/openproject/assets
 #        - ./databases/openproject/pgdata:/var/openproject/pgdata
+#        - ./openproject/config:/var/config
+#        - ./databases/openproject/files:/home/openproject/openproject/files
+#        - ./databases/openproject/logs:/var/log/supervisor
+#      links:
+#        - openProjectPostgres:openprojectdb
       networks:
-        - frontend
         - backend
 
   ### redmine ###############[https://hub.docker.com/_/redmine/]#########################
