@@ -21,6 +21,10 @@ volumes:
     driver: ${VOLUMES_DRIVER}
   redis:
     driver: ${VOLUMES_DRIVER}
+  redis-test:
+    driver: ${VOLUMES_DRIVER}
+  redis-kaifa:
+    driver: ${VOLUMES_DRIVER}
   neo4j:
     driver: ${VOLUMES_DRIVER}
   mariadb:
@@ -1491,7 +1495,24 @@ services:
         - "${REDIS_PORT}:6379"
       networks:
         - backend
-
+  ### Redis-kaifa ################################################
+    redis-kaifa:
+      build: ./redis
+      volumes:
+        - ${DATA_PATH_HOST}/redis_kaifa:/data
+      ports:
+        - "${REDIS_KAIFA_PORT}:6379"
+      networks:
+        - backend
+### Redis-test ################################################
+    redis-test:
+      build: ./redis
+      volumes:
+        - ${DATA_PATH_HOST}/redis_test:/data
+      ports:
+        - "${REDIS_TEST_PORT}:6379"
+      networks:
+        - backend
 ### Redis Cluster ##########################################
     redis-cluster:
       build: ./redis-cluster
