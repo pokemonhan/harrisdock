@@ -146,7 +146,7 @@ services:
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
 #        - ${WORKSPACE_CRON_PATH}:/etc/cron.d
-        - ./php-worker/supervisord.d:/etc/supervisord.d
+        - ./php-worker/supervisord.d/php56:/etc/supervisord.d
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "myxytt.com:${WEBSERVER_IP}"
@@ -249,7 +249,7 @@ services:
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         #        - ${WORKSPACE_CRON_PATH}:/etc/cron.d
-        - ./php-worker/supervisord.d:/etc/supervisord.d
+        - ./php-worker/supervisord.d/php71:/etc/supervisord.d
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "myxytt.com:${WEBSERVER_IP}"
@@ -354,7 +354,7 @@ services:
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         #        - ${WORKSPACE_CRON_PATH}:/etc/cron.d
-        - ./php-worker/supervisord.d:/etc/supervisord.d
+        - ./php-worker/supervisord.d/phptom:/etc/supervisord.d
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "myxytt.com:${WEBSERVER_IP}"
@@ -457,7 +457,7 @@ services:
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         #        - ${WORKSPACE_CRON_PATH}:/etc/cron.d
-        - ./php-worker/supervisord.d:/etc/supervisord.d
+        - ./php-worker/supervisord.d/php72:/etc/supervisord.d
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "myxytt.com:${WEBSERVER_IP}"
@@ -560,7 +560,7 @@ services:
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         #        - ${WORKSPACE_CRON_PATH}:/etc/cron.d
-        - ./php-worker/supervisord.d:/etc/supervisord.d
+        - ./php-worker/supervisord.d/php73:/etc/supervisord.d
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "myxytt.com:${WEBSERVER_IP}"
@@ -1101,8 +1101,9 @@ services:
   ### PHP Worker 7.1 parallel ##################################
     php-worker7:
       build:
-        context: ./php-worker7
+        context: ./php-worker
         args:
+          - CHANGE_SOURCE=${CHANGE_SOURCE}
           - PHP_VERSION=${PHP_SECONDARY_VERSION}
           - PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_PGSQL=${PHP_WORKER71_INSTALL_PGSQL}
@@ -1125,7 +1126,7 @@ services:
           - PGID=${PHP_WORKER71_PGID}
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
-        - ./php-worker7/supervisord.d/php71:/etc/supervisord.d
+        - ./php-worker/supervisord.d/php71:/etc/supervisord.d
       depends_on:
         - workspace7
       extra_hosts:
@@ -1136,8 +1137,9 @@ services:
   ### PHP Worker　parallel ############################################
     php-worker-tom:
       build:
-        context: ./php-worker-tom
+        context: ./php-worker
         args:
+          - CHANGE_SOURCE=${CHANGE_SOURCE}
           - PHP_VERSION=${PHP_TOM_BUDGET_VERSION}
           - PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_PGSQL=${PHP_WORKER_TOM_INSTALL_PGSQL}
@@ -1162,7 +1164,7 @@ services:
           - PGID=${PHP_WORKER_TOM_PGID}
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
-        - ./php-worker-tom/supervisord.d:/etc/supervisord.d
+        - ./php-worker/supervisord.d/phptom:/etc/supervisord.d
       depends_on:
         - workspace-tom
       extra_hosts:
@@ -1173,8 +1175,9 @@ services:
   ### PHP Worker 72　parallel ############################################
     php-worker72:
       build:
-        context: ./php-worker7
+        context: ./php-worker
         args:
+          - CHANGE_SOURCE=${CHANGE_SOURCE}
           - PHP_VERSION=${PHP_THIRD_VERSION}
           - PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_PGSQL=${PHP_WORKER72_INSTALL_PGSQL}
@@ -1197,7 +1200,7 @@ services:
           - PGID=${PHP_WORKER72_PGID}
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
-        - ./php-worker7/supervisord.d/php72:/etc/supervisord.d
+        - ./php-worker/supervisord.d/php72:/etc/supervisord.d
       depends_on:
         - workspace72
       extra_hosts:
@@ -1208,8 +1211,9 @@ services:
   ### PHP Worker 73　parallel ############################################
     php-worker73:
       build:
-        context: ./php-worker7
+        context: ./php-worker
         args:
+          - CHANGE_SOURCE=${CHANGE_SOURCE}
           - PHP_VERSION=${PHP_73_VERSION}
           - PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_PGSQL=${PHP_WORKER73_INSTALL_PGSQL}
@@ -1232,7 +1236,7 @@ services:
           - PGID=${PHP_WORKER73_PGID}
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
-        - ./php-worker7/supervisord.d/php73:/etc/supervisord.d
+        - ./php-worker/supervisord.d/php73:/etc/supervisord.d
       depends_on:
         - workspace73
       extra_hosts:
@@ -1240,7 +1244,7 @@ services:
       networks:
         - backend
 
-### Laravel Horizon ############################################
+  ### Laravel Horizon ############################################
     laravel-horizon:
       build:
         context: ./laravel-horizon

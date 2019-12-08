@@ -32,17 +32,22 @@ RUN apk --update add wget \
   supervisor
 
 RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
+       $("echo This is 5, $PHP_VERSION") \
        docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
         && pecl channel-update pecl.php.net && pecl install memcached-2.2.0 mongodb && docker-php-ext-enable memcached mongodb \
-;else \
-	if [ ${PHP_VERSION} = "7.2.22" ]; then \
+#;else \
+	;elif [ ${PHP_VERSION} = "7.2.25" ]; then \
+	  $("echo This is 7.2, $PHP_VERSION") \
 		docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
 		&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 mongodb && docker-php-ext-enable memcached mongodb \
+	;elif [ ${PHP_VERSION} = "7.3.12" ]; then \
+    	  $("echo This is 7.3, $PHP_VERSION") \
+    		docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
+    		&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 mongodb && docker-php-ext-enable memcached mongodb \
 	;else \
-	$("echo This is, $PHP_VERSION") \
+	    $("echo This is other, $PHP_VERSION") \
     	docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
     	&& pecl channel-update pecl.php.net && pecl install memcached mongodb && docker-php-ext-enable memcached mongodb \
-	;fi \
 ;fi
 
 # Add a non-root user:
@@ -147,6 +152,53 @@ RUN if [ ${INSTALL_CASSANDRA} = true ]; then \
   && docker-php-ext-enable cassandra \
 ;fi
 
+###########################################################################
+# Tom Swoole EXTENSION
+###########################################################################
+#ARG INSTALL_TOM_SWOOLE=false
+#COPY ./tom/swoole_loader71.so /tmp/swoole_loader71.so
+##COPY ./tom/swoole.ini /usr/local/etc/php/conf.d/docker-php-ext-swoole-loader71.ini
+#
+#RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
+#    # Install Tom Swoole Extension
+#    ls /tmp -la \
+#    && mv /tmp/swoole_loader71.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so \
+#    #&& ls $(php -r "echo ini_get('extension_dir');") -la \
+#    && docker-php-ext-enable swoole_loader71 \
+#    #&& ls /usr/local/etc/php/conf.d/ -la && cat /usr/local/etc/php/conf.d/docker-php-ext-swoole_loader71.ini \
+#    && rm -rf /tmp/swoole* \
+#;fi
+
+ARG INSTALL_TOM_SWOOLE=false
+ARG TOM_SWOOLE_ProjectName
+#ENV TOM_SWOOLE_ProjectName ${TOM_SWOOLE_ProjectName}
+ADD ./tom/* /tom/
+RUN chmod -R 777 /tom/
+#RUN echo ${TOM_SWOOLE_ProjectName}
+RUN ls -la /tom/*
+
+RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
+    # Install Tom Swoole Extension
+    ls /tmp -la && \
+    if [ $TOM_SWOOLE_ProjectName = "xuanwu" ]; then \
+      echo "i am at xuanwu clause"; \
+      mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
+    elif [ $TOM_SWOOLE_ProjectName = "redpacket" ]; then \
+      echo "i am at redpacket clause"; \
+      mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
+    elif [ $TOM_SWOOLE_ProjectName = "jianghu" ]; then \
+          echo "i am at jianghu clause"; \
+          mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
+    else \
+      echo "i am at other clause"; \
+      mv /tom/swoole_loader71.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
+    fi && \
+     docker-php-ext-enable swoole_loader71 \
+     && rm -rf /tom \
+;fi
+
+RUN php -m
+#######################################################################################
 # Install Phalcon ext
 ARG INSTALL_PHALCON=false
 ARG PHALCON_VERSION
