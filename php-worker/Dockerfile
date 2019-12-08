@@ -36,18 +36,20 @@ RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
        docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
         && pecl channel-update pecl.php.net && pecl install memcached-2.2.0 mongodb && docker-php-ext-enable memcached mongodb \
 #;else \
-	;elif [ ${PHP_VERSION} = "7.2.25" ]; then \
-	  $("echo This is 7.2, $PHP_VERSION") \
-		docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
-		&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 mongodb && docker-php-ext-enable memcached mongodb \
-	;elif [ ${PHP_VERSION} = "7.3.12" ]; then \
-    	  $("echo This is 7.3, $PHP_VERSION") \
-    		docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
-    		&& pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 mongodb && docker-php-ext-enable memcached mongodb \
-	;else \
-	    $("echo This is other, $PHP_VERSION") \
-    	docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
-    	&& pecl channel-update pecl.php.net && pecl install memcached mongodb && docker-php-ext-enable memcached mongodb \
+  ;elif [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
+      php_minor_version=$(php -r "echo PHP_MINOR_VERSION ;");\
+       case "$php_minor_version" in \
+          "2"|"3") \
+          echo $PHP_VERSION;\
+          docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
+          && pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.3 mongodb && docker-php-ext-enable memcached mongodb \
+          ;; \
+          *)\
+          echo "here is in default clause $PHP_VERSION";\
+          docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
+          && pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 mongodb && docker-php-ext-enable memcached mongodb \
+          ;; \
+       esac\
 ;fi
 
 # Add a non-root user:
