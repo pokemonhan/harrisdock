@@ -519,6 +519,32 @@ RUN if [ "${INSTALL_TAINT}" = true ]; then \
 ;fi
 
 ###########################################################################
+# Tom Swoole EXTENSION
+###########################################################################
+ARG INSTALL_TOM_SWOOLE=false
+ARG TOM_SWOOLE_ProjectName
+#ENV TOM_SWOOLE_ProjectName ${TOM_SWOOLE_ProjectName}
+COPY ./tom/* /tom/
+RUN chmod -R 777 /tom/
+RUN ls -la /tom/*
+
+RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
+    # Install Tom Swoole Extension
+    if [ $TOM_SWOOLE_ProjectName = "xuanwu" ]; then \
+      mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
+    elif [ $TOM_SWOOLE_ProjectName = "redpacket" ]; then \
+      mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
+    elif [ $TOM_SWOOLE_ProjectName = "jianghu" ]; then \
+      mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
+    else \
+      mv /tom/swoole_loader71.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
+    fi \
+    && echo "extension=swoole_loader71.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/swoole.ini \
+#    && rm -rf /tmp/* \
+    && ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/swoole.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/18-swoole.ini \
+;fi
+RUN php -m
+###########################################################################
 # Libpng16 EXTENSION
 ###########################################################################
 
@@ -613,6 +639,7 @@ ARG INSTALL_NPM_GULP=false
 ARG INSTALL_NPM_BOWER=false
 ARG INSTALL_NPM_VUE_CLI=false
 ARG INSTALL_NPM_ANGULAR_CLI=false
+ARG INSTALL_NPM_PM2=false
 ARG NPM_REGISTRY
 ENV NPM_REGISTRY ${NPM_REGISTRY}
 ENV NVM_DIR /home/laradock/.nvm
@@ -641,6 +668,9 @@ RUN if [ ${INSTALL_NODE} = true ]; then \
         ;fi \
         && if [ ${INSTALL_NPM_ANGULAR_CLI} = true ]; then \
         npm install -g @angular/cli \
+        ;fi \
+        && if [ ${INSTALL_NPM_PM2} = true ]; then \
+        npm install -g pm2 \
         ;fi \
         && ln -s `npm bin --global` /home/laradock/.node-bin \
 ;fi
