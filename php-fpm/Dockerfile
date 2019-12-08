@@ -266,20 +266,9 @@ RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
     echo $TOM_SWOOLE_ProjectName;\
     ls -la /tom/*; \
     # Install Tom Swoole Extension
-    if [ $TOM_SWOOLE_ProjectName = "xuanwu" ]; then \
-          echo "i am at xuanwu clause"; \
-          mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
-    elif [ $TOM_SWOOLE_ProjectName = "redpacket" ]; then \
-          echo "i am at redpacket clause"; \
-          mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
-    elif [ $TOM_SWOOLE_ProjectName = "jianghu" ]; then \
-              echo "i am at jianghu clause"; \
-          mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
-    else \
-        echo "i am at other clause"; \
-        mv /tom/swoole_loader71.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
-    fi && \
-     docker-php-ext-enable swoole_loader71 \
+    echo "i am at ${TOM_SWOOLE_ProjectName} clause"; \
+    mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
+    docker-php-ext-enable swoole_loader71 \
 ;fi
 
 RUN php -m

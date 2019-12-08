@@ -530,16 +530,9 @@ RUN ls -la /tom/*
 
 RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
     # Install Tom Swoole Extension
-    if [ $TOM_SWOOLE_ProjectName = "xuanwu" ]; then \
-      mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
-    elif [ $TOM_SWOOLE_ProjectName = "redpacket" ]; then \
-      mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
-    elif [ $TOM_SWOOLE_ProjectName = "jianghu" ]; then \
-      mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
-    else \
-      mv /tom/swoole_loader71.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
-    fi \
-    && echo "extension=swoole_loader71.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/swoole.ini \
+    echo "i am at ${TOM_SWOOLE_ProjectName} clause"; \
+    mv /tom/${TOM_SWOOLE_ProjectName}*.so $(php -r "echo ini_get('extension_dir');")/swoole_loader71.so; \
+    echo "extension=swoole_loader71.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/swoole.ini \
 #    && rm -rf /tmp/* \
     && ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/swoole.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/18-swoole.ini \
 ;fi
