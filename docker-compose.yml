@@ -1946,6 +1946,8 @@ services:
     jenkins:
       build: ./jenkins
       environment:
+        - CHANGE_SOURCE=${CHANGE_SOURCE}
+        - UBUNTU_SOURCE=${UBUNTU_SOURCE}
         - JAVA_OPTS="-Djava.awt.headless=true"
         - TZ=${JENKINS_TIMEZONE}
       ports:
