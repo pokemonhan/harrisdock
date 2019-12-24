@@ -1,0 +1,9 @@
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.sendgrid.net"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "apikey"
+gitlab_rails['smtp_password'] = "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"
+gitlab_rails['smtp_domain'] = "smtp.sendgrid.net"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
