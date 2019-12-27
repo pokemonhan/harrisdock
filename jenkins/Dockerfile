@@ -10,23 +10,6 @@ ARG group=jenkins
 ARG uid=1000
 ARG gid=1000
 
-# If you're in China, or you need to change sources, will be set CHANGE_SOURCE to true in .env.
-
-ARG CHANGE_SOURCE=false
-RUN if [ ${CHANGE_SOURCE} = true ]; then \
-    # Change application source from deb.debian.org to aliyun source
-    sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list && \
-    sed -i 's/security.debian.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list && \
-    sed -i 's/security-cdn.debian.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list \
-;fi
-
-ARG UBUNTU_SOURCE
-COPY ./sources.sh /tmp/sources.sh
-
-RUN if [ ${CHANGE_SOURCE} = true ]; then \
-    /bin/sh -c /tmp/sources.sh && \
-    rm -rf /tmp/sources.sh \
-;fi
 # Jenkins is run with user `jenkins`, uid = 1000
 # If you bind mount a volume from the host or a data container, 
 # ensure you use the same uid
@@ -62,11 +45,11 @@ COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groov
 
 # jenkins version being bundled in this docker image
 ARG JENKINS_VERSION
-ENV JENKINS_VERSION ${JENKINS_VERSION:-2.209}
+ENV JENKINS_VERSION ${JENKINS_VERSION:-2.210}
 #https://updates.jenkins-ci.org/download/war/
 # jenkins.war checksum, download will be validated using it
 # origin 2.89.2 current 2.209
-ARG JENKINS_SHA=ee4857a5d9221b5046d9533f4f134a997034fd8907b0a9788734a48c859d2319
+ARG JENKINS_SHA=693d692bc4485d6f18d0579f93d6430e4ccd34dcb1972e7059fd1dd590e1ddb7
 
 
 # Can be used to customize where jenkins.war get downloaded from
