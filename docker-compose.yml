@@ -907,7 +907,7 @@ services:
           - INSTALL_XHPROF=${PHP_FPM_TOM_INSTALL_XHPROF}
           - PUID=${PHP_FPM_TOM_PUID}
           - PGID=${PHP_FPM_TOM_PGID}
-          - LOCALE=${PHP_FPM_DEFAULT_LOCALE}
+          - LOCALE=${PHP_FPM_TOM_DEFAULT_LOCALE}
           - http_proxy
           - https_proxy
           - no_proxy
@@ -993,7 +993,7 @@ services:
           - INSTALL_XHPROF=${PHP_FPM72P_INSTALL_XHPROF}
           - PUID=${PHP_FPM72P_PUID}
           - PGID=${PHP_FPM72P_PGID}
-          - LOCALE=${PHP_FPM_DEFAULT_LOCALE}
+          - LOCALE=${PHP_FPM72P_DEFAULT_LOCALE}
           - http_proxy
           - https_proxy
           - no_proxy
@@ -1079,7 +1079,7 @@ services:
           - INSTALL_XHPROF=${PHP_FPM73_INSTALL_XHPROF}
           - PUID=${PHP_FPM73_PUID}
           - PGID=${PHP_FPM73_PGID}
-          - LOCALE=${PHP_FPM_DEFAULT_LOCALE}
+          - LOCALE=${PHP_FPM73_DEFAULT_LOCALE}
           - http_proxy
           - https_proxy
           - no_proxy
@@ -1105,7 +1105,6 @@ services:
         - backend
       links:
         - docker-in-docker
-
 
   ### PHP Worker ############################################
     php-worker:

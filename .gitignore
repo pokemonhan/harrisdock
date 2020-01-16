@@ -18,3 +18,7 @@ databases/*
 !/.devcontainer/docker-compose.extend-example.yml
 
 .DS_Store
+
+redmine/datas/*
+
+workspace/cronlog/
