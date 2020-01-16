@@ -29,6 +29,7 @@ RUN apk --update add wget \
   autoconf \
   cyrus-sasl-dev \
   libgsasl-dev \
+  oniguruma-dev \
   supervisor
 
 RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
@@ -208,6 +209,7 @@ RUN if [ $INSTALL_PHALCON = true ]; then \
     && rm -rf /tmp/cphalcon* \
 ;fi
 
+ARG INSTALL_GHOSTSCRIPT=false
 RUN if [ $INSTALL_GHOSTSCRIPT = true ]; then \
     apk --update add ghostscript \
 ;fi
