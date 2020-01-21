@@ -194,8 +194,11 @@ RUN echo "" >> ~/.bashrc && \
 #从外面编辑crontab 不需要拷贝到里面去执行
 USER root
 
-COPY ./crontab /etc/cron.d
+#COPY ./crontab /etc/cron.d
 
+COPY ./crontab/v${LARADOCK_PHP_VERSION} /etc/cron.d
+
+RUN cat /etc/cron.d/laradock
 RUN chmod -R 644 /etc/cron.d
 
 ###########################################################################
@@ -1085,16 +1088,17 @@ RUN if [ ${INSTALL_POWERLINE} = true ]; then \
 # SUPERVISOR:
 ###########################################################################
 ARG INSTALL_SUPERVISOR=false
-
+COPY supervisord.conf /etc/supervisord.conf
 RUN if [ ${INSTALL_SUPERVISOR} = true ]; then \
     if [ ${INSTALL_PYTHON} = true ]; then \
-    python -m pip install --upgrade supervisor && \
-    echo_supervisord_conf > /etc/supervisord.conf && \
-    sed -i 's/\;\[include\]/\[include\]/g' /etc/supervisord.conf && \
-    sed -i 's/\;files\s.*/files = supervisord.d\/*.conf/g' /etc/supervisord.conf \
+    python -m pip install --upgrade supervisor \
+#    python -m pip install --upgrade supervisor && \
+#    echo_supervisord_conf > /etc/supervisord.conf && \
+#    sed -i 's/\;\[include\]/\[include\]/g' /etc/supervisord.conf && \
+#    sed -i 's/\;files\s.*/files = supervisord.d\/*.conf/g' /etc/supervisord.conf \
   ;fi \
 ;fi
-
+ENTRYPOINT ["supervisord", "-n", "-c",  "/etc/supervisord.conf"]
 USER laradock
 
 ###########################################################################
