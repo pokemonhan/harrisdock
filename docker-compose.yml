@@ -368,6 +368,7 @@ services:
           - no_proxy
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - ./workspace/ssh_req/vTom/known_hosts:/root/.ssh/known_hosts
         #        - ${WORKSPACE_CRON_PATH}:/etc/cron.d
         - ./php-worker/supervisord.d/phptom:/etc/supervisord.d
       extra_hosts:
@@ -379,6 +380,7 @@ services:
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
         - DOCKER_HOST=tcp://docker-in-docker:2375
+#      command: ["supervisord","-n", "/etc/supervisord.conf"]
       networks:
         - frontend
         - backend

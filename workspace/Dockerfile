@@ -1098,7 +1098,7 @@ RUN if [ ${INSTALL_SUPERVISOR} = true ]; then \
 #    sed -i 's/\;files\s.*/files = supervisord.d\/*.conf/g' /etc/supervisord.conf \
   ;fi \
 ;fi
-ENTRYPOINT ["supervisord", "-n", "-c",  "/etc/supervisord.conf"]
+#ENTRYPOINT ["supervisord", "-n", "-c",  "/etc/supervisord.conf"]
 USER laradock
 
 ###########################################################################
