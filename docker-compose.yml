@@ -590,10 +590,6 @@ services:
         - ./php-worker/supervisord.d/php73:/etc/supervisord.d
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
-        - "myxytt.com:${WEBSERVER_IP}"
-        - "local.multisites.frontend:${DOCKER_HOST_IP}"
-        - "local.multisites.backend:${DOCKER_HOST_IP}"
-        - "local.multisites.com:${DOCKER_HOST_IP}"
       ports:
         - "${WORKSPACE73_SSH_PORT}:22"
       tty: true
@@ -1093,10 +1089,6 @@ services:
         - "9000"
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
-        - "myxytt.com:${WEBSERVER_IP}"
-        - "local.multisites.frontend:${DOCKER_HOST_IP}"
-        - "local.multisites.backend:${DOCKER_HOST_IP}"
-        - "local.multisites.com:${DOCKER_HOST_IP}"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
         - DOCKER_HOST=tcp://docker-in-docker:2375
@@ -1344,20 +1336,15 @@ services:
 #        - php-fpm7
 #        - php-fpm72
         - php-fpm73
-#      extra_hosts:
-#        - "dockerhost:${DOCKER_HOST_IP}"
-#        - "local.multisites.frontend:${DOCKER_HOST_IP}"
+      extra_hosts:
+        - "dockerhost:${DOCKER_HOST_IP}"
+        - "api.jianghu.me:${DOCKER_HOST_IP}"
 #        - "local.multisites.backend:${DOCKER_HOST_IP}"
 #        - "local.multisites.com:${DOCKER_HOST_IP}"
       networks:
-        frontend:
-          aliases:
-            - local.multisites.frontend
-            - local.multisites.backend
-            - admin.chunqiu.net
         backend:
           aliases:
-            - local.multisites.com
+            - api.jianghu.me
             - admin.chunqiu.net
 ### Blackfire ########################################
     blackfire:
