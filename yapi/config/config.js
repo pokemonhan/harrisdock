@@ -5,7 +5,7 @@ module.exports = {
     // MongoDB 数据库配置
     db: {
         // MongoDB 所在服务器
-        servername: 'mongo',//yapi-mongo 172.19.0.1
+        servername: '172.19.0.1',//yapi-mongo 172.19.0.1 mongo
         // MongoDB 端口
         port: 27017,
         // YApi 使用的数据库名称
