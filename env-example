@@ -251,6 +251,7 @@ NGINX_SSL_PATH=./nginx/ssl/
 ### LARAVEL_HORIZON ################################################
 
 LARAVEL_HORIZON_INSTALL_SOCKETS=false
+LARAVEL_HORIZON_INSTALL_YAML=false
 LARAVEL_HORIZON_INSTALL_PHPREDIS=true
 LARAVEL_HORIZON_INSTALL_MONGO=false
 LARAVEL_HORIZON_INSTALL_FFMPEG=false
@@ -849,3 +850,6 @@ GEARMAN_MYSQL_PASSWORD_FILE=
 GEARMAN_MYSQL_DB=Gearmand
 # Table to use by Gearman (Default: gearman_queue)
 GEARMAN_MYSQL_TABLE=gearman_queue
+
+### ELK Stack ##################################################
+ELK_VERSION=7.5.1
