@@ -22,3 +22,5 @@ databases/*
 redmine/datas/*
 
 workspace/cronlog/
+
+nginx/bots.d/
