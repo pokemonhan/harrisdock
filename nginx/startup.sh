@@ -9,5 +9,9 @@ fi
 # Start crond in background
 crond -l 2 -b
 
+yes |./usr/local/sbin/setup-ngxblocker; \
+yes |./usr/local/sbin/setup-ngxblocker -x -e conf; \
+./usr/local/sbin/setup-ngxblocker -x; \
+nginx -t;
 # Start nginx in foreground
 nginx

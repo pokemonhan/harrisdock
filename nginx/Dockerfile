@@ -41,4 +41,16 @@ ADD ./startup.sh /opt/startup.sh
 RUN sed -i 's/\r//g' /opt/startup.sh
 CMD ["/bin/bash", "/opt/startup.sh"]
 
+############## Install nginx-ultimate-bad-bot-blocker ##################################
+USER root
+RUN apk get update; \
+    apk add curl wget; \
+    mkdir -m 777 -p "/usr/local/sbin";
+
+RUN wget https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/install-ngxblocker -O /usr/local/sbin/install-ngxblocker; \
+    chmod +x /usr/local/sbin/install-ngxblocker;\
+    ./usr/local/sbin/install-ngxblocker; \
+    ./usr/local/sbin/install-ngxblocker -x; \
+    chmod +x -R /usr/local/sbin;
+############## Install nginx-ultimate-bad-bot-blocker finished ############################
 EXPOSE 80 81 443
