@@ -53,4 +53,15 @@ RUN wget https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot
     ./usr/local/sbin/install-ngxblocker -x; \
     chmod +x -R /usr/local/sbin;
 ############## Install nginx-ultimate-bad-bot-blocker finished ############################
+#for test if it is alreay installed correctly
+#for normal request
+#curl -A "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.96 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" -I http://api.jianghu.me/
+#curl -A "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)" -I http://api.jianghu.me/
+#curl -I http://api.jianghu.me/
+
+#for test abnormal request
+#curl -A "Xenu Link Sleuth/1.3.8" -I http://api.jianghu.me/
+#curl -A "Mozilla/5.0 (compatible; AhrefsBot/5.2; +http://ahrefs.com/robot/)" -I http://api.jianghu.me/
+#curl -I http://api.jianghu.me/ -e http://100dollars-seo.com
+
 EXPOSE 80 81 443
