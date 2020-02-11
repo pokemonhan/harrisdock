@@ -1,0 +1,31 @@
+#MyGithub
+Host github.com
+FingerprintHash md5
+User git
+HostName github.com
+PubkeyAuthentication yes
+IdentityFile ~/.ssh/github/id_rsa
+
+# ed night pj
+Host bitbucket.org
+FingerprintHash md5
+User git
+HostName bitbucket.org
+PubkeyAuthentication yes
+IdentityFile ~/.ssh/bitbucket/id_rsa
+
+#chunqiu pj
+Host gitlab.year.bet
+FingerprintHash md5
+User git
+HostName gitlab.year.bet
+PubkeyAuthentication yes
+IdentityFile ~/.ssh/chunqiu/id_rsa
+
+#chenxing pj
+Host gitlab.cssunions.com
+FingerprintHash md5
+User git
+HostName gitlab.cssunions.com
+PubkeyAuthentication yes
+IdentityFile ~/.ssh/chunqiu/id_rsa
