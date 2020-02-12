@@ -13,7 +13,6 @@
 #
 
 ARG LARADOCK_PHP_VERSION
-
 FROM laradock/workspace:2.6.1-${LARADOCK_PHP_VERSION}
 
 LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
@@ -235,6 +234,15 @@ ARG INSTALL_WP_CLI=false
 RUN if [ ${INSTALL_WP_CLI} = true ]; then \
     curl -fsSL -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar | bash && \
     chmod +x /usr/local/bin/wp \
+;fi
+
+###########################################################################
+# BZ2:
+###########################################################################
+
+ARG INSTALL_BZ2=false
+RUN if [ ${INSTALL_BZ2} = true ]; then \
+  apt-get -y install php${LARADOCK_PHP_VERSION}-bz2 \
 ;fi
 
 ###########################################################################
@@ -1286,6 +1294,19 @@ RUN if [ ${INSTALL_GNU_PARALLEL} = true ]; then \
   apt-get -y install parallel \
 ;fi
 
+###########################################################################
+# Bash Git Prompt
+###########################################################################
+
+ARG INSTALL_GIT_PROMPT=false
+
+COPY git-prompt.sh /tmp/git-prompt
+
+RUN if [ ${INSTALL_GIT_PROMPT} = true ]; then \
+    git clone https://github.com/magicmonty/bash-git-prompt.git /root/.bash-git-prompt --depth=1 && \
+    cat /tmp/git-prompt >> /root/.bashrc && \
+    rm /tmp/git-prompt \
+;fi
 
 ###########################################################################
 # Check PHP version:
