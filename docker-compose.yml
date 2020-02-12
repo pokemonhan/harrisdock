@@ -1257,7 +1257,7 @@ services:
         context: ./php-worker
         args:
           - CHANGE_SOURCE=${CHANGE_SOURCE}
-          - PHP_VERSION=${PHP_73_VERSION}
+          - LARADOCK_PHP_VERSION=${PHP_73_VERSION}
           - PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_PGSQL=${PHP_WORKER73_INSTALL_PGSQL}
           - INSTALL_BCMATH=${PHP_WORKER73_INSTALL_BCMATH}
