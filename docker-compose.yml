@@ -186,12 +186,13 @@ services:
           - LARADOCK_PHP_VERSION=${PHP_SECONDARY_VERSION}
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_SUBVERSION=${WORKSPACE71_INSTALL_SUBVERSION}
+          - INSTALL_BZ2=${WORKSPACE71_INSTALL_BZ2}
+          - INSTALL_GMP=${WORKSPACE71_INSTALL_GMP}
           - INSTALL_XDEBUG=${WORKSPACE71_INSTALL_XDEBUG}
           - INSTALL_PCOV=${WORKSPACE71_INSTALL_PCOV}
           - INSTALL_PHPDBG=${WORKSPACE71_INSTALL_PHPDBG}
           - INSTALL_BLACKFIRE=${INSTALL_BLACKFIRE}
           - INSTALL_SSH2=${WORKSPACE71_INSTALL_SSH2}
-          - INSTALL_GMP=${WORKSPACE71_INSTALL_GMP}
           - INSTALL_SOAP=${WORKSPACE71_INSTALL_SOAP}
           - INSTALL_XSL=${WORKSPACE71_INSTALL_XSL}
           - INSTALL_LDAP=${WORKSPACE71_INSTALL_LDAP}
@@ -248,6 +249,7 @@ services:
           - INSTALL_AST=${WORKSPACE71_INSTALL_AST}
           - INSTALL_YAML=${WORKSPACE71_INSTALL_YAML}
           - INSTALL_MAILPARSE=${WORKSPACE71_INSTALL_MAILPARSE}
+          - INSTALL_GIT_PROMPT=${WORKSPACE71_INSTALL_GIT_PROMPT}
           - PUID=${WORKSPACE71_PUID}
           - PGID=${WORKSPACE71_PGID}
           - CHROME_DRIVER_VERSION=${WORKSPACE71_CHROME_DRIVER_VERSION}
@@ -261,6 +263,7 @@ services:
           - INSTALL_POWERLINE=${WORKSPACE71_INSTALL_POWERLINE}
           - INSTALL_SUPERVISOR=${WORKSPACE71_INSTALL_SUPERVISOR}
           - INSTALL_FFMPEG=${WORKSPACE71_INSTALL_FFMPEG}
+          - INSTALL_WKHTMLTOPDF=${WORKSPACE71_INSTALL_WKHTMLTOPDF}
           - INSTALL_GNU_PARALLEL=${WORKSPACE71_INSTALL_GNU_PARALLEL}
           - http_proxy
           - https_proxy
@@ -268,16 +271,22 @@ services:
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         #        - ${WORKSPACE_CRON_PATH}:/etc/cron.d
+        - docker-in-docker:/certs/client
         - ./php-worker/supervisord.d/php71:/etc/supervisord.d
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "myxytt.com:${WEBSERVER_IP}"
       ports:
         - "${WORKSPACE71_SSH_PORT}:22"
+        - "${WORKSPACE71_VUE_CLI_SERVE_HOST_PORT}:8080"
+        - "${WORKSPACE71_VUE_CLI_UI_HOST_PORT}:8000"
       tty: true
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
-        - DOCKER_HOST=tcp://docker-in-docker:2375
+        - DOCKER_HOST=tcp://docker-in-docker:2376
+        - DOCKER_TLS_VERIFY=1
+        - DOCKER_TLS_CERTDIR=/certs
+        - DOCKER_CERT_PATH=/certs/client
       networks:
         - frontend
         - backend
@@ -294,12 +303,13 @@ services:
           - LARADOCK_PHP_VERSION=${PHP_TOM_BUDGET_VERSION}
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_SUBVERSION=${WORKSPACETOM_INSTALL_SUBVERSION}
+          - INSTALL_BZ2=${WORKSPACETOM_INSTALL_BZ2}
+          - INSTALL_GMP=${WORKSPACETOM_INSTALL_GMP}
           - INSTALL_XDEBUG=${WORKSPACETOM_INSTALL_XDEBUG}
           - INSTALL_PCOV=${WORKSPACETOM_INSTALL_PCOV}
           - INSTALL_PHPDBG=${WORKSPACETOM_INSTALL_PHPDBG}
           - INSTALL_BLACKFIRE=${INSTALL_BLACKFIRE}
           - INSTALL_SSH2=${WORKSPACETOM_INSTALL_SSH2}
-          - INSTALL_GMP=${WORKSPACETOM_INSTALL_GMP}
           - INSTALL_SOAP=${WORKSPACETOM_INSTALL_SOAP}
           - INSTALL_XSL=${WORKSPACETOM_INSTALL_XSL}
           - INSTALL_LDAP=${WORKSPACETOM_INSTALL_LDAP}
@@ -358,6 +368,7 @@ services:
           - INSTALL_AST=${WORKSPACETOM_INSTALL_AST}
           - INSTALL_YAML=${WORKSPACETOM_INSTALL_YAML}
           - INSTALL_MAILPARSE=${WORKSPACETOM_INSTALL_MAILPARSE}
+          - INSTALL_GIT_PROMPT=${WORKSPACETOM_INSTALL_GIT_PROMPT}
           - PUID=${WORKSPACETOM_PUID}
           - PGID=${WORKSPACETOM_PGID}
           - CHROME_DRIVER_VERSION=${WORKSPACETOM_CHROME_DRIVER_VERSION}
@@ -371,6 +382,7 @@ services:
           - INSTALL_POWERLINE=${WORKSPACETOM_INSTALL_POWERLINE}
           - INSTALL_SUPERVISOR=${WORKSPACETOM_INSTALL_SUPERVISOR}
           - INSTALL_FFMPEG=${WORKSPACETOM_INSTALL_FFMPEG}
+          - INSTALL_WKHTMLTOPDF=${WORKSPACETOM_INSTALL_WKHTMLTOPDF}
           - INSTALL_GNU_PARALLEL=${WORKSPACETOM_INSTALL_GNU_PARALLEL}
           - http_proxy
           - https_proxy
@@ -379,17 +391,22 @@ services:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         - ./workspace/ssh_req/vTom/known_hosts:/root/.ssh/known_hosts
         #        - ${WORKSPACE_CRON_PATH}:/etc/cron.d
+        - docker-in-docker:/certs/client
         - ./php-worker/supervisord.d/phptom:/etc/supervisord.d
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "myxytt.com:${WEBSERVER_IP}"
       ports:
         - "${WORKSPACETOM_SSH_PORT}:22"
+        - "${WORKSPACETOM_VUE_CLI_SERVE_HOST_PORT}:8080"
+        - "${WORKSPACETOM_VUE_CLI_UI_HOST_PORT}:8000"
       tty: true
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
-        - DOCKER_HOST=tcp://docker-in-docker:2375
-#      command: ["supervisord","-n", "/etc/supervisord.conf"]
+        - DOCKER_HOST=tcp://docker-in-docker:2376
+        - DOCKER_TLS_VERIFY=1
+        - DOCKER_TLS_CERTDIR=/certs
+        - DOCKER_CERT_PATH=/certs/client
       networks:
         - frontend
         - backend
@@ -406,12 +423,13 @@ services:
           - LARADOCK_PHP_VERSION=${PHP_THIRD_VERSION}
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_SUBVERSION=${WORKSPACE72P_INSTALL_SUBVERSION}
+          - INSTALL_BZ2=${WORKSPACE72P_INSTALL_BZ2}
+          - INSTALL_GMP=${WORKSPACE72P_INSTALL_GMP}
           - INSTALL_XDEBUG=${WORKSPACE72P_INSTALL_XDEBUG}
           - INSTALL_PCOV=${WORKSPACE72P_INSTALL_PCOV}
           - INSTALL_PHPDBG=${WORKSPACE72P_INSTALL_PHPDBG}
           - INSTALL_BLACKFIRE=${INSTALL_BLACKFIRE}
           - INSTALL_SSH2=${WORKSPACE72P_INSTALL_SSH2}
-          - INSTALL_GMP=${WORKSPACE72P_INSTALL_GMP}
           - INSTALL_SOAP=${WORKSPACE72P_INSTALL_SOAP}
           - INSTALL_XSL=${WORKSPACE72P_INSTALL_XSL}
           - INSTALL_LDAP=${WORKSPACE72P_INSTALL_LDAP}
@@ -468,6 +486,7 @@ services:
           - INSTALL_AST=${WORKSPACE72P_INSTALL_AST}
           - INSTALL_YAML=${WORKSPACE72P_INSTALL_YAML}
           - INSTALL_MAILPARSE=${WORKSPACE72P_INSTALL_MAILPARSE}
+          - INSTALL_GIT_PROMPT=${WORKSPACE72P_INSTALL_GIT_PROMPT}
           - PUID=${WORKSPACE72P_PUID}
           - PGID=${WORKSPACE72P_PGID}
           - CHROME_DRIVER_VERSION=${WORKSPACE72P_CHROME_DRIVER_VERSION}
@@ -481,6 +500,7 @@ services:
           - INSTALL_POWERLINE=${WORKSPACE72P_INSTALL_POWERLINE}
           - INSTALL_SUPERVISOR=${WORKSPACE72P_INSTALL_SUPERVISOR}
           - INSTALL_FFMPEG=${WORKSPACE72P_INSTALL_FFMPEG}
+          - INSTALL_WKHTMLTOPDF=${WORKSPACE72P_INSTALL_WKHTMLTOPDF}
           - INSTALL_GNU_PARALLEL=${WORKSPACE72P_INSTALL_GNU_PARALLEL}
           - http_proxy
           - https_proxy
@@ -488,16 +508,22 @@ services:
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         #        - ${WORKSPACE_CRON_PATH}:/etc/cron.d
+        - docker-in-docker:/certs/client
         - ./php-worker/supervisord.d/php72:/etc/supervisord.d
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "myxytt.com:${WEBSERVER_IP}"
       ports:
         - "${WORKSPACE72P_SSH_PORT}:22"
+        - "${WORKSPACE72P_VUE_CLI_SERVE_HOST_PORT}:8080"
+        - "${WORKSPACE72P_VUE_CLI_UI_HOST_PORT}:8000"
       tty: true
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
-        - DOCKER_HOST=tcp://docker-in-docker:2375
+        - DOCKER_HOST=tcp://docker-in-docker:2376
+        - DOCKER_TLS_VERIFY=1
+        - DOCKER_TLS_CERTDIR=/certs
+        - DOCKER_CERT_PATH=/certs/client
       networks:
         - frontend
         - backend
@@ -514,12 +540,13 @@ services:
           - LARADOCK_PHP_VERSION=${PHP_73_VERSION}
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_SUBVERSION=${WORKSPACE73_INSTALL_SUBVERSION}
+          - INSTALL_BZ2=${WORKSPACE73_INSTALL_BZ2}
+          - INSTALL_GMP=${WORKSPACE73_INSTALL_GMP}
           - INSTALL_XDEBUG=${WORKSPACE73_INSTALL_XDEBUG}
           - INSTALL_PCOV=${WORKSPACE73_INSTALL_PCOV}
           - INSTALL_PHPDBG=${WORKSPACE73_INSTALL_PHPDBG}
           - INSTALL_BLACKFIRE=${INSTALL_BLACKFIRE}
           - INSTALL_SSH2=${WORKSPACE73_INSTALL_SSH2}
-          - INSTALL_GMP=${WORKSPACE73_INSTALL_GMP}
           - INSTALL_SOAP=${WORKSPACE73_INSTALL_SOAP}
           - INSTALL_XSL=${WORKSPACE73_INSTALL_XSL}
           - INSTALL_LDAP=${WORKSPACE73_INSTALL_LDAP}
@@ -576,6 +603,7 @@ services:
           - INSTALL_AST=${WORKSPACE73_INSTALL_AST}
           - INSTALL_YAML=${WORKSPACE73_INSTALL_YAML}
           - INSTALL_MAILPARSE=${WORKSPACE73_INSTALL_MAILPARSE}
+          - INSTALL_GIT_PROMPT=${WORKSPACE73_INSTALL_GIT_PROMPT}
           - PUID=${WORKSPACE73_PUID}
           - PGID=${WORKSPACE73_PGID}
           - CHROME_DRIVER_VERSION=${WORKSPACE73_CHROME_DRIVER_VERSION}
@@ -589,6 +617,7 @@ services:
           - INSTALL_POWERLINE=${WORKSPACE73_INSTALL_POWERLINE}
           - INSTALL_SUPERVISOR=${WORKSPACE73_INSTALL_SUPERVISOR}
           - INSTALL_FFMPEG=${WORKSPACE73_INSTALL_FFMPEG}
+          - INSTALL_WKHTMLTOPDF=${WORKSPACE73_INSTALL_WKHTMLTOPDF}
           - INSTALL_GNU_PARALLEL=${WORKSPACE73_INSTALL_GNU_PARALLEL}
           - http_proxy
           - https_proxy
@@ -596,15 +625,22 @@ services:
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         #        - ${WORKSPACE_CRON_PATH}:/etc/cron.d
+        - docker-in-docker:/certs/client
         - ./php-worker/supervisord.d/php73:/etc/supervisord.d
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
+        - "myxytt.com:${WEBSERVER_IP}"
       ports:
         - "${WORKSPACE73_SSH_PORT}:22"
+        - "${WORKSPACE73_VUE_CLI_SERVE_HOST_PORT}:8080"
+        - "${WORKSPACE73_VUE_CLI_UI_HOST_PORT}:8000"
       tty: true
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
-        - DOCKER_HOST=tcp://docker-in-docker:2375
+        - DOCKER_HOST=tcp://docker-in-docker:2376
+        - DOCKER_TLS_VERIFY=1
+        - DOCKER_TLS_CERTDIR=/certs
+        - DOCKER_CERT_PATH=/certs/client
       networks:
         - frontend
         - backend
@@ -778,6 +814,8 @@ services:
           - CHANGE_SOURCE=${CHANGE_SOURCE}
           - LARADOCK_PHP_VERSION=${PHP_SECONDARY_VERSION}
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
+          - INSTALL_BZ2=${PHP_FPM71_INSTALL_BZ2}
+          - INSTALL_GMP=${PHP_FPM71_INSTALL_GMP}
           - INSTALL_XDEBUG=${PHP_FPM71_INSTALL_XDEBUG}
           - INSTALL_PCOV=${PHP_FPM71_INSTALL_PCOV}
           - INSTALL_PHPDBG=${PHP_FPM71_INSTALL_PHPDBG}
@@ -793,7 +831,6 @@ services:
           - INSTALL_GEARMAN=${PHP_FPM71_INSTALL_GEARMAN}
           - INSTALL_MSSQL=${PHP_FPM71_INSTALL_MSSQL}
           - INSTALL_BCMATH=${PHP_FPM71_INSTALL_BCMATH}
-          - INSTALL_GMP=${PHP_FPM71_INSTALL_GMP}
           - INSTALL_PHPREDIS=${PHP_FPM71_INSTALL_PHPREDIS}
           - INSTALL_MEMCACHED=${PHP_FPM71_INSTALL_MEMCACHED}
           - INSTALL_LGVRAND=${PHP_FPM71_INSTALL_LGVRAND}
@@ -829,6 +866,7 @@ services:
           - INSTALL_PCNTL=${PHP_FPM71_INSTALL_PCNTL}
           - ADDITIONAL_LOCALES=${PHP_FPM71_ADDITIONAL_LOCALES}
           - INSTALL_FFMPEG=${PHP_FPM71_FFMPEG}
+          - INSTALL_WKHTMLTOPDF=${PHP_FPM71_INSTALL_WKHTMLTOPDF}
           - INSTALL_XHPROF=${PHP_FPM71_INSTALL_XHPROF}
           - PUID=${PHP_FPM71_PUID}
           - PGID=${PHP_FPM71_PGID}
@@ -840,6 +878,7 @@ services:
         - ./php-fpm/php${PHP_SECONDARY_VERSION}.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - docker-in-docker:/certs/client
       expose:
         - "9000"
       extra_hosts:
@@ -847,7 +886,10 @@ services:
         - "myxytt.com:${WEBSERVER_IP}"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
-        - DOCKER_HOST=tcp://docker-in-docker:2375
+        - DOCKER_HOST=tcp://docker-in-docker:2376
+        - DOCKER_TLS_VERIFY=1
+        - DOCKER_TLS_CERTDIR=/certs
+        - DOCKER_CERT_PATH=/certs/client
         - FAKETIME=${PHP_FPM_FAKETIME}
       depends_on:
         - workspace7
@@ -864,6 +906,8 @@ services:
           - CHANGE_SOURCE=${CHANGE_SOURCE}
           - LARADOCK_PHP_VERSION=${PHP_TOM_BUDGET_VERSION}
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
+          - INSTALL_BZ2=${PHP_FPM_TOM_INSTALL_BZ2}
+          - INSTALL_GMP=${PHP_FPM_TOM_INSTALL_GMP}
           - INSTALL_XDEBUG=${PHP_FPM_TOM_INSTALL_XDEBUG}
           - INSTALL_PCOV=${PHP_FPM_TOM_INSTALL_PCOV}
           - INSTALL_PHPDBG=${PHP_FPM_TOM_INSTALL_PHPDBG}
@@ -879,7 +923,6 @@ services:
           - INSTALL_GEARMAN=${PHP_FPM_TOM_INSTALL_GEARMAN}
           - INSTALL_MSSQL=${PHP_FPM_TOM_INSTALL_MSSQL}
           - INSTALL_BCMATH=${PHP_FPM_TOM_INSTALL_BCMATH}
-          - INSTALL_GMP=${PHP_FPM_TOM_INSTALL_GMP}
           - INSTALL_PHPREDIS=${PHP_FPM_TOM_INSTALL_PHPREDIS}
           - INSTALL_MEMCACHED=${PHP_FPM_TOM_INSTALL_MEMCACHED}
           - INSTALL_LGVRAND=${PHP_FPM_TOM_INSTALL_LGVRAND}
@@ -917,6 +960,7 @@ services:
           - INSTALL_PCNTL=${PHP_FPM_TOM_INSTALL_PCNTL}
           - ADDITIONAL_LOCALES=${PHP_FPM_TOM_ADDITIONAL_LOCALES}
           - INSTALL_FFMPEG=${PHP_FPM_TOM_FFMPEG}
+          - INSTALL_WKHTMLTOPDF=${PHP_FPM_TOM_INSTALL_WKHTMLTOPDF}
           - INSTALL_XHPROF=${PHP_FPM_TOM_INSTALL_XHPROF}
           - PUID=${PHP_FPM_TOM_PUID}
           - PGID=${PHP_FPM_TOM_PGID}
@@ -928,6 +972,7 @@ services:
         - ./php-fpm/php${PHP_TOM_BUDGET_VERSION}.ini:/usr/local/etc/php/php.ini
         #        - ./php-fpm/tom/:/tmp/tom
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - docker-in-docker:/certs/client
       expose:
         - "9000"
       extra_hosts:
@@ -935,7 +980,10 @@ services:
         - "myxytt.com:${WEBSERVER_IP}"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
-        - DOCKER_HOST=tcp://docker-in-docker:2375
+        - DOCKER_HOST=tcp://docker-in-docker:2376
+        - DOCKER_TLS_VERIFY=1
+        - DOCKER_TLS_CERTDIR=/certs
+        - DOCKER_CERT_PATH=/certs/client
         - FAKETIME=${PHP_FPM_FAKETIME}
       depends_on:
         - workspace-tom
@@ -952,6 +1000,8 @@ services:
           - CHANGE_SOURCE=${CHANGE_SOURCE}
           - LARADOCK_PHP_VERSION=${PHP_THIRD_VERSION}
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
+          - INSTALL_BZ2=${PHP_FPM72P_INSTALL_BZ2}
+          - INSTALL_GMP=${PHP_FPM72P_INSTALL_GMP}
           - INSTALL_XDEBUG=${PHP_FPM72P_INSTALL_XDEBUG}
           - INSTALL_PCOV=${PHP_FPM72P_INSTALL_PCOV}
           - INSTALL_PHPDBG=${PHP_FPM72P_INSTALL_PHPDBG}
@@ -967,7 +1017,6 @@ services:
           - INSTALL_GEARMAN=${PHP_FPM72P_INSTALL_GEARMAN}
           - INSTALL_MSSQL=${PHP_FPM72P_INSTALL_MSSQL}
           - INSTALL_BCMATH=${PHP_FPM72P_INSTALL_BCMATH}
-          - INSTALL_GMP=${PHP_FPM72P_INSTALL_GMP}
           - INSTALL_PHPREDIS=${PHP_FPM72P_INSTALL_PHPREDIS}
           - INSTALL_MEMCACHED=${PHP_FPM72P_INSTALL_MEMCACHED}
           - INSTALL_LGVRAND=${PHP_FPM72P_INSTALL_LGVRAND}
@@ -1003,6 +1052,7 @@ services:
           - INSTALL_PCNTL=${PHP_FPM72P_INSTALL_PCNTL}
           - ADDITIONAL_LOCALES=${PHP_FPM72P_ADDITIONAL_LOCALES}
           - INSTALL_FFMPEG=${PHP_FPM72P_FFMPEG}
+          - INSTALL_WKHTMLTOPDF=${PHP_FPM72P_INSTALL_WKHTMLTOPDF}
           - INSTALL_XHPROF=${PHP_FPM72P_INSTALL_XHPROF}
           - PUID=${PHP_FPM72P_PUID}
           - PGID=${PHP_FPM72P_PGID}
@@ -1014,6 +1064,7 @@ services:
         - ./php-fpm/php${PHP_THIRD_VERSION}.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - docker-in-docker:/certs/client
       expose:
         - "9000"
       extra_hosts:
@@ -1021,7 +1072,10 @@ services:
         - "myxytt.com:${WEBSERVER_IP}"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
-        - DOCKER_HOST=tcp://docker-in-docker:2375
+        - DOCKER_HOST=tcp://docker-in-docker:2376
+        - DOCKER_TLS_VERIFY=1
+        - DOCKER_TLS_CERTDIR=/certs
+        - DOCKER_CERT_PATH=/certs/client
         - FAKETIME=${PHP_FPM_FAKETIME}
       depends_on:
         - workspace72
@@ -1038,6 +1092,8 @@ services:
           - CHANGE_SOURCE=${CHANGE_SOURCE}
           - LARADOCK_PHP_VERSION=${PHP_73_VERSION}
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
+          - INSTALL_BZ2=${PHP_FPM73_INSTALL_BZ2}
+          - INSTALL_GMP=${PHP_FPM73_INSTALL_GMP}
           - INSTALL_XDEBUG=${PHP_FPM73_INSTALL_XDEBUG}
           - INSTALL_PCOV=${PHP_FPM73_INSTALL_PCOV}
           - INSTALL_PHPDBG=${PHP_FPM73_INSTALL_PHPDBG}
@@ -1053,7 +1109,6 @@ services:
           - INSTALL_GEARMAN=${PHP_FPM73_INSTALL_GEARMAN}
           - INSTALL_MSSQL=${PHP_FPM73_INSTALL_MSSQL}
           - INSTALL_BCMATH=${PHP_FPM73_INSTALL_BCMATH}
-          - INSTALL_GMP=${PHP_FPM73_INSTALL_GMP}
           - INSTALL_PHPREDIS=${PHP_FPM73_INSTALL_PHPREDIS}
           - INSTALL_MEMCACHED=${PHP_FPM73_INSTALL_MEMCACHED}
           - INSTALL_LGVRAND=${PHP_FPM73_INSTALL_LGVRAND}
@@ -1089,6 +1144,7 @@ services:
           - INSTALL_PCNTL=${PHP_FPM73_INSTALL_PCNTL}
           - ADDITIONAL_LOCALES=${PHP_FPM73_ADDITIONAL_LOCALES}
           - INSTALL_FFMPEG=${PHP_FPM73_FFMPEG}
+          - INSTALL_WKHTMLTOPDF=${PHP_FPM73_INSTALL_WKHTMLTOPDF}
           - INSTALL_XHPROF=${PHP_FPM73_INSTALL_XHPROF}
           - PUID=${PHP_FPM73_PUID}
           - PGID=${PHP_FPM73_PGID}
@@ -1100,13 +1156,18 @@ services:
         - ./php-fpm/php${PHP_73_VERSION}.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - docker-in-docker:/certs/client
       expose:
         - "9000"
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
+        - "myxytt.com:${WEBSERVER_IP}"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
-        - DOCKER_HOST=tcp://docker-in-docker:2375
+        - DOCKER_HOST=tcp://docker-in-docker:2376
+        - DOCKER_TLS_VERIFY=1
+        - DOCKER_TLS_CERTDIR=/certs
+        - DOCKER_CERT_PATH=/certs/client
         - FAKETIME=${PHP_FPM_FAKETIME}
       depends_on:
         - workspace73
@@ -1139,7 +1200,6 @@ services:
           - INSTALL_SWOOLE=${PHP_WORKER_INSTALL_SWOOLE}
           - INSTALL_TAINT=${PHP_WORKER_INSTALL_TAINT}
           - INSTALL_FFMPEG=${PHP_WORKER_INSTALL_FFMPEG}
-          - INSTALL_REDIS=${PHP_WORKER_INSTALL_REDIS}
           - PUID=${PHP_WORKER_PUID}
           - PGID=${PHP_WORKER_PGID}
       volumes:
@@ -1161,6 +1221,8 @@ services:
           - CHANGE_SOURCE=${CHANGE_SOURCE}
           - LARADOCK_PHP_VERSION=${PHP_SECONDARY_VERSION}
           - PHALCON_VERSION=${PHALCON_VERSION}
+          - INSTALL_BZ2=${PHP_WORKER71_INSTALL_BZ2}
+          - INSTALL_GMP=${PHP_WORKER71_INSTALL_GMP}
           - INSTALL_PGSQL=${PHP_WORKER71_INSTALL_PGSQL}
           - INSTALL_BCMATH=${PHP_WORKER71_INSTALL_BCMATH}
           - INSTALL_PHALCON=${PHP_WORKER71_INSTALL_PHALCON}
@@ -1175,8 +1237,6 @@ services:
           - INSTALL_SWOOLE=${PHP_WORKER71_INSTALL_SWOOLE}
           - INSTALL_TAINT=${PHP_WORKER71_INSTALL_TAINT}
           - INSTALL_FFMPEG=${PHP_WORKER71_INSTALL_FFMPEG}
-          - INSTALL_GMP=${PHP_WORKER71_INSTALL_GMP}
-          - INSTALL_REDIS=${PHP_WORKER71_INSTALL_REDIS}
           - PUID=${PHP_WORKER71_PUID}
           - PGID=${PHP_WORKER71_PGID}
       volumes:
@@ -1197,6 +1257,8 @@ services:
           - CHANGE_SOURCE=${CHANGE_SOURCE}
           - LARADOCK_PHP_VERSION=${PHP_TOM_BUDGET_VERSION}
           - PHALCON_VERSION=${PHALCON_VERSION}
+          - INSTALL_BZ2=${PHP_WORKER_TOM_INSTALL_BZ2}
+          - INSTALL_GMP=${PHP_WORKER_TOM_INSTALL_GMP}
           - INSTALL_PGSQL=${PHP_WORKER_TOM_INSTALL_PGSQL}
           - INSTALL_BCMATH=${PHP_WORKER_TOM_INSTALL_BCMATH}
           - INSTALL_PHALCON=${PHP_WORKER_TOM_INSTALL_PHALCON}
@@ -1213,8 +1275,6 @@ services:
           - INSTALL_SWOOLE=${PHP_WORKER_TOM_INSTALL_SWOOLE}
           - INSTALL_TAINT=${PHP_WORKER_TOM_INSTALL_TAINT}
           - INSTALL_FFMPEG=${PHP_WORKER_TOM_INSTALL_FFMPEG}
-          - INSTALL_GMP=${PHP_WORKER_TOM_INSTALL_GMP}
-          - INSTALL_REDIS=${PHP_WORKER_TOM_INSTALL_REDIS}
           - PUID=${PHP_WORKER_TOM_PUID}
           - PGID=${PHP_WORKER_TOM_PGID}
       volumes:
@@ -1235,6 +1295,8 @@ services:
           - CHANGE_SOURCE=${CHANGE_SOURCE}
           - PHP_VERSION=${PHP_THIRD_VERSION}
           - PHALCON_VERSION=${PHALCON_VERSION}
+          - INSTALL_BZ2=${PHP_WORKER72_INSTALL_BZ2}
+          - INSTALL_GMP=${PHP_WORKER72_INSTALL_GMP}
           - INSTALL_PGSQL=${PHP_WORKER72_INSTALL_PGSQL}
           - INSTALL_BCMATH=${PHP_WORKER72_INSTALL_BCMATH}
           - INSTALL_PHALCON=${PHP_WORKER72_INSTALL_PHALCON}
@@ -1249,8 +1311,6 @@ services:
           - INSTALL_SWOOLE=${PHP_WORKER72_INSTALL_SWOOLE}
           - INSTALL_TAINT=${PHP_WORKER72_INSTALL_TAINT}
           - INSTALL_FFMPEG=${PHP_WORKER72_INSTALL_FFMPEG}
-          - INSTALL_GMP=${PHP_WORKER72_INSTALL_GMP}
-          - INSTALL_REDIS=${PHP_WORKER72_INSTALL_REDIS}
           - PUID=${PHP_WORKER72_PUID}
           - PGID=${PHP_WORKER72_PGID}
       volumes:
@@ -1271,6 +1331,8 @@ services:
           - CHANGE_SOURCE=${CHANGE_SOURCE}
           - LARADOCK_PHP_VERSION=${PHP_73_VERSION}
           - PHALCON_VERSION=${PHALCON_VERSION}
+          - INSTALL_BZ2=${PHP_WORKER73_INSTALL_BZ2}
+          - INSTALL_GMP=${PHP_WORKER73_INSTALL_GMP}
           - INSTALL_PGSQL=${PHP_WORKER73_INSTALL_PGSQL}
           - INSTALL_BCMATH=${PHP_WORKER73_INSTALL_BCMATH}
           - INSTALL_PHALCON=${PHP_WORKER73_INSTALL_PHALCON}
@@ -1285,8 +1347,6 @@ services:
           - INSTALL_SWOOLE=${PHP_WORKER73_INSTALL_SWOOLE}
           - INSTALL_TAINT=${PHP_WORKER73_INSTALL_TAINT}
           - INSTALL_FFMPEG=${PHP_WORKER73_INSTALL_FFMPEG}
-          - INSTALL_GMP=${PHP_WORKER73_INSTALL_GMP}
-          - INSTALL_REDIS=${PHP_WORKER73_INSTALL_REDIS}
           - PUID=${PHP_WORKER73_PUID}
           - PGID=${PHP_WORKER73_PGID}
       volumes:
@@ -1298,7 +1358,7 @@ services:
         - "dockerhost:${DOCKER_HOST_IP}"
       networks:
         - backend
-### Laravel Horizon ############################################
+  ### Laravel Horizon ############################################
     laravel-horizon:
       build:
         context: ./laravel-horizon
