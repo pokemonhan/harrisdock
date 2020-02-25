@@ -630,6 +630,7 @@ services:
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "myxytt.com:${WEBSERVER_IP}"
+        #- "api.jianghu.me:${DOCKER_HOST_IP}"
       ports:
         - "${WORKSPACE73_SSH_PORT}:22"
         - "${WORKSPACE73_VUE_CLI_SERVE_HOST_PORT}:8080"
@@ -1162,6 +1163,7 @@ services:
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "myxytt.com:${WEBSERVER_IP}"
+#        - "api.jianghu.me:${DOCKER_HOST_IP}"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
         - DOCKER_HOST=tcp://docker-in-docker:2376
@@ -1420,7 +1422,7 @@ services:
         - php-fpm73
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
-        - "api.jianghu.me:${DOCKER_HOST_IP}"
+#        - "api.jianghu.me:${DOCKER_HOST_IP}"
 #        - "local.multisites.backend:${DOCKER_HOST_IP}"
 #        - "local.multisites.com:${DOCKER_HOST_IP}"
       networks:
