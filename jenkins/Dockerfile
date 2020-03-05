@@ -82,8 +82,9 @@ RUN apt-get install -y curl && curl -sSL https://get.docker.com/ | sh
 RUN usermod -aG docker jenkins
 
 # Install Docker-Compose
-#RUN curl -L "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-COPY ./docker-compose-Linux-x86_64 /usr/local/bin/docker-compose
+RUN curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+#for manual download composer file from https://github.com/docker/compose/releases/download/1.25.4/docker-compose-Linux-x86_64
+#COPY ./docker-compose-Linux-x86_64 /usr/local/bin/docker-compose
 RUN chmod +x /usr/local/bin/docker-compose
 
 
