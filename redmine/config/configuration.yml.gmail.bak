@@ -13,9 +13,9 @@ default:
     delivery_method: :smtp
     smtp_settings:
       enable_starttls_auto: true
-      address: "smtp.sendgrid.net"
+      address: "smtp.gmail.com"
       port: 587
-      domain: "smtp.sendgrid.net"
-      authentication: :login
-      user_name: "apikey"
-      password: "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"
+      domain: "smtp.gmail.com"
+      authentication: :plain
+      user_name: "hahaxuanwu@gmail.com"
+      password: "xu@nwuHarri5"
