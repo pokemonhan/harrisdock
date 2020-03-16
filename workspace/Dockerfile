@@ -435,6 +435,7 @@ RUN if [ ${INSTALL_WORKSPACE_SSH} = true ]; then \
         && rm -f /tmp/id_rsa* \
         && chmod 644 /root/.ssh/authorized_keys /root/.ssh/id_rsa.pub /root/.ssh/chunqiu/id_rsa.pub /root/.ssh/github/id_rsa.pub \
     && chmod 400 /root/.ssh/id_rsa /root/.ssh/chunqiu/id_rsa /root/.ssh/github/id_rsa \
+    && chmod 600 /root/.ssh/config \
     && cp -rf /root/.ssh /home/laradock \
     && chown -R laradock:laradock /home/laradock/.ssh \
 ;fi
