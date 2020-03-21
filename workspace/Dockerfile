@@ -194,10 +194,22 @@ RUN echo "" >> ~/.bashrc && \
 USER root
 
 #COPY ./crontab /etc/cron.d
+RUN  mkdir /tmp/cron
 
-COPY ./crontab/v${LARADOCK_PHP_VERSION} /etc/cron.d
+COPY ./crontab/v${LARADOCK_PHP_VERSION} /tmp/cron
 
-RUN cat /etc/cron.d/laradock
+RUN ls -la /tmp/cron/*
+ARG INSTALL_TOM_SWOOLE=false
+RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
+  cp /tmp/cron/crontom /etc/cron.d/ \
+;else \
+  cp /tmp/cron/cron${LARADOCK_PHP_VERSION} /etc/cron.d/ \
+;fi
+
+RUN ls -la /etc/cron.d/*
+
+#RUN cat /etc/cron.d/laradock
+
 RUN chmod -R 644 /etc/cron.d
 
 ###########################################################################
