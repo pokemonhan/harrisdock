@@ -2942,3 +2942,12 @@ services:
         - ./logs/yapi/:/yapi/log
       networks:
         - frontend
+
+  ### swagger-ui 接口管理服务器 ########################################
+    swagger-ui:
+      image: swaggerapi/swagger-ui:latest
+      ports:
+        - 8085:8080
+      networks:
+        - frontend
+
