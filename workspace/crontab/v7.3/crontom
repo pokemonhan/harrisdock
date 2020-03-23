@@ -1,2 +1,2 @@
 * * * * * laradock php /var/www/artisan schedule:run >> /dev/null 2>&1
-* * * * * root bash /var/www/jenkins-push-scripts/syncRm-Lc/syncPullPush.sh >> /var/www/harrisdock/workspace/cronlog/cronlog.log
+* * * * * root bash /var/www/shell-scripts/syncRm-Lc/syncPullPush.sh >> /var/www/harrisdock/workspace/cronlog/cronlog.log
