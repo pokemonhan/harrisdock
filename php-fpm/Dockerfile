@@ -12,17 +12,42 @@
 # Note: Base Image name format {image-tag}-{php-version}
 #
 
-ARG LARADOCK_PHP_VERSION
-
-FROM laradock/php-fpm:latest-${LARADOCK_PHP_VERSION}
-
+ARG INSTALL_FPM_IMAGE
+FROM ${INSTALL_FPM_IMAGE}
 LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
-
-ARG LARADOCK_PHP_VERSION
 
 # Set Environment Variables
 ENV DEBIAN_FRONTEND noninteractive
-
+ARG LARADOCK_PHP_VERSION
+###########################【added by manual】####################################
+RUN if [ ${LARADOCK_PHP_VERSION} = 7.3 ]; then \
+        set -eux; \
+        apt-get update; \
+        apt-get upgrade -y; \
+        apt-get install -y --no-install-recommends \
+                curl \
+                libmemcached-dev \
+                libz-dev \
+                libpq-dev \
+                libjpeg-dev \
+                libpng-dev \
+                libfreetype6-dev \
+                libssl-dev \
+                libmcrypt-dev; \
+        rm -rf /var/lib/apt/lists/* ;\
+        # Install the PHP pdo_mysql extention
+        docker-php-ext-install pdo_mysql; \
+        php -m; \
+        # Install the PHP pdo_pgsql extention
+        docker-php-ext-install pdo_pgsql; \
+        # Install the PHP gd library
+        docker-php-ext-configure gd \
+                --with-jpeg-dir=/usr/lib \
+                --with-freetype-dir=/usr/include/freetype2; \
+        docker-php-ext-install gd; \
+        php -r 'var_dump(gd_info());' \
+;fi
+#########################################################################
 # If you're in China, or you need to change sources, will be set CHANGE_SOURCE to true in .env.
 
 ARG CHANGE_SOURCE=false

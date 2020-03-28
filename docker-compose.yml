@@ -654,6 +654,7 @@ services:
         context: ./php-fpm
         args:
           - CHANGE_SOURCE=${CHANGE_SOURCE}
+          - INSTALL_FPM_IMAGE=${PHP_FPM_INSTALL_IMAGE}
           - LARADOCK_PHP_VERSION=${PHP_VERSION}
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_BZ2=${PHP_FPM_INSTALL_BZ2}
@@ -839,6 +840,7 @@ services:
         context: ./php-fpm
         args:
           - CHANGE_SOURCE=${CHANGE_SOURCE}
+          - INSTALL_FPM_IMAGE=${PHP_FPM71_INSTALL_IMAGE}
           - LARADOCK_PHP_VERSION=${PHP_SECONDARY_VERSION}
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_BZ2=${PHP_FPM71_INSTALL_BZ2}
@@ -931,6 +933,7 @@ services:
         context: ./php-fpm
         args:
           - CHANGE_SOURCE=${CHANGE_SOURCE}
+          - INSTALL_FPM_IMAGE=${PHP_FPM_TOM_INSTALL_IMAGE}
           - LARADOCK_PHP_VERSION=${PHP_TOM_BUDGET_VERSION}
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_BZ2=${PHP_FPM_TOM_INSTALL_BZ2}
@@ -1025,6 +1028,7 @@ services:
         context: ./php-fpm
         args:
           - CHANGE_SOURCE=${CHANGE_SOURCE}
+          - INSTALL_FPM_IMAGE=${PHP_FPM72_INSTALL_IMAGE}
           - LARADOCK_PHP_VERSION=${PHP_THIRD_VERSION}
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_BZ2=${PHP_FPM72P_INSTALL_BZ2}
@@ -1117,6 +1121,7 @@ services:
         context: ./php-fpm
         args:
           - CHANGE_SOURCE=${CHANGE_SOURCE}
+          - INSTALL_FPM_IMAGE=${PHP_FPM73_INSTALL_IMAGE}
           - LARADOCK_PHP_VERSION=${PHP_73_VERSION}
           - LARADOCK_PHALCON_VERSION=${PHALCON_VERSION}
           - INSTALL_BZ2=${PHP_FPM73_INSTALL_BZ2}
