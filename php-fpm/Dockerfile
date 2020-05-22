@@ -12,8 +12,10 @@
 # Note: Base Image name format {image-tag}-{php-version}
 #
 
-ARG INSTALL_FPM_IMAGE
-FROM ${INSTALL_FPM_IMAGE}
+ARG LARADOCK_PHP_VERSION
+ARG BASE_IMAGE_TAG_PREFIX=latest
+FROM laradock/php-fpm:${BASE_IMAGE_TAG_PREFIX}-${LARADOCK_PHP_VERSION}
+
 LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
 
 # Set Environment Variables
@@ -282,9 +284,9 @@ ARG INSTALL_PHPREDIS=false
 RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
     # Install Php Redis Extension
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
-      printf "\n" |pecl install -o -f redis-4.3.0; \
+      pecl install -o -f redis-4.3.0; \
     else \
-      printf "\n" |pecl install -o -f redis; \
+      pecl install -o -f redis; \
     fi \
     && rm -rf /tmp/pear \
     && docker-php-ext-enable redis \
