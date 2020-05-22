@@ -6,7 +6,6 @@ weight: 5
 
 ## Laradock Related Projects
 
-Laradock CLI is a tool for Laravel projects which automates the docker configuration setup for services, amongst other things.
 
 * [Docker Stacks](https://github.com/sfx101/docker-stacks): A GUI for managing Laradock. (by [Subhadip Naskar](https://github.com/sfx101))
 * [Laradock CLI](https://github.com/lorinlee/laradock-cli): A CLI for managing Laradock. (by [Lorin Lee](https://github.com/lorinlee))

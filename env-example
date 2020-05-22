@@ -32,7 +32,7 @@ COMPOSE_FILE=docker-compose.yml
 # Change the separator from : to ; on Windows
 COMPOSE_PATH_SEPARATOR=:
 
-# Define the prefix of container names. This is useful if you have multiple projects that use laradock to have seperate containers per project.
+# Define the prefix of container names. This is useful if you have multiple projects that use laradock to have separate containers per project.
 COMPOSE_PROJECT_NAME=laradock
 
 ### PHP Version ###########################################
@@ -98,6 +98,7 @@ WORKSPACE_NVM_NODEJS_ORG_MIRROR=
 WORKSPACE_INSTALL_NODE=true
 WORKSPACE_NODE_VERSION=node
 WORKSPACE_NPM_REGISTRY=
+WORKSPACE_INSTALL_PNPM=false
 WORKSPACE_INSTALL_YARN=true
 WORKSPACE_YARN_VERSION=latest
 WORKSPACE_INSTALL_NPM_GULP=true
@@ -171,6 +172,7 @@ WORKSPACE_BROWSERSYNC_HOST_PORT=3000
 WORKSPACE_BROWSERSYNC_UI_HOST_PORT=3001
 WORKSPACE_VUE_CLI_SERVE_HOST_PORT=8080
 WORKSPACE_VUE_CLI_UI_HOST_PORT=8001
+WORKSPACE_ANGULAR_CLI_SERVE_HOST_PORT=4200
 WORKSPACE_INSTALL_GIT_PROMPT=false
 
 ### PHP_FPM ###############################################
@@ -272,6 +274,7 @@ NGINX_SSL_PATH=./nginx/ssl/
 LARAVEL_HORIZON_INSTALL_BZ2=false
 LARAVEL_HORIZON_INSTALL_GD=false
 LARAVEL_HORIZON_INSTALL_GMP=false
+LARAVEL_HORIZON_INSTALL_IMAGEMAGICK=false
 LARAVEL_HORIZON_INSTALL_SOCKETS=false
 LARAVEL_HORIZON_INSTALL_YAML=false
 LARAVEL_HORIZON_INSTALL_ZIP_ARCHIVE=false
