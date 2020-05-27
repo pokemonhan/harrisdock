@@ -2196,6 +2196,19 @@ services:
       networks:
         - frontend
         - backend
+    ### Laravel Echo Server DEV ################################
+    laravel-echo-server-dev:
+      build:
+        context: ./laravel-echo-server-dev
+      volumes:
+        - ./laravel-echo-server-dev/laravel-echo-server.json:/app/laravel-echo-server.json:ro
+      ports:
+        - "${LARAVEL_ECHO_SERVER_DEV_PORT}:6001"
+      links:
+        - redis-test
+      networks:
+        - frontend
+        - backend
 
 ### Solr ################################################
     solr:
