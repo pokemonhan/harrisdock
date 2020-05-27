@@ -2209,6 +2209,19 @@ services:
       networks:
         - frontend
         - backend
+    ### Laravel Echo Server DEVELOPER TEST ################################
+    laravel-echo-server-test:
+      build:
+        context: ./laravel-echo-server-test
+      volumes:
+        - /var/www/shareprj/ethanphp/site/jianghu_entertain/laravel-echo-server.json:/usr/src/app/laravel-echo-server.json
+      ports:
+        - "${LARAVEL_ECHO_SERVER_TEST_PORT}:6001"
+      links:
+        - redis-kaifa
+      networks:
+        - frontend
+        - backend
 
 ### Solr ################################################
     solr:
