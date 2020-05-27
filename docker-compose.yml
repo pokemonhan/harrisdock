@@ -2188,7 +2188,7 @@ services:
       build:
         context: ./laravel-echo-server
       volumes:
-        - ./laravel-echo-server/laravel-echo-server.json:/app/laravel-echo-server.json:ro
+        - ./laravel-echo-server/laravel-echo-server.json:/usr/src/app/laravel-echo-server.json
       ports:
         - "${LARAVEL_ECHO_SERVER_PORT}:6001"
       links:
@@ -2201,7 +2201,7 @@ services:
       build:
         context: ./laravel-echo-server-dev
       volumes:
-        - ./laravel-echo-server-dev/laravel-echo-server.json:/app/laravel-echo-server.json:ro
+        - ./laravel-echo-server-dev/laravel-echo-server.json:/usr/src/app/laravel-echo-server.json
       ports:
         - "${LARAVEL_ECHO_SERVER_DEV_PORT}:6001"
       links:
