@@ -2,18 +2,32 @@
 	"authHost": "echodev.397017.com",
 	"authEndpoint": "/broadcasting/auth",
 	"clients": [],
-	"database": "redis-test",
+	"database": "redis",
 	"databaseConfig": {
 		"redis": {
 			"port": "6379",
-			"host": "redis-test"
+			"host": "redis-test",
+			"keyPrefix": "jianghuhuyu_database_"
 		}
 	},
-	"devMode": true,
+	"devMode": false,
 	"host": null,
 	"port": "6001",
 	"protocol": "http",
 	"socketio": {},
+	"secureOptions": 67108864,
 	"sslCertPath": "",
-	"sslKeyPath": ""
+	"sslKeyPath": "",
+	"sslCertChainPath": "",
+	"sslPassphrase": "",
+	"subscribers": {
+		"http": true,
+		"redis": true
+	},
+	"apiOriginAllow": {
+		"allowCors": true,
+		"allowOrigin": "http://madmin.397017.com,http://cadmin.397017.com,http://h5.397017.com",
+		"allowMethods": "GET, POST",
+		"allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
+	}
 }
