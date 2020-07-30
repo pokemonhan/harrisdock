@@ -37,7 +37,7 @@ RUN apk --update add wget \
   supervisor
 
 RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
-       $("echo This is 5, $PHP_VERSION") \
+       $("echo This is 5, $LARADOCK_PHP_VERSION") \
        docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
         && pecl channel-update pecl.php.net && pecl install memcached-2.2.0 mcrypt-1.0.1 mongodb && docker-php-ext-enable memcached mongodb \
 #;else \
@@ -45,12 +45,12 @@ RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
       php_minor_version=$(php -r "echo PHP_MINOR_VERSION ;");\
        case "$php_minor_version" in \
           "2"|"3") \
-          echo $PHP_VERSION;\
+          echo $LARADOCK_PHP_VERSION;\
           docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
           && pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.3 mongodb && docker-php-ext-enable memcached mongodb \
           ;; \
           *)\
-          echo "here is in default clause $PHP_VERSION";\
+          echo "here is in default clause $LARADOCK_PHP_VERSION";\
           docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
           && pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.3 mongodb && docker-php-ext-enable memcached mongodb \
           ;; \
@@ -380,7 +380,7 @@ ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisord.conf"]
 #--------------------------------------------------------------------------
 #
 
-RUN php -v | head -n 1 | grep -q "PHP ${PHP_VERSION}."
+RUN php -v | head -n 1 | grep -q "PHP ${LARADOCK_PHP_VERSION}."
 
 #
 #--------------------------------------------------------------------------
