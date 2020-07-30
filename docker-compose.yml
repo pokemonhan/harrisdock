@@ -282,7 +282,6 @@ services:
         - ./php-worker/supervisord.d/php71:/etc/supervisord.d
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
-        - "myxytt.com:${WEBSERVER_IP}"
       ports:
         - "${WORKSPACE71_SSH_PORT}:22"
         - "${WORKSPACE71_VUE_CLI_SERVE_HOST_PORT}:8080"
@@ -402,7 +401,6 @@ services:
         - ./php-worker/supervisord.d/phptom:/etc/supervisord.d
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
-        - "myxytt.com:${WEBSERVER_IP}"
       ports:
         - "${WORKSPACETOM_SSH_PORT}:22"
         - "${WORKSPACETOM_VUE_CLI_SERVE_HOST_PORT}:8080"
@@ -519,9 +517,9 @@ services:
         - ./php-worker/supervisord.d/php72:/etc/supervisord.d
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
-        - "myxytt.com:${WEBSERVER_IP}"
       ports:
         - "${WORKSPACE72P_SSH_PORT}:22"
+        - "${WORKSPACE72P_LIVE_PORT}:19967"
         - "${WORKSPACE72P_VUE_CLI_SERVE_HOST_PORT}:8080"
         - "${WORKSPACE72P_VUE_CLI_UI_HOST_PORT}:8000"
       tty: true
@@ -636,7 +634,6 @@ services:
         - ./php-worker/supervisord.d/php73:/etc/supervisord.d
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
-        - "myxytt.com:${WEBSERVER_IP}"
         #- "api.jianghu.me:${DOCKER_HOST_IP}"
       ports:
         - "${WORKSPACE73_SSH_PORT}:22"
@@ -828,7 +825,6 @@ services:
         - "9000"
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
-        - "myxytt.com:${WEBSERVER_IP}"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
         - DOCKER_HOST=tcp://docker-in-docker:2376
@@ -921,7 +917,6 @@ services:
         - "9000"
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
-        - "myxytt.com:${WEBSERVER_IP}"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
         - DOCKER_HOST=tcp://docker-in-docker:2376
@@ -1016,7 +1011,6 @@ services:
         - "9000"
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
-        - "myxytt.com:${WEBSERVER_IP}"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
         - DOCKER_HOST=tcp://docker-in-docker:2376
@@ -1109,7 +1103,6 @@ services:
         - "9000"
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
-        - "myxytt.com:${WEBSERVER_IP}"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
         - DOCKER_HOST=tcp://docker-in-docker:2376
@@ -1202,8 +1195,6 @@ services:
         - "9000"
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
-        - "myxytt.com:${WEBSERVER_IP}"
-#        - "api.jianghu.me:${DOCKER_HOST_IP}"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
         - DOCKER_HOST=tcp://docker-in-docker:2376
@@ -1256,7 +1247,6 @@ services:
         - workspace
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
-        - "myxytt.com:${WEBSERVER_IP}"
       networks:
         - backend
 
@@ -1471,18 +1461,18 @@ services:
         - php-fpm
 #        - php-fpm-tom
 #        - php-fpm7
-#        - php-fpm72
-        - php-fpm73
+        - php-fpm72
+#        - php-fpm73
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
 #        - "api.jianghu.me:${DOCKER_HOST_IP}"
-#        - "local.multisites.backend:${DOCKER_HOST_IP}"
 #        - "local.multisites.com:${DOCKER_HOST_IP}"
       networks:
         backend:
           aliases:
             - api.jianghu.me
             - admin.chunqiu.net
+            - www.zhibo.me
 ### Blackfire ########################################
     blackfire:
       image: blackfire/blackfire
