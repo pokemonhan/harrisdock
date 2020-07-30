@@ -1875,6 +1875,7 @@ services:
         - ${DATA_PATH_HOST}/rabbitmq:/var/lib/rabbitmq
       depends_on:
         - php-fpm
+        - php-fpm72
       networks:
         - backend
 
