@@ -1719,6 +1719,7 @@ services:
 ### Redis ################################################
     redis:
       build: ./redis
+      command: redis-server --requirepass 12345678
       volumes:
         - ${DATA_PATH_HOST}/redis:/data
       ports:

@@ -85,7 +85,7 @@ RUN set -xe; \
       fi && \
       # Install the zip extension
       docker-php-ext-install zip && \
-      php -m | grep -q 'zip'
+      php -m | grep -q 'zip';
 
 #
 #--------------------------------------------------------------------------
@@ -218,7 +218,7 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; then \
     pecl install xdebug-2.5.5; \
   else \
     if [ $(php -r "echo PHP_MINOR_VERSION;") = "0" ]; then \
-      pecl install xdebug-2.9.0; \
+      pecl install xdebug-2.9.6; \
     else \
       pecl install xdebug; \
     fi \
