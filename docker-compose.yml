@@ -1872,7 +1872,7 @@ services:
         - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
       hostname: laradock-rabbitmq
       volumes:
-        - ${DATA_PATH_HOST}/rabbitmq:/var/lib/rabbitmq
+        - ${DATA_PATH_HOST}/rabbitmq:/var/lib/rabbitmq/mnesia
       depends_on:
         - php-fpm
         - php-fpm72
