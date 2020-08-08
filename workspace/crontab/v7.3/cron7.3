@@ -1,0 +1,38 @@
+
+# 每小时处理一次分表相关
+0 * * * * laradock php /var/www/webapi/Commands/games.php -s Order.autoGenOrderTables >> /var/www/webapi/Runtime/Order.autoGenOrderTables.log 2>&1
+
+# 封盘开奖
+* * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=kuaileshifen >> /var/www/webapi/Runtime/Drawing.OneMin.kuaileshifen.log 2>&1
+* * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=kuaisan >> /var/www/webapi/Runtime/Drawing.OneMin.kuaisan.log 2>&1
+* * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=liuhecai >> /var/www/webapi/Runtime/Drawing.OneMin.liuhecai.log 2>&1
+* * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=saiche >> /var/www/webapi/Runtime/Drawing.OneMin.saiche.log 2>&1
+* * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=shishicai >> /var/www/webapi/Runtime/Drawing.OneMin.shishicai.log 2>&1
+* * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=shiyixuanwu >> /var/www/webapi/Runtime/Drawing.OneMin.shiyixuanwu.log 2>&1
+* * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=xingyunnongchang >> /var/www/webapi/Runtime/Drawing.OneMin.xingyunnongchang.log 2>&1
+
+# 每分钟统计一次
+* * * * * laradock php /var/www/webapi/Commands/games.php -s Stats.triggerRealtime >> /var/www/webapi/Runtime/Stats.triggerRealtime.log 2>&1
+
+# 15 分钟刷新一次缓存
+*/15 * * * * laradock php /var/www/webapi/Commands/games.php -s Cache.buildCache >> /var/www/webapi/Runtime/Cache.buildCache.log 2>&1
+
+#维持队列连接定时任务
+59 */2 * * * laradock php /var/www/payment/server.php tool:keep_queue_connect_alive
+
+# 每30分钟统计当天用户投注数和胜单数
+*/30 * * * * laradock php /var/www/webapi/Commands/app.php -s StatisticHandle.statisticTodayGameOrder >> /var/www/webapi/Runtime/StatisticHandle.statisticTodayGameOrder.log 2>&1
+
+# 每10分钟执行综合统计
+*/10 * * * * laradock php /var/www/webapi/Commands/app.php -s StatisticHandle.statisticTotal >> /var/www/webapi/Runtime/StatisticHandle.statisticTotal.log 2>&1
+# 每天凌晨回溯统计前一日数据
+10 * * * * laradock php /var/www/webapi/Commands/app.php -s StatisticHandle.statisticTotal --date='-1 day' >> /var/www/webapi/Runtime/StatisticHandle.statisticTotal.log 2>&1
+
+#代理分佣 每日3点
+00 3 * * * laradock php /var/www/webapi/Commands/app.php -s AgentProfit.profit >> /var/www/webapi/Runtime/AgentProfit.profit.log 2>&1
+
+#直播间心跳超时关闭
+* * * * * laradock php /var/www/webapi/Commands/app.php -s Live.close >> /var/www/webapi/Runtime/Live.close.log 2>&1
+
+#直播间定时付费
+* * * * * laradock php /var/www/webapi/Commands/app.php -s Live.timeDeduction >> /data/www/webapi/Runtime/Live.timeDeduction.log 2>&1
