@@ -1455,6 +1455,22 @@ services:
         - "dockerhost:${DOCKER_HOST_IP}"
       networks:
         - backend
+        ### PHP Worker 73　circus ############################################
+    php-worker-circus:
+      build:
+        context: ./php-worker-circus
+        args:
+          - CHANGE_SOURCE=${CHANGE_SOURCE}
+      environment:
+        - TZ=${WORKSPACE73_TIMEZONE}
+      volumes:
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+      depends_on:
+        - workspace73
+      extra_hosts:
+        - "dockerhost:${DOCKER_HOST_IP}"
+      networks:
+        - backend
 
   ### Laravel Horizon ############################################
     laravel-horizon:
