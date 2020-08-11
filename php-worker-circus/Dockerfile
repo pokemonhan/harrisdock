@@ -77,4 +77,25 @@ RUN pip3 --no-cache-dir install circus -i https://mirrors.aliyun.com/pypi/simple
 COPY ./entrypoint.sh /data/
 RUN chmod +x /data/entrypoint.sh
 
+###########################################################################
+# Circus Configuration ini files
+# /etc/init/circus.conf.
+#**References : https://github.com/corydodt/circus-base/blob/master/circus.ini
+#            from https://github.com/corydodt/circus-base
+#References : https://github.com/circus-tent/circus/issues/926
+#Official Doc :https://circus.readthedocs.io/en/latest/for-ops/deployment/
+#Referenceds : https://github.com/rongfengliang/circus-docker
+###########################################################################
+
+#从外面编辑crontab 不需要拷贝到里面去执行
+USER root
+
+#COPY ./crontab /etc/cron.d
+RUN  mkdir /tmp/circus/
+COPY ./circus.ini /tmp/circus/
+RUN ls -la /tmp/circus/*
+
+COPY ./config /etc/circus.d
+RUN ls -la /etc/circus.d/*
+
 ENTRYPOINT ["/data/entrypoint.sh"]
