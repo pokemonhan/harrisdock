@@ -203,9 +203,9 @@ COPY ./crontab/v${LARADOCK_PHP_VERSION} /tmp/cron
 RUN ls -la /tmp/cron/*
 ARG INSTALL_TOM_SWOOLE=false
 RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
-  cp /tmp/cron/crontom /etc/cron.d/ \
+  cp -rf /tmp/cron/crontom/* /etc/cron.d/ \
 ;else \
-  cp /tmp/cron/cron${LARADOCK_PHP_VERSION} /etc/cron.d/ \
+  cp -rf /tmp/cron/default/* /etc/cron.d/ \
 ;fi
 
 RUN ls -la /etc/cron.d/*
