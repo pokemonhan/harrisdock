@@ -74,6 +74,8 @@ RUN curl https://getcomposer.org/installer > /tmp/composer-setup && \
 
 RUN pip3 --no-cache-dir install circus -i https://mirrors.aliyun.com/pypi/simple/
 
+RUN pip3 --no-cache-dir install circus-web
+
 COPY ./entrypoint.sh /data/
 RUN chmod +x /data/entrypoint.sh
 
@@ -98,4 +100,7 @@ RUN ls -la /tmp/circus/*
 COPY ./config /etc/circus.d
 RUN ls -la /etc/circus.d/*
 
+EXPOSE 8080
 ENTRYPOINT ["/data/entrypoint.sh"]
+
+
