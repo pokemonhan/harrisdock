@@ -1896,7 +1896,7 @@ services:
         - ${DATA_PATH_HOST}/rabbitmq:/var/lib/rabbitmq/mnesia
       depends_on:
         - php-fpm
-        - php-fpm72
+        - php-fpm73
       networks:
         - backend
 
