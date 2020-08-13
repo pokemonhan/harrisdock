@@ -1,25 +1,25 @@
 
 #更新比赛数据 每小时更新一次
-00 * * * * laradock php /var/www/web-api/server.php nami:init_match FT
-00 * * * * laradock php /var/www/web-api/server.php nami:init_match BK
+#00 * * * * laradock php /var/www/web-api/server.php nami:init_match FT
+#00 * * * * laradock php /var/www/web-api/server.php nami:init_match BK
 
 #更新纳米比赛视频直播状态 每1分钟执行一次
-* * * * * laradock php /var/www/web-api/server.php nami:update_match_live_status
+#* * * * * laradock php /var/www/web-api/server.php nami:update_match_live_status
 #变更纳米足球联赛球队数据 每30分钟执行一次
-*/30 * * * * laradock php /var/www/web-api/server.php nami:change_league_team FT
+#*/30 * * * * laradock php /var/www/web-api/server.php nami:change_league_team FT
 #变更纳米篮球联赛球队数据 每30分钟执行一次
-*/30 * * * * laradock php /var/www/web-api/server.php nami:change_league_team BK
+#*/30 * * * * laradock php /var/www/web-api/server.php nami:change_league_team BK
 
 #更新平台球队数据 每小时更新一次
-00 * * * * laradock php /var/www/web-api/server.php match:init_teams
+#00 * * * * laradock php /var/www/web-api/server.php match:init_teams
 #更新平台联盟数据 每小时更新一次
-00 * * * * laradock php /var/www/web-api/server.php match:init_league_icon
+#00 * * * * laradock php /var/www/web-api/server.php match:init_league_icon
 
 #更新平台概况数据
-*/15 * * * * laradock php /var/www/web-api/server.php service:platform
+#*/15 * * * * laradock php /var/www/web-api/server.php service:platform
 
 #服务平台缓存赛事统计场次数据
-* * * * * laradock php /var/www/web-api/server.php service:match_current_scenes
+#* * * * * laradock php /var/www/web-api/server.php service:match_current_scenes
 
 #维持队列连接定时任务
-59 */2 * * * laradock php /var/www/web-api/server.php tool:keep_queue_connect_alive
+#59 */2 * * * laradock php /var/www/web-api/server.php tool:keep_queue_connect_alive

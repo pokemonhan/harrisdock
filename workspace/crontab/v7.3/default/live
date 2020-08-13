@@ -35,4 +35,24 @@
 * * * * * laradock php /var/www/webapi/Commands/app.php -s Live.close >> /var/www/webapi/Runtime/Live.close.log 2>&1
 
 #直播间定时付费
-* * * * * laradock php /var/www/webapi/Commands/app.php -s Live.timeDeduction >> /data/www/webapi/Runtime/Live.timeDeduction.log 2>&1
+* * * * * laradock php /var/www/webapi/Commands/app.php -s Live.timeDeduction >> /var/www/webapi/Runtime/Live.timeDeduction.log 2>&1
+#每5分钟更新一次各排行榜
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=profit --interval=day >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=profit --interval=week >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=profit --interval=month >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=profit --interval=total >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=consume --interval=day >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=consume --interval=week >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=consume --interval=month >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=consume --interval=total >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=god --interval=day >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=god --interval=week >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=god --interval=month >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=god --interval=total >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=recharge --interval=day >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=recharge --interval=week >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=recharge --interval=month >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=recharge --interval=total >> /var/www/webapi/Runtime/RankListCache.log 2>&1

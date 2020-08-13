@@ -1,0 +1,94 @@
+#定期清除七天前的日志
+35 10 * * * /usr/bin/find /var/www/web-api/storage/logs -mtime +6 -name "*.log" -exec rm -rf {} \;
+
+##定时任务
+#每晚凌晨5分代理业绩与佣金结算
+#5 0 * * * laradock php /var/www/web-api/server.php agent:performance >> /var/www/web-api/storage/logs/agent_performance.log 2>&1
+#凌晨4点5分根据前一天的业绩对代理升级（有依赖，需要等到业绩与佣金结算命令完成，故需要与该命令的执行时间有一定的间隔）
+#5 4 * * * laradock php /var/www/web-api/server.php agent:upgrade >> /var/www/web-api/storage/logs/agent_upgrade.log 2>&1
+#滚球盈亏 每分钟执行一次
+* * * * * laradock php /var/www/web-api/server.php risk:in_play_profit_loss >> /var/www/web-api/storage/logs/risk_in_play_profit_loss.log 2>&1
+#赛事预警 每分钟执行一次
+* * * * * laradock php /var/www/web-api/server.php risk:match_warn >> /var/www/web-api/storage/logs/risk_match_warn.log 2>&1
+
+#VIP降级脚本  每天15:00执行
+00 15 * * * laradock php /var/www/web-api/server.php vip:down_grade >> /var/www/web-api/storage/logs/vip_down_grade.log 2>&1
+#VIP每月红包发放  每天15:00执行
+00 15 * * * laradock php /var/www/web-api/server.php vip:redpaper_monthly >> /var/www/web-api/storage/logs/vip_redpaper_monthly.log 2>&1
+
+#检查私信发送 每分钟执行一次
+* * * * * laradock php /var/www/web-api/server.php direct_message:send_direct_message >> /var/www/web-api/storage/logs/send_direct_message.log 2>&1
+
+#报表分发脚本 每分钟执行一次
+* * * * * laradock php /var/www/web-api/server.php report:report_all >> /var/www/web-api/storage/logs/report_all.log 2>&1
+
+#移动端登录池脚本 每1分钟执行一次
+* * * * * laradock php /var/www/web-api/server.php member:login_pool >> /var/www/web-api/storage/logs/login_pool.log 2>&1
+
+#系统设置数据存入redis 每10分钟执行一次
+*/10 * * * * laradock php /var/www/web-api/server.php setting:setting_redis_init >> /var/www/web-api/storage/logs/setting_redis_init.log 2>&1
+
+#昨日平台概况数据汇总（避免正常脚本执行时遗漏掉特殊时间的数据）
+00 05 * * * laradock php /var/www/web-api/server.php report:platform_overview yesterday >> /var/www/web-api/storage/logs/platform_overview.log 2>&1
+
+#统计VIP等级涵盖的会员数 每10分钟执行一次
+*/10 * * * * laradock php /var/www/web-api/server.php vip:count_member >> /var/www/web-api/storage/logs/vip_count_member.log 2>&1
+
+#统计用户层级涵盖的会员数 每10分钟执行一次
+*/10 * * * * laradock php /var/www/web-api/server.php level:count_member >> /var/www/web-api/storage/logs/level_count_member.log 2>&1
+
+#清理异常的确认中的订单使之变为无效
+*/5 * * * * laradock php /var/www/web-api/server.php order:invalid_order >> /var/www/web-api/storage/logs/invalid_order.log 2>&1
+
+#自动发放邀请活动奖励
+00 17 * * * laradock php /var/www/web-api/server.php recommend:auto_release_reward >> /var/www/web-api/storage/logs/auto_release_reward.log 2>&1
+
+#刷新晒单是否可跟单
+*/5 * * * * laradock php /var/www/web-api/server.php match:share_check_follow_able >> /var/www/web-api/storage/logs/share_check_follow_able.log 2>&1
+#代理每日统计用户充值和投注信息
+30 12 * * * laradock php /var/www/web-api/server.php agent:member_statistics >> /var/www/web-api/storage/logs/agent_member_statistics.log 2>&1
+#代理信息统计 每30分钟执行一次
+*/30 * * * * laradock php /var/www/web-api/server.php agent:agent_statistics >> /var/www/web-api/storage/logs/agent_agent_statistics.log 2>&1
+#代理报表 30分钟一次
+*/30 * * * * laradock php /var/www/web-api/server.php report:agent_report >> /var/www/web-api/storage/logs/agent_report.log 2>&1
+
+#活动重构
+#历史活动检测
+*/10 * * * * laradock php /var/www/web-api/server.php activity_v2:activity_history >> /var/www/web-api/storage/logs/activity_history.log 2>&1
+#生日类活动检测
+00 13 * * * laradock php /var/www/web-api/server.php activity_v2:activity_birthday >> /var/www/web-api/storage/logs/activity_birthday.log 2>&1
+#周期已完成(达标)活动状态流转到已完成
+00 06 * * * laradock php /var/www/web-api/server.php activity_v2:cycle_complete_update >> /var/www/web-api/storage/logs/cycle_complete_update.log 2>&1
+#检测用户活动领取是否过期
+*/20 * * * * laradock php /var/www/web-api/server.php activity_v2:activity_user_expire >> /var/www/web-api/storage/logs/activity_user_expire.log 2>&1
+
+#已完成(达标)活动状态流转到已完待领或已领待审
+* * * * * laradock php /var/www/web-api/server.php activity_v2:complete_update >> /var/www/web-api/storage/logs/complete_update.log 2>&1
+#已审定发用户活动发放脚本
+00 15 * * * laradock php /var/www/web-api/server.php activity_v2:activity_issue_fixed >> /var/www/web-api/storage/logs/activity_issue_fixed.log 2>&1
+
+#公告极光推送
+* * * * * laradock php /var/www/web-api/server.php announcement:jpush >> /var/www/web-api/storage/logs/jpush.log 2>&1
+#极光推送接收统计 10分钟一次
+*/10 * * * * laradock php /var/www/web-api/server.php push:report >> /var/www/web-api/storage/logs/push_report.log 2>&1
+
+#首页公告、广告数据  每分钟一次
+* * * * * laradock php /var/www/web-api/server.php index:index >> /var/www/web-api/storage/logs/index.log 2>&1
+
+#充值余额风控定时任务 每天一次
+0 12 * * * laradock php /var/www/web-api/server.php member_risk:rbr >> /var/www/web-api/storage/logs/member_risk.log 2>&1
+
+#预警赛事已完结清楚 每天一次
+30 05 * * * laradock php /var/www/web-api/server.php warning_match_delete >> /var/www/web-api/storage/logs/warning_match_delete.log 2>&1
+
+#统计风控用户个数脚本
+*/20 * * * * laradock php /var/www/web-api/server.php member_risk:risk_count >> /var/www/web-api/storage/logs/member_risk_risk_count.log 2>&1
+
+#公告统计接收人数 每小时一次
+45 * * * * laradock php /var/www/web-api/server.php announcement:statistical >> /var/www/web-api/storage/logs/announcement_statistical.log 2>&1
+
+#活动报表数据统计脚本
+59 * * * * laradock php /var/www/web-api/server.php report:activity_report >> /var/www/web-api/storage/logs/report_activity_report.log 2>&1
+
+#维持队列连接定时任务
+59 */2 * * * laradock php /var/www/web-api/server.php tool:keep_queue_connect_alive >> /var/www/web-api/storage/logs/keep_queue_connect_alive.log 2>&1

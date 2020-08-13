@@ -81,7 +81,7 @@ RUN set -xe; \
       php${LARADOCK_PHP_VERSION}-zip \
       # nasm
       nasm && \
-      php -m | grep -q 'zip'
+      php -m | grep -q 'zip';
 
 #
 #--------------------------------------------------------------------------
