@@ -671,7 +671,7 @@ services:
         - "dockerhost:${DOCKER_HOST_IP}"
       ports:
         - "${WORKSPACE73_SSH_PORT}:22"
-        - "${WORKSPACE73_LIVE_PORT}:19967"
+        - "${WORKSPACE73_LIVE_PORT}:8282"
         - "${WORKSPACE73_BROWSERSYNC_HOST_PORT}:3000"
         - "${WORKSPACE73_BROWSERSYNC_UI_HOST_PORT}:3001"
         - "${WORKSPACE73_VUE_CLI_SERVE_HOST_PORT}:8080"
