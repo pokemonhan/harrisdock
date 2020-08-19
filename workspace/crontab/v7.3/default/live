@@ -36,6 +36,12 @@
 
 #直播间定时付费
 * * * * * laradock php /var/www/webapi/Commands/app.php -s Live.timeDeduction >> /var/www/webapi/Runtime/Live.timeDeduction.log 2>&1
+
+#q keepalive, every hour
+7 * * * * laradock php /var/www/webapi/Commands/app.php -s Keep.alive >> /var/www/webapi/Runtime/Keep.alive.log 2>&1
+
+* * * * * laradock php /var/www/webapi/Commands/app.php -s Keep.workerScale >> /var/www/webapi/Runtime/Keep.worker_scale.log 2>&1
+
 #每5分钟更新一次各排行榜
 */5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=profit --interval=day >> /var/www/webapi/Runtime/RankListCache.log 2>&1
 */5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=profit --interval=week >> /var/www/webapi/Runtime/RankListCache.log 2>&1
@@ -56,3 +62,6 @@
 */5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=recharge --interval=week >> /var/www/webapi/Runtime/RankListCache.log 2>&1
 */5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=recharge --interval=month >> /var/www/webapi/Runtime/RankListCache.log 2>&1
 */5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=recharge --interval=total >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+
+#
+0 0 1 * * laradock php /var/www/webapi/Commands/app.php -s Live.votestotalClean >> /var/www/webapi/Runtime/Live.votestotalClean.log 2>&1
