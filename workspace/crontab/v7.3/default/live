@@ -18,7 +18,7 @@
 */15 * * * * laradock php /var/www/webapi/Commands/games.php -s Cache.buildCache >> /var/www/webapi/Runtime/Cache.buildCache.log 2>&1
 
 #维持队列连接定时任务
-59 */2 * * * laradock php /var/www/payment/server.php tool:keep_queue_connect_alive
+#59 */2 * * * laradock php /var/www/payment/server.php tool:keep_queue_connect_alive
 
 # 每30分钟统计当天用户投注数和胜单数
 */30 * * * * laradock php /var/www/webapi/Commands/app.php -s StatisticHandle.statisticTodayGameOrder >> /var/www/webapi/Runtime/StatisticHandle.statisticTodayGameOrder.log 2>&1
