@@ -669,9 +669,11 @@ services:
         - ./php-worker/supervisord.d/php71:/etc/supervisord.d
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
+        - "dysmsapi.aliyuncs.com:8.210.214.228"
       ports:
         - "${WORKSPACE73_SSH_PORT}:22"
         - "${WORKSPACE73_LIVE_PORT}:8282"
+        - "${WORKSPACE73_LIVE_REG_PORT}:1238"
         - "${WORKSPACE73_BROWSERSYNC_HOST_PORT}:3000"
         - "${WORKSPACE73_BROWSERSYNC_UI_HOST_PORT}:3001"
         - "${WORKSPACE73_VUE_CLI_SERVE_HOST_PORT}:8080"
@@ -1237,6 +1239,7 @@ services:
         - "9000"
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
+        - "dysmsapi.aliyuncs.com:8.210.214.228"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
         - DOCKER_HOST=tcp://docker-in-docker:2376
@@ -1541,6 +1544,7 @@ services:
         - php-fpm73
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
+        - "dysmsapi.aliyuncs.com:8.210.214.228"
 #        - "api.jianghu.me:${DOCKER_HOST_IP}"
 #        - "local.multisites.com:${DOCKER_HOST_IP}"
       networks:
