@@ -34,7 +34,10 @@ RUN if [ ${LARADOCK_PHP_VERSION} = 7.3 ]; then \
                 libpng-dev \
                 libfreetype6-dev \
                 libssl-dev \
-                libmcrypt-dev; \
+                libmcrypt-dev \
+                telnet \
+                npm; \
+        npm install -g wscat; \
         rm -rf /var/lib/apt/lists/* ;\
         # Install the PHP pdo_mysql extention
         docker-php-ext-install pdo_mysql; \
