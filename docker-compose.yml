@@ -1576,6 +1576,7 @@ services:
             - api.jianghu.me
             - admin.chunqiu.net
             - www.zhibo.me
+            - cs.zhiboapi.me
 ### Blackfire ########################################
     blackfire:
       image: blackfire/blackfire
