@@ -1802,6 +1802,7 @@ services:
             - admin.chunqiu.net
             - www.zhibo.me
             - cs.zhiboapi.me
+            - pservice.zhibo.me
             - csadmin.zhibo.me
 ### Blackfire ########################################
     blackfire:
