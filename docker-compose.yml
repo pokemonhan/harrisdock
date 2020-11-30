@@ -1393,6 +1393,7 @@ services:
         - docker-in-docker:/certs/client
       expose:
         - "9000"
+        - "9003"
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "dysmsapi.aliyuncs.com:8.210.214.228"
