@@ -215,14 +215,14 @@ RUN if [ ${INSTALL_PG_CLIENT} = true ]; then \
 ARG INSTALL_XDEBUG=false
 
 RUN if [ ${INSTALL_XDEBUG} = true ]; then \
-  # Install the xdebug extension
+  # Install the xdebug extension -o
   if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
     pecl install xdebug-2.5.5; \
   else \
-    if [ $(php -r "echo PHP_MINOR_VERSION;") = "0" ]; then \
-      pecl install xdebug-2.9.6; \
-    else \
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ] && [ $(php -r "echo PHP_MINOR_VERSION;") < "2" ]; then \
       pecl install xdebug-2.9.8; \
+    else \
+      pecl install xdebug; \
     fi \
   fi && \
   docker-php-ext-enable xdebug \

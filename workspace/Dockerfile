@@ -391,7 +391,6 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; then \
           #pecl install xdebug; \
           #echo "xDebug 3 required, not supported."; \
           apt-get install -y php${LARADOCK_PHP_VERSION}-xdebug && \
-              #sed -i 's/^;//g' /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-xdebug.ini \
         fi \
       fi \
     fi \
