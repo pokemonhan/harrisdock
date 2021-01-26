@@ -222,6 +222,7 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; then \
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ] && [ $(php -r "echo PHP_MINOR_VERSION;") < "2" ]; then \
       pecl install xdebug-2.9.8; \
     else \
+      echo "i am here"; \
       pecl install xdebug; \
     fi \
   fi && \
@@ -410,7 +411,7 @@ RUN if [ ${INSTALL_AMQP} = true ]; then \
     # download and install manually, to make sure it's compatible with ampq installed by pecl later
     # install cmake first
     apt-get -y install cmake && \
-    curl -L -o /tmp/rabbitmq-c.tar.gz https://github.com/alanxz/rabbitmq-c/archive/master.tar.gz && \
+    curl --insecure -L -o /tmp/rabbitmq-c.tar.gz https://github.com/alanxz/rabbitmq-c/archive/master.tar.gz && \
     mkdir -p rabbitmq-c && \
     tar -C rabbitmq-c -zxvf /tmp/rabbitmq-c.tar.gz --strip 1 && \
     cd rabbitmq-c/ && \

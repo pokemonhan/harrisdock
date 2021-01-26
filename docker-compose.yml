@@ -1408,6 +1408,8 @@ services:
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "dysmsapi.aliyuncs.com:8.210.214.228"
+        - "ddtgc.h2h7.com:35.220.137.228"
+        - "dd-tgc-adminlb-1752508356.ap-east-1.elb.amazonaws.com:18.166.163.168"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
         - DOCKER_HOST=tcp://docker-in-docker:2376
@@ -1807,6 +1809,8 @@ services:
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "dysmsapi.aliyuncs.com:8.210.214.228"
+        - "ddtgc.h2h7.com:35.220.137.228"
+        - "dd-tgc-adminlb-1752508356.ap-east-1.elb.amazonaws.com:18.166.163.168"
 #        - "api.jianghu.me:${DOCKER_HOST_IP}"
 #        - "local.multisites.com:${DOCKER_HOST_IP}"
       networks:

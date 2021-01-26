@@ -46,11 +46,14 @@ USER root
 RUN apk get update; \
     apk add curl wget; \
     mkdir -m 777 -p "/usr/local/sbin";
+#because of wget --no-check-certificate secure problem cannot download package and install
+RUN echo "check-certificate = off" >> /etc/wgetrc;
 
 RUN wget https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/install-ngxblocker -O /usr/local/sbin/install-ngxblocker; \
     chmod +x /usr/local/sbin/install-ngxblocker;\
     ./usr/local/sbin/install-ngxblocker; \
-    ./usr/local/sbin/install-ngxblocker -x; \
+#    ./usr/local/sbin/install-ngxblocker -x; \
+#    ls -l /usr/local/sbin/*; \
     chmod +x -R /usr/local/sbin;
 ############## Install nginx-ultimate-bad-bot-blocker finished ############################
 #for test if it is alreay installed correctly
