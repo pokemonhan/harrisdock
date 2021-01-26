@@ -51,10 +51,10 @@ RUN echo "check-certificate = off" >> /etc/wgetrc;
 
 RUN wget https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/install-ngxblocker -O /usr/local/sbin/install-ngxblocker; \
     chmod +x /usr/local/sbin/install-ngxblocker;\
-    ./usr/local/sbin/install-ngxblocker; \
-#    ./usr/local/sbin/install-ngxblocker -x; \
+    ./usr/local/sbin/install-ngxblocker -x; \
 #    ls -l /usr/local/sbin/*; \
     chmod +x -R /usr/local/sbin;
+
 ############## Install nginx-ultimate-bad-bot-blocker finished ############################
 #for test if it is alreay installed correctly
 #for normal request
