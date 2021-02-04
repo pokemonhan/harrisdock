@@ -385,12 +385,12 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; then \
         pecl install xdebug-2.9.8; \
       else \
         if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
-          apt-get install -y php${LARADOCK_PHP_VERSION}-xdebug && \
+          apt-get install -y php${LARADOCK_PHP_VERSION}-xdebug; \
               #sed -i 's/^;//g' /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-xdebug.ini \
         else \
           #pecl install xdebug; \
           #echo "xDebug 3 required, not supported."; \
-          apt-get install -y php${LARADOCK_PHP_VERSION}-xdebug && \
+          apt-get install -y php${LARADOCK_PHP_VERSION}-xdebug; \
         fi \
       fi \
     fi \
