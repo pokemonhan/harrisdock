@@ -381,7 +381,7 @@ ARG INSTALL_XDEBUG=false
 RUN if [ ${INSTALL_XDEBUG} = true ]; then \
   # Install the xdebug extension
   if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
-    pecl install xdebug-3.0.0; \
+    pecl install xdebug; \
   else \
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
       pecl install xdebug-2.5.5; \
@@ -389,16 +389,10 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; then \
       if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ] && [ $(php -r "echo PHP_MINOR_VERSION;") = "0" ]; then \
         pecl install xdebug-2.9.0; \
       else \
-        if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ] && [ $(php -r "echo PHP_MINOR_VERSION;") = "1" ]; then \
+        if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ] && [ $(php -r "echo PHP_MINOR_VERSION;") < "2" ]; then \
           pecl install xdebug-2.9.8; \
         else \
-          if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
-            apt-get install -y php${LARADOCK_PHP_VERSION}-xdebug; \
-            #sed -i 's/^;//g' /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-xdebug.ini \
-          else \
-            #pecl install xdebug; \
-            apt-get install -y php${LARADOCK_PHP_VERSION}-xdebug; \
-          fi \
+          pecl install xdebug; \
         fi \
       fi \
     fi \
