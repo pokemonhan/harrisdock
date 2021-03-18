@@ -137,7 +137,7 @@ RUN if [ ${INSTALL_SSH2} = true ]; then \
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
         pecl install -a ssh2-0.13; \
     else \
-        pecl install -a ssh2-1.2; \
+        pecl install -a ssh2-1.3.1; \
     fi && \
     docker-php-ext-enable ssh2 \
 ;fi
@@ -216,14 +216,18 @@ ARG INSTALL_XDEBUG=false
 
 RUN if [ ${INSTALL_XDEBUG} = true ]; then \
   # Install the xdebug extension -o
-  if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
-    pecl install xdebug-2.5.5; \
+  if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
+    pecl install xdebug-3.0.0; \
   else \
-    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ] && [ $(php -r "echo PHP_MINOR_VERSION;") < "2" ]; then \
-      pecl install xdebug-2.9.8; \
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
+      pecl install xdebug-2.5.5; \
     else \
-      echo "i am here"; \
-      pecl install xdebug; \
+      if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ] && [ $(php -r "echo PHP_MINOR_VERSION;") < "2" ]; then \
+            pecl install xdebug-2.9.8; \
+          else \
+            echo "i am here"; \
+            pecl install xdebug; \
+          fi \
     fi \
   fi && \
   docker-php-ext-enable xdebug \
@@ -232,9 +236,20 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; then \
 # Copy xdebug configuration for remote debugging
 COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
-RUN sed -i "s/xdebug.remote_autostart=0/xdebug.remote_autostart=1/" /usr/local/etc/php/conf.d/xdebug.ini && \
-    sed -i "s/xdebug.remote_enable=0/xdebug.remote_enable=1/" /usr/local/etc/php/conf.d/xdebug.ini && \
-    sed -i "s/xdebug.cli_color=0/xdebug.cli_color=1/" /usr/local/etc/php/conf.d/xdebug.ini
+RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
+  sed -i "s/xdebug.remote_host=/xdebug.client_host=/" /usr/local/etc/php/conf.d/xdebug.ini && \
+  sed -i "s/xdebug.remote_connect_back=0/xdebug.discover_client_host=false/" /usr/local/etc/php/conf.d/xdebug.ini && \
+  sed -i "s/xdebug.remote_port=9000/xdebug.client_port=9003/" /usr/local/etc/php/conf.d/xdebug.ini && \
+  sed -i "s/xdebug.profiler_enable=0/; xdebug.profiler_enable=0/" /usr/local/etc/php/conf.d/xdebug.ini && \
+  sed -i "s/xdebug.profiler_output_dir=/xdebug.output_dir=/" /usr/local/etc/php/conf.d/xdebug.ini && \
+  sed -i "s/xdebug.remote_mode=req/; xdebug.remote_mode=req/" /usr/local/etc/php/conf.d/xdebug.ini && \
+  sed -i "s/xdebug.remote_autostart=0/xdebug.start_with_request=yes/" /usr/local/etc/php/conf.d/xdebug.ini && \
+  sed -i "s/xdebug.remote_enable=0/xdebug.mode=debug/" /usr/local/etc/php/conf.d/xdebug.ini \
+;else \
+  sed -i "s/xdebug.remote_autostart=0/xdebug.remote_autostart=1/" /usr/local/etc/php/conf.d/xdebug.ini && \
+  sed -i "s/xdebug.remote_enable=0/xdebug.remote_enable=1/" /usr/local/etc/php/conf.d/xdebug.ini \
+;fi
+RUN sed -i "s/xdebug.cli_color=0/xdebug.cli_color=1/" /usr/local/etc/php/conf.d/xdebug.ini
 
 ###########################################################################
 # pcov:
@@ -300,21 +315,21 @@ RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
 ###########################################################################
 
 ARG INSTALL_SWOOLE=false
-
-RUN if [ ${INSTALL_SWOOLE} = true ]; then \
-    # Install Php Swoole Extension
-    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
-      pecl install swoole-2.0.10; \
-    else \
-      if [ $(php -r "echo PHP_MINOR_VERSION;") = "0" ]; then \
-        pecl install swoole-2.2.0; \
+RUN set -eux; \
+    if [ ${INSTALL_SWOOLE} = true ]; then \
+      # Install Php Swoole Extension
+      if   [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "50600" ]; then \
+        pecl install swoole-2.0.11; \
+      elif [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "70000" ]; then \
+        pecl install swoole-4.3.5; \
+      elif [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "70100" ]; then \
+        pecl install swoole-4.6.0; \
       else \
         pecl install swoole; \
-      fi \
-    fi && \
-    docker-php-ext-enable swoole \
-    && php -m | grep -q 'swoole' \
-;fi
+      fi; \
+      docker-php-ext-enable swoole; \
+      php -m | grep -q 'swoole'; \
+    fi
 
 ###########################################################################
 # Taint EXTENSION
@@ -375,31 +390,38 @@ RUN if [ ${INSTALL_MONGO} = true ]; then \
 
 ARG INSTALL_XHPROF=false
 
-RUN if [ ${INSTALL_XHPROF} = true ]; then \
-    # Install the php xhprof extension
-    if [ $(php -r "echo PHP_MAJOR_VERSION;") = 7 ]; then \
-      curl -L -o /tmp/xhprof.tar.gz "https://github.com/tideways/php-xhprof-extension/archive/v5.0.1.tar.gz"; \
-    else \ 
-      curl -L -o /tmp/xhprof.tar.gz "https://codeload.github.com/phacility/xhprof/tar.gz/master"; \
-    fi \
-    && mkdir -p xhprof \
-    && tar -C xhprof -zxvf /tmp/xhprof.tar.gz --strip 1 \
-    && ( \
-        cd xhprof \
-        && phpize \
-        && ./configure \
-        && make \
-        && make install \
-    ) \
-    && rm -r xhprof \
-    && rm /tmp/xhprof.tar.gz \
-;fi
+RUN set -eux; \
+    if [ ${INSTALL_XHPROF} = true ]; then \
+      # Install the php xhprof extension
+      if   [ $(php -r "echo PHP_MAJOR_VERSION;") != 5 ]; then \
+        pecl install xhprof; \
+      else \
+        curl -L -o /tmp/xhprof.tar.gz "https://codeload.github.com/phacility/xhprof/tar.gz/master"; \
+        mkdir -p /tmp/xhprof; \
+        tar -C /tmp/xhprof -zxvf /tmp/xhprof.tar.gz --strip 1; \
+        ( \
+            cd /tmp/xhprof/extension; \
+            phpize; \
+            ./configure; \
+            make; \
+            make install; \
+        ); \
+        rm -r /tmp/xhprof; \
+        rm /tmp/xhprof.tar.gz; \
+      fi; \
+      docker-php-ext-enable xhprof; \
+      php -m | grep -q 'xhprof'; \
+    fi
 
-COPY ./xhprof.ini /usr/local/etc/php/conf.d
+# if [ ${INSTALL_XHPROF_USE_TIDYWAYS} = true ]; then \
+#   https://github.com/tideways/php-xhprof-extension
+# fi
 
-RUN if [ ${INSTALL_XHPROF} = false ]; then \
-    rm /usr/local/etc/php/conf.d/xhprof.ini \
-;fi
+# COPY ./xhprof.ini /usr/local/etc/php/conf.d
+
+# RUN if [ ${INSTALL_XHPROF} = false ]; then \
+#     rm /usr/local/etc/php/conf.d/xhprof.ini \
+# ;fi
 
 ###########################################################################
 # AMQP:
@@ -423,6 +445,41 @@ RUN if [ ${INSTALL_AMQP} = true ]; then \
     docker-php-ext-enable amqp && \
     # Install the sockets extension
     docker-php-ext-install sockets \
+;fi
+
+###########################################################################
+# CASSANDRA:
+###########################################################################
+
+ARG INSTALL_CASSANDRA=false
+
+RUN if [ ${INSTALL_CASSANDRA} = true ]; then \
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
+      echo "PHP Driver for Cassandra is not supported for PHP 8.0."; \
+    else \
+      apt-get install libgmp-dev -yqq && \
+      curl https://downloads.datastax.com/cpp-driver/ubuntu/18.04/dependencies/libuv/v1.35.0/libuv1-dev_1.35.0-1_amd64.deb -o libuv1-dev.deb && \
+      curl https://downloads.datastax.com/cpp-driver/ubuntu/18.04/dependencies/libuv/v1.35.0/libuv1_1.35.0-1_amd64.deb -o libuv1.deb && \
+      curl https://downloads.datastax.com/cpp-driver/ubuntu/18.04/cassandra/v2.16.0/cassandra-cpp-driver-dev_2.16.0-1_amd64.deb -o cassandra-cpp-driver-dev.deb && \
+      curl https://downloads.datastax.com/cpp-driver/ubuntu/18.04/cassandra/v2.16.0/cassandra-cpp-driver_2.16.0-1_amd64.deb -o cassandra-cpp-driver.deb && \
+      dpkg -i libuv1.deb && \
+      dpkg -i libuv1-dev.deb && \
+      dpkg -i cassandra-cpp-driver.deb && \
+      dpkg -i cassandra-cpp-driver-dev.deb && \
+      rm libuv1.deb libuv1-dev.deb cassandra-cpp-driver-dev.deb cassandra-cpp-driver.deb && \
+      cd /usr/src && \
+      git clone https://github.com/datastax/php-driver.git && \
+      cd /usr/src/php-driver/ext && \
+      phpize && \
+      mkdir /usr/src/php-driver/build && \
+      cd /usr/src/php-driver/build && \
+      ../ext/configure > /dev/null && \
+      make clean > /dev/null && \
+      make > /dev/null 2>&1 && \
+      make install && \
+      echo "extension=cassandra.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/cassandra.ini && \
+      ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/cassandra.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/30-cassandra.ini; \
+    fi \
 ;fi
 
 ###########################################################################
@@ -725,11 +782,29 @@ RUN if [ ${INSTALL_IMAGE_OPTIMIZERS} = true ]; then \
 USER root
 
 ARG INSTALL_IMAGEMAGICK=false
+ARG IMAGEMAGICK_VERSION=latest
+ENV IMAGEMAGICK_VERSION ${IMAGEMAGICK_VERSION}
 
 RUN if [ ${INSTALL_IMAGEMAGICK} = true ]; then \
     apt-get update --fix-missing && \
     apt-get install -y libmagickwand-dev imagemagick && \
-    pecl install imagick && \
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
+      apt-get install -y git && \
+      cd /tmp && \
+      if [ ${IMAGEMAGICK_VERSION} = "latest" ]; then \
+        git clone https://github.com/Imagick/imagick; \
+      else \
+        git clone --branch ${IMAGEMAGICK_VERSION} https://github.com/Imagick/imagick; \
+      fi && \
+      cd imagick && \
+      phpize && \
+      ./configure && \
+      make && \
+      make install && \
+      rm -r /tmp/imagick; \
+    else \
+      pecl install imagick; \
+    fi && \
     docker-php-ext-enable imagick \
 ;fi
 
@@ -905,6 +980,21 @@ RUN if [ ${INSTALL_SSHPASS} = true ]; then \
 ;fi
 
 ###########################################################################
+# Docker Client:
+###########################################################################
+
+USER root
+
+ARG INSTALL_DOCKER_CLIENT=false
+
+RUN if [ ${INSTALL_DOCKER_CLIENT} = true ]; then \
+    curl -sS https://download.docker.com/linux/static/stable/x86_64/docker-20.10.3.tgz -o /tmp/docker.tar.gz && \
+    tar -xzf /tmp/docker.tar.gz -C /tmp/ && \
+    cp /tmp/docker/docker* /usr/local/bin && \
+    chmod +x /usr/local/bin/docker* \
+;fi
+
+###########################################################################
 # FFMPEG:
 ###########################################################################
 
@@ -955,7 +1045,7 @@ RUN if [ ${INSTALL_WKHTMLTOPDF} = true ]; then \
     libx11-dev \
     libjpeg62 \
     libxtst6 \
-    fontconfig \ 
+    fontconfig \
     libjpeg62-turbo \
     xfonts-base \
     xfonts-75dpi \
@@ -1001,7 +1091,13 @@ RUN if [ ${INSTALL_CACHETOOL} = true ]; then \
 ARG INSTALL_XMLRPC=false
 
 RUN if [ ${INSTALL_XMLRPC} = true ]; then \
-    docker-php-ext-install xmlrpc \
+  apt-get -yq install libxml2-dev; \
+  if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
+    pecl install xmlrpc-1.0.0RC2; \
+    docker-php-ext-enable xmlrpc; \
+  else \
+    docker-php-ext-install xmlrpc; \
+  fi \
 ;fi
 
 ###########################################################################
