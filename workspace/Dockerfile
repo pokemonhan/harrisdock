@@ -213,11 +213,12 @@ RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
   cp -rf /tmp/cron/default/* /etc/cron.d/ \
 ;fi
 
-RUN ls -la /etc/cron.d/*
+RUN chmod -R 644 /etc/cron.d \
+&& ls -la /etc/cron.d/*
 
 #RUN cat /etc/cron.d/laradock
 
-RUN chmod -R 644 /etc/cron.d
+#RUN chmod -R 644 /etc/cron.d
 
 ###########################################################################
 # Update Repositories
@@ -636,8 +637,8 @@ ARG INSTALL_TOM_SWOOLE=false
 ARG TOM_SWOOLE_ProjectName
 #ENV TOM_SWOOLE_ProjectName ${TOM_SWOOLE_ProjectName}
 COPY ./tom/* /tom/
-RUN chmod -R 777 /tom/
-RUN ls -la /tom/*
+RUN chmod -R 777 /tom/ \
+&& ls -la /tom/*
 
 RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
     # Install Tom Swoole Extension
@@ -646,8 +647,8 @@ RUN if [ ${INSTALL_TOM_SWOOLE} = true ]; then \
     echo "extension=swoole_loader71.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/swoole.ini \
 #    && rm -rf /tmp/* \
     && ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/swoole.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/18-swoole.ini \
+    php -m \
 ;fi
-RUN php -m
 ###########################################################################
 # Libpng16 EXTENSION
 ###########################################################################
