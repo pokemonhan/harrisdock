@@ -3,10 +3,17 @@ FROM php:7.3-fpm
 # If you're in China, or you need to change sources, will be set CHANGE_SOURCE to true in .env.
 
 ARG CHANGE_SOURCE=false
+ARG UBUNTU_SOURCE=aliyun
+COPY ./sources.sh /tmp/sources.sh
 RUN if [ ${CHANGE_SOURCE} = true ]; then \
-    # Change application source from dl-cdn.alpinelinux.org to aliyun source
-    sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories \
-;fi
+    # Change application source from deb.debian.org to aliyun source
+    sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list; \
+    sed -i 's/security.debian.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list; \
+    sed -i 's/security-cdn.debian.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list; \
+    chmod +x /tmp/sources.sh; \
+    /bin/sh -c /tmp/sources.sh; \
+  fi; \
+  rm -rf /tmp/sources.sh
 
 ###########################################################################
 # Set Timezone
@@ -52,29 +59,44 @@ RUN apt-get update && apt-get -y install libzip-dev \
 # Should Install sockets bcmath
 RUN docker-php-ext-install pdo_mysql bcmath sockets zip
 
-RUN pecl install -o -f redis \
-    && rm -rf /tmp/pear \
-    && docker-php-ext-enable redis
+#RUN printf "\n" | pecl install -o -f redis \
+#    && rm -rf /tmp/pear \
+#    && docker-php-ext-enable redis
+
+RUN printf "\n" | curl --insecure -L 'http://pecl.php.net/get/redis-5.3.4.tgz' -o redis-5.3.4.tgz \
+  && pecl install redis-5.3.4.tgz \
+  &&  rm -rf redis-5.3.4.tgz \
+  &&  rm -rf /tmp/pear \
+  &&  docker-php-ext-enable redis
 
  # download and install manually, to make sure it's compatible with ampq installed by pecl later
     # install cmake first
-RUN curl -L -o /tmp/rabbitmq-c.tar.gz https://github.com/alanxz/rabbitmq-c/archive/master.tar.gz && \
+RUN curl --insecure -L -o /tmp/rabbitmq-c.tar.gz https://github.com/alanxz/rabbitmq-c/archive/master.tar.gz && \
     mkdir -p rabbitmq-c && \
     tar -C rabbitmq-c -zxvf /tmp/rabbitmq-c.tar.gz --strip 1 && \
     cd rabbitmq-c/ && \
     mkdir _build && cd _build/ && \
     cmake .. && \
-    cmake --build . --target install && \
+    cmake --build . --target install
     # Install the amqp extension
-    pecl install amqp && \
-    docker-php-ext-enable amqp
+#RUN pecl install amqp && \
+#    docker-php-ext-enable amqp
 
-RUN curl https://getcomposer.org/installer > /tmp/composer-setup && \
-    php /tmp/composer-setup --install-dir=/usr/bin --filename=composer
+RUN printf "\n" | curl --insecure -L 'http://pecl.php.net/get/amqp-1.10.2.tgz' -o amqp-1.10.2.tgz \
+  && pecl install amqp-1.10.2.tgz \
+  &&  rm -rf amqp-1.10.2.tgz \
+  &&  rm -rf /tmp/pear \
+  &&  docker-php-ext-enable amqp
 
-RUN pip3 --no-cache-dir install circus -i https://mirrors.aliyun.com/pypi/simple/
+#RUN curl --insecure -sS https://getcomposer.org/installer > /tmp/composer-setup && \
+#    php /tmp/composer-setup --install-dir=/usr/bin --filename=composer
 
-RUN pip3 --no-cache-dir install circus-web
+COPY ./php-composer/installer /tmp/composer-setup
+RUN php /tmp/composer-setup --install-dir=/usr/bin --filename=composer
+
+#https://pypi.org/simple/circus/
+#https://developer.aliyun.com/article/652884
+RUN pip3 --no-cache-dir --trusted-host mirrors.aliyun.com install circus circus-web -i https://mirrors.aliyun.com/pypi/simple/
 
 COPY ./entrypoint.sh /data/
 RUN chmod +x /data/entrypoint.sh
