@@ -1765,6 +1765,7 @@ services:
       environment:
         - TZ=${WORKSPACE73_TIMEZONE}
       volumes:
+        - ./php-worker-circus/config:/etc/circus.d
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
       ports:
         - "${CIRCUS_HTTP_PORT}:9999"
