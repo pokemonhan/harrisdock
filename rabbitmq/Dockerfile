@@ -1,4 +1,4 @@
-FROM rabbitmq:alpine
+FROM rabbitmq:management-alpine
 
 LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
 
@@ -6,6 +6,9 @@ RUN rabbitmq-plugins enable --offline rabbitmq_management
 
 RUN apk update && \
 apk add wget unzip
+
+#RUN apt-get -yqq update && \
+#apt-get install -yqq wget unzip
 
 ##############v 3.7##############
 #RUN curl https://dl.bintray.com/rabbitmq/community-plugins/3.7.x/rabbitmq_delayed_message_exchange/rabbitmq_delayed_message_exchange-20171201-3.7.x.zip > rabbitmq_delayed_message_exchange-20171201-3.7.x.zip && \
