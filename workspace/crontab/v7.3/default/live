@@ -11,6 +11,22 @@
 * * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=shiyixuanwu >> /var/www/webapi/Runtime/Drawing.OneMin.shiyixuanwu.log 2>&1
 * * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=xingyunnongchang >> /var/www/webapi/Runtime/Drawing.OneMin.xingyunnongchang.log 2>&1
 
+*/3 * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=sfkuaileshifen >> /var/www/webapi/Runtime/Drawing.OneMin.sfkuaileshifen.log 2>&1
+*/3 * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=sfkuaisan >> /var/www/webapi/Runtime/Drawing.OneMin.sfkuaisan.log 2>&1
+*/3 * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=sfliuhecai >> /var/www/webapi/Runtime/Drawing.OneMin.sfliuhecai.log 2>&1
+*/3 * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=sfsaiche >> /var/www/webapi/Runtime/Drawing.OneMin.sfsaiche.log 2>&1
+*/3 * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=sfshishicai >> /var/www/webapi/Runtime/Drawing.OneMin.sfshishicai.log 2>&1
+*/3 * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=sfshiyixuanwu >> /var/www/webapi/Runtime/Drawing.OneMin.sfshiyixuanwu.log 2>&1
+*/3 * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=sfxingyunnongchang >> /var/www/webapi/Runtime/Drawing.OneMin.sfxingyunnongchang.log 2>&1
+
+*/5 * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=wfkuaileshifen >> /var/www/webapi/Runtime/Drawing.OneMin.wfkuaileshifen.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=wfkuaisan >> /var/www/webapi/Runtime/Drawing.OneMin.wfkuaisan.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=wfliuhecai >> /var/www/webapi/Runtime/Drawing.OneMin.wfliuhecai.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=wfsaiche >> /var/www/webapi/Runtime/Drawing.OneMin.wfsaiche.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=wfshishicai >> /var/www/webapi/Runtime/Drawing.OneMin.wfshishicai.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=wfshiyixuanwu >> /var/www/webapi/Runtime/Drawing.OneMin.wfshiyixuanwu.log 2>&1
+*/5 * * * * laradock php /var/www/webapi/Commands/games.php -s Drawing.OneMin --game=wfxingyunnongchang >> /var/www/webapi/Runtime/Drawing.OneMin.wfxingyunnongchang.log 2>&1
+
 # 每分钟统计一次
 * * * * * laradock php /var/www/webapi/Commands/games.php -s Stats.triggerRealtime >> /var/www/webapi/Runtime/Stats.triggerRealtime.log 2>&1
 
@@ -18,7 +34,7 @@
 */15 * * * * laradock php /var/www/webapi/Commands/games.php -s Cache.buildCache >> /var/www/webapi/Runtime/Cache.buildCache.log 2>&1
 
 #维持队列连接定时任务
-#59 * * * * laradock php /var/www/payment/server.php tool:keep_queue_connect_alive
+#59 * * * * laradock php /data/www/payment/server.php tool:keep_queue_connect_alive >> /data/www/payment/storage/logs/keepalive.log 2>&1
 
 # 每30分钟统计当天用户投注数和胜单数
 */30 * * * * laradock php /var/www/webapi/Commands/app.php -s StatisticHandle.statisticTodayGameOrder >> /var/www/webapi/Runtime/StatisticHandle.statisticTodayGameOrder.log 2>&1
@@ -43,15 +59,15 @@
 * * * * * laradock php /var/www/webapi/Commands/app.php -s Keep.workerScale >> /var/www/webapi/Runtime/Keep.worker_scale.log 2>&1
 
 #每5分钟更新一次各排行榜
-*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=profit --interval=day >> /var/www/webapi/Runtime/RankListCache.log 2>&1
-*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=profit --interval=week >> /var/www/webapi/Runtime/RankListCache.log 2>&1
-*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=profit --interval=month >> /var/www/webapi/Runtime/RankListCache.log 2>&1
-*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=profit --interval=total >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+#*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=profit --interval=day >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+#*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=profit --interval=week >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+#*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=profit --interval=month >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+#*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=profit --interval=total >> /var/www/webapi/Runtime/RankListCache.log 2>&1
 
-*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=consume --interval=day >> /var/www/webapi/Runtime/RankListCache.log 2>&1
-*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=consume --interval=week >> /var/www/webapi/Runtime/RankListCache.log 2>&1
-*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=consume --interval=month >> /var/www/webapi/Runtime/RankListCache.log 2>&1
-*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=consume --interval=total >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+#*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=consume --interval=day >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+#*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=consume --interval=week >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+#*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=consume --interval=month >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+#*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=consume --interval=total >> /var/www/webapi/Runtime/RankListCache.log 2>&1
 
 */5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=god --interval=day >> /var/www/webapi/Runtime/RankListCache.log 2>&1
 */5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=god --interval=week >> /var/www/webapi/Runtime/RankListCache.log 2>&1
@@ -62,6 +78,15 @@
 */5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=recharge --interval=week >> /var/www/webapi/Runtime/RankListCache.log 2>&1
 */5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=recharge --interval=month >> /var/www/webapi/Runtime/RankListCache.log 2>&1
 */5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.cacheHandle --type=recharge --interval=total >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+
+#日排行榜从redis中入库 每天00:05将昨日排行数据入库
+5 0 * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.listRedisToDb --type=date >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+#周排行榜从redis中入库 每周一00:05将上周排行数据入库
+5 0 * * 1 laradock php /var/www/webapi/Commands/app.php -s RankListCache.listRedisToDb --type=week >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+#月排行榜从redis中入库 每月1号00:05将上月排行数据入库
+5 0 1 * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.listRedisToDb --type=month >> /var/www/webapi/Runtime/RankListCache.log 2>&1
+#总排行榜从redis中入库 每天00:05将昨日排行数据入库
+5 0 * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.listRedisToDb --type=total >> /var/www/webapi/Runtime/RankListCache.log 2>&1
 
 #
 0 0 1 * * laradock php /var/www/webapi/Commands/app.php -s Live.votestotalClean >> /var/www/webapi/Runtime/Live.votestotalClean.log 2>&1
@@ -79,7 +104,22 @@
 
 #对昨日返水进行到账操作
 5 0 * * * laradock php /var/www/webapi/Commands/app.php -s ThirdPartGame.rebateToUser >> /var/www/webapi/Runtime/ebateToUser.log 2>&1
-
+#每日5:20点生成昨日会员报表数据
+20 5 * * * laradock php /var/www/webapi/Commands/app.php -s UserReport.userMoneyDataDayReport  --date='-1 day' >> /var/www/webapi/Runtime/userMoneyDataDayReport.log 2>&1
+# 会员报表老数据处理命令手动执行 start传入开始日期  end 传入结束日期最大值为当前日期的前一天
+# laradock php /var/www/webapi/Commands/app.php -s UserReport.userReportOldData  --start='-1 day' --end='-1 day' >> /var/www/webapi/Runtime/userMoneyDataDayReport.log 2>&1
 # 每分钟执行  同步live表和直播排序列表
 * * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.syncLiveOrderListFromLiveTable >> /var/www/webapi/Runtime/SyncLiveOrderListFromLiveTable.log 2>&1
 
+# 每分钟缓存直播间观众人数
+* * * * * laradock php /var/www/webapi/Commands/app.php -s LiveAccount.cacheLiveRoomPeopleNum >> /var/www/webapi/Runtime/LiveAccount.cacheLiveRoomPeopleNum.log 2>&1
+
+# 每分钟缓存域名直播间使用人数
+* * * * * laradock php /var/www/webapi/Commands/app.php -s LiveAccount.cacheUseAnchorNum >> /var/www/webapi/Runtime/LiveAccount.cacheUseAnchorNum.log 2>&1
+
+# 每30s检测一次直播服务状态
+* * * * * laradock php /var/www/webapi/Commands/app.php -s Live.checkService >> /var/www/webapi/Runtime/Live.checkService.log 2>&1
+* * * * * sleep 30; laradock php /var/www/webapi/Commands/app.php -s Live.checkService >> /var/www/webapi/Runtime/Live.checkService.log 2>&1
+
+# 每5分钟执行  更新明星榜
+*/5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.refreshProfitList >> /var/www/webapi/Runtime/refreshProfitList.log 2>&1
