@@ -7,6 +7,7 @@
    <a href="https://github.com/laradock/laradock/network"><img src="https://img.shields.io/github/forks/laradock/laradock.svg" alt="GitHub forks"></a>
    <a href="https://github.com/laradock/laradock/issues"><img src="https://img.shields.io/github/issues/laradock/laradock.svg" alt="GitHub issues"></a>
    <a href="https://github.com/laradock/laradock/stargazers"><a href="#backers" alt="sponsors on Open Collective"><img src="https://opencollective.com/laradock/backers/badge.svg" /></a> <a href="#sponsors" alt="Sponsors on Open Collective"><img src="https://opencollective.com/laradock/sponsors/badge.svg" /></a> <img src="https://img.shields.io/github/stars/laradock/laradock.svg" alt="GitHub stars"></a>
+   <a href="https://github.com/laradock/laradock/actions/workflows/main-ci.yml"><img src="https://github.com/laradock/laradock/actions/workflows/main-ci.yml/badge.svg" alt="GitHub CI"></a>
    <a href="https://travis-ci.org/laradock/laradock"><img src="https://travis-ci.org/laradock/laradock.svg?branch=master" alt="Build status"></a>
    <a href="https://raw.githubusercontent.com/laradock/laradock/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license"></a>
 </p>
@@ -191,7 +192,10 @@ Sponsoring is an act of giving in a different fashion. 🌱
 
 <p align="center">
 
-<a href="https://www.bestonlinecasino.com/" target="_blank"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/bestonlinecasino.jpg" alt="We thank bestonlinecasino.com for their support" height="75px"></a>
+<a href="https://casinopilotti.com/"        target="_blank"   style="margin-right: 4em"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/casinopilotti.png"        height="75px"    alt="CasinoPilotti" ></a>
+<a href="https://www.bestonlinecasino.com/" target="_blank"   style="margin-right: 4em"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/bestonlinecasino.jpg"     height="75px"    alt="We thank bestonlinecasino.com for their support"></a>
+<a href="http://apiato.io/"                 target="_blank"   style="margin-right: 4em"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/apiato.png"               height="75px"    alt="Apiato Build PHP API's faster"></a>
+
 
 <a href="https://opencollective.com/laradock/tiers/gold-sponsors/0/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/0/avatar.svg?button=false&isActive=true" height="75px"></a>
 <a href="https://opencollective.com/laradock/tiers/gold-sponsors/1/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/1/avatar.svg?button=false&isActive=true" height="75px"></a>
@@ -226,8 +230,6 @@ Sponsoring is an act of giving in a different fashion. 🌱
 ### Bronze Sponsors
 
 <p align="center">
-
-<a href="http://apiato.io/" target="_blank"     style="margin-right: 4em"    ><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/apiato.png" alt="Apiato Build API's faster." height="55px"></a>
 
 <a href="https://opencollective.com/laradock/tiers/bronze-sponsors/0/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/bronze-sponsors/0/avatar.svg?button=false&isActive=true" height="55px"></a>
 <a href="https://opencollective.com/laradock/tiers/bronze-sponsors/1/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/bronze-sponsors/1/avatar.svg?button=false&isActive=true" height="55px"></a>
