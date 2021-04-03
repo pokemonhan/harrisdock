@@ -48,7 +48,7 @@ RUN set -eux; \
         docker-php-ext-install gd; \
         php -r 'var_dump(gd_info());'
 
-RUN apt-get update && apt-get -y install libzip-dev \
+RUN apt-get update && apt-get -yqq install libzip-dev \
     unzip \
     python3 \
     python3-pip \
@@ -122,7 +122,7 @@ RUN ls -la /tmp/circus/*
 COPY ./config /etc/circus.d
 RUN ls -la /etc/circus.d/*
 
-EXPOSE 8080
+EXPOSE 8080 9999
 ENTRYPOINT ["/data/entrypoint.sh"]
 
 
