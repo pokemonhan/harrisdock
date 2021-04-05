@@ -34,7 +34,7 @@
 */15 * * * * laradock php /var/www/webapi/Commands/games.php -s Cache.buildCache >> /var/www/webapi/Runtime/Cache.buildCache.log 2>&1
 
 #维持队列连接定时任务
-#59 * * * * laradock php /data/www/payment/server.php tool:keep_queue_connect_alive >> /data/www/payment/storage/logs/keepalive.log 2>&1
+#59 * * * * laradock php /var/www/payment/server.php tool:keep_queue_connect_alive >> /data/www/payment/storage/logs/keepalive.log 2>&1
 
 # 每30分钟统计当天用户投注数和胜单数
 */30 * * * * laradock php /var/www/webapi/Commands/app.php -s StatisticHandle.statisticTodayGameOrder >> /var/www/webapi/Runtime/StatisticHandle.statisticTodayGameOrder.log 2>&1
@@ -119,7 +119,7 @@
 
 # 每30s检测一次直播服务状态
 * * * * * laradock php /var/www/webapi/Commands/app.php -s Live.checkService >> /var/www/webapi/Runtime/Live.checkService.log 2>&1
-* * * * * sleep 30; laradock php /var/www/webapi/Commands/app.php -s Live.checkService >> /var/www/webapi/Runtime/Live.checkService.log 2>&1
+* * * * * laradock sleep 30; php /var/www/webapi/Commands/app.php -s Live.checkService >> /var/www/webapi/Runtime/Live.checkService.log 2>&1
 
 # 每5分钟执行  更新明星榜
 */5 * * * * laradock php /var/www/webapi/Commands/app.php -s RankListCache.refreshProfitList >> /var/www/webapi/Runtime/refreshProfitList.log 2>&1
