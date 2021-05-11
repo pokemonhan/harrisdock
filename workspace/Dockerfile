@@ -1242,7 +1242,8 @@ RUN if [ ${INSTALL_IMAGEMAGICK} = true ]; then \
       pecl install imagick; \
     fi && \
     echo "extension=imagick.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/imagick.ini && \
-    ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/imagick.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-imagick.ini \
+    ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/imagick.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-imagick.ini && \
+    php -m | grep -q 'imagick' \
 ;fi
 
 ###########################################################################
@@ -1260,6 +1261,18 @@ RUN if [ ${INSTALL_TERRAFORM} = true ]; then \
     && mv terraform /usr/local/bin \
     && rm terraform_0.10.6_linux_amd64.zip \
 ;fi
+
+###########################################################################
+# Memcached Dependecies:
+###########################################################################
+
+ARG INSTALL_MEMCACHED=false
+
+RUN if [ ${INSTALL_MEMCACHED} = true ]; then \
+  apt-get -y install php${LARADOCK_PHP_VERSION}-igbinary \
+  && apt-get -y install php${LARADOCK_PHP_VERSION}-memcached \
+;fi
+
 ###########################################################################
 # pgsql client
 ###########################################################################
@@ -1634,6 +1647,32 @@ RUN if [ ${INSTALL_PHPDECIMAL} = true ]; then \
       && php -m | grep -q 'decimal' \
     ;fi \
 ;fi
+
+###########################################################################
+# zookeeper
+###########################################################################
+ARG INSTALL_ZOOKEEPER=false
+
+RUN set -eux; \
+    if [ ${INSTALL_ZOOKEEPER} = true ]; then \
+    apt install -yqq libzookeeper-mt-dev; \
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
+      curl -L -o /tmp/php-zookeeper.tar.gz https://github.com/php-zookeeper/php-zookeeper/archive/master.tar.gz; \
+      mkdir -p /tmp/php-zookeeper; \
+      tar -C /tmp/php-zookeeper -zxvf /tmp/php-zookeeper.tar.gz --strip 1; \
+      cd /tmp/php-zookeeper; \
+      phpize && ./configure && make && make install;\
+    else \
+      if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
+        pecl install zookeeper-0.5.0; \
+      else \
+        pecl install zookeeper-0.7.2; \
+      fi; \
+    fi; \
+    echo "extension=zookeeper.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/zookeeper.ini; \
+    ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/zookeeper.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/30-zookeeper.ini; \
+    php -m | grep -q 'zookeeper'; \
+    fi
 
 #
 #--------------------------------------------------------------------------

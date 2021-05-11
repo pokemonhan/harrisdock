@@ -23,7 +23,6 @@ RUN apk --update add wget \
   curl \
   git \
   build-base \
-  libmemcached-dev \
   libmcrypt-dev \
   libxml2-dev \
   pcre-dev \
@@ -32,8 +31,8 @@ RUN apk --update add wget \
   cyrus-sasl-dev \
   libgsasl-dev \
   oniguruma-dev \
-  openssl \
-  openssl-dev \
+  libressl \
+  libressl-dev \
   supervisor
 
 RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
@@ -90,12 +89,24 @@ RUN set -eux; if [ ${INSTALL_GNUPG} = true ]; then \
       docker-php-ext-enable gnupg; \
     fi
 
+#Install LDAP
+ARG INSTALL_LDAP=false;
+RUN set -eux; if [ ${INSTALL_LDAP} = true ]; then \
+      apk add --no-cache --no-progress openldap-dev; \
+      docker-php-ext-install ldap; \
+      php -m | grep -oiE '^ldap$'; \
+    fi
+
 #Install GD package:
 ARG INSTALL_GD=false
 RUN if [ ${INSTALL_GD} = true ]; then \
-   apk add --update --no-cache freetype-dev libjpeg-turbo-dev jpeg-dev libpng-dev; \
-   docker-php-ext-configure gd --with-freetype-dir=/usr/lib/ --with-jpeg-dir=/usr/lib/ --with-png-dir=/usr/lib/ && \
-   docker-php-ext-install gd \
+    apk add --update --no-cache freetype-dev libjpeg-turbo-dev jpeg-dev libpng-dev; \
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ] && [ $(php -r "echo PHP_MINOR_VERSION;") = "4" ]; then \
+      docker-php-ext-configure gd --with-freetype --with-jpeg --with-png; \
+    else \
+      docker-php-ext-configure gd --with-freetype-dir=/usr/lib/ --with-jpeg-dir=/usr/lib/ --with-png-dir=/usr/lib/; \
+    fi; \
+    docker-php-ext-install gd \
 ;fi
 
 #Install ImageMagick:
@@ -104,9 +115,8 @@ ARG IMAGEMAGICK_VERSION=latest
 ENV IMAGEMAGICK_VERSION ${IMAGEMAGICK_VERSION}
 RUN set -eux; \
   if [ ${INSTALL_IMAGEMAGICK} = true ]; then \
-    apk add --update --no-cache imagemagick-dev; \
+    apk add --update --no-cache imagemagick-dev imagemagick; \
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
-      apk add --update --no-cache git && \
       cd /tmp && \
       if [ ${IMAGEMAGICK_VERSION} = "latest" ]; then \
         git clone https://github.com/Imagick/imagick; \
@@ -133,6 +143,12 @@ RUN if [ ${INSTALL_GMP} = true ]; then \
    && docker-php-ext-install gmp \
 ;fi
 
+#Install BCMath package:
+ARG INSTALL_BCMATH=false
+RUN if [ ${INSTALL_BCMATH} = true ]; then \
+    docker-php-ext-install bcmath \
+;fi
+
 #Install SOAP package:
 ARG INSTALL_SOAP=false
 RUN if [ ${INSTALL_SOAP} = true ]; then \
@@ -150,12 +166,6 @@ RUN if [ ${INSTALL_MONGO} = true ]; then \
         docker-php-ext-enable mongodb; \
       fi; \
     fi
-
-#Install BCMath package:
-ARG INSTALL_BCMATH=false
-RUN if [ ${INSTALL_BCMATH} = true ]; then \
-    docker-php-ext-install bcmath \
-;fi
 
 ###########################################################################
 # PHP OCI8:
@@ -261,7 +271,6 @@ RUN if [ ${INSTALL_AUDIOWAVEFORM} = true ]; then \
 ARG INSTALL_AMQP=false
 
 RUN if [ ${INSTALL_AMQP} = true ]; then \
-    apk del -q openssl openssl-dev && \
     apk --update add -q rabbitmq-c rabbitmq-c-dev && \
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
       printf "\n" | pecl install amqp-1.11.0beta; \
@@ -270,7 +279,6 @@ RUN if [ ${INSTALL_AMQP} = true ]; then \
     fi && \
     docker-php-ext-enable amqp && \
     apk del -q rabbitmq-c-dev && \
-    apk add --update -q openssl openssl-dev && \
     docker-php-ext-install sockets \
 ;fi
 
@@ -377,9 +385,13 @@ RUN if [ $INSTALL_GHOSTSCRIPT = true ]; then \
 ARG INSTALL_REDIS=false
 RUN if [ ${INSTALL_REDIS} = true ]; then \
     # Install Redis Extension
-    printf "\n" | pecl install -o -f redis \
-    &&  rm -rf /tmp/pear \
-    &&  docker-php-ext-enable redis \
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
+      printf "\n" | pecl install -o -f redis-4.3.0; \
+    else \
+      printf "\n" | pecl install -o -f redis; \
+    fi; \
+    rm -rf /tmp/pear; \
+    docker-php-ext-enable redis \
 ;fi
 
 ###########################################################################
@@ -413,8 +425,11 @@ RUN if [ ${INSTALL_TAINT} = true ]; then \
     # Install Php TAINT Extension
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
       pecl install taint; \
-    fi && \
-    docker-php-ext-enable taint \
+      docker-php-ext-enable taint; \
+      php -m | grep -q 'taint'; \
+    else \
+      echo 'taint not Support'; \
+    fi \
 ;fi
 
 ###########################################################################
@@ -424,7 +439,7 @@ RUN if [ ${INSTALL_TAINT} = true ]; then \
 ARG INSTALL_IMAP=false
 
 RUN if [ ${INSTALL_IMAP} = true ]; then \
-    apk add --update imap-dev openssl-dev && \
+    apk add --update imap-dev && \
     docker-php-ext-configure imap --with-imap --with-imap-ssl && \
     docker-php-ext-install imap \
 ;fi
@@ -436,8 +451,32 @@ RUN if [ ${INSTALL_IMAP} = true ]; then \
 ARG INSTALL_XMLRPC=false
 
 RUN if [ ${INSTALL_XMLRPC} = true ]; then \
-    docker-php-ext-install xmlrpc \
-;fi
+      if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
+        pecl install xmlrpc-1.0.0RC2; \
+        docker-php-ext-enable xmlrpc; \
+      else \
+        docker-php-ext-install xmlrpc; \
+      fi; \
+      php -m | grep -r 'xmlrpc'; \
+    fi
+
+###########################################################################
+# PHP Memcached:
+###########################################################################
+
+ARG INSTALL_MEMCACHED=false
+
+RUN if [ ${INSTALL_MEMCACHED} = true ]; then \
+  apk --update add libmemcached-dev; \
+  # Install the php memcached extension
+  if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
+    pecl install memcached-2.2.0; \
+  else \
+    pecl install memcached; \
+  fi; \
+  docker-php-ext-enable memcached; \
+  php -m | grep -r 'memcached'; \
+fi
 
 #
 #--------------------------------------------------------------------------
