@@ -1956,7 +1956,8 @@ services:
 #        - php-fpm-tom
 #        - php-fpm7
 #        - php-fpm72
-        - php-fpm73
+#        - php-fpm73
+        - php-fpm74
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "dysmsapi.aliyuncs.com:8.210.214.228"
@@ -3686,4 +3687,26 @@ services:
         - ./logs/yapi/:/yapi/log
       networks:
         - frontend
+
+  ### sentry 异常报告 ########################################
+  #environment place https://github.com/getsentry/docker-sentry/blob/902ac5c7e65aa0bfe891b6273b8693af704ccfde/8.5/sentry.conf.py
+    sentry:
+      build:
+        context: ./sentry
+        args:
+          - SENTRY_VERSION=${SENTRY_VERSION}
+      ports:
+        - 9004:9000
+      networks:
+        - backend
+      depends_on:
+        - redis
+        - postgres
+      environment:
+        - POSTGRES_ENV_POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        - POSTGRES_ENV_POSTGRES_USER=${POSTGRES_USER}
+        - SENTRY_POSTGRES_HOST=postgres
+        - SENTRY_REDIS_PASSWORD=12345678
+        - SENTRY_REDIS_HOST=redis
+        - SENTRY_SECRET_KEY=${SENTRY_SECRET_KEY}
 
