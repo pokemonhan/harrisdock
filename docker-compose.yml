@@ -3720,7 +3720,7 @@ services:
         - SENTRY_EMAIL_HOST=smtp.gmail.com
         - SENTRY_EMAIL_PORT=587
         - SENTRY_EMAIL_USER=hahaxuanwu@gmail.com
-        - SENTRY_EMAIL_PASSWORD=xu@
+        - SENTRY_EMAIL_PASSWORD=xu@nwuHarri5
       extra_hosts:
         - "mysentry.com:host-gateway"
 
