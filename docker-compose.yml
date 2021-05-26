@@ -1,5 +1,8 @@
 version: '3.5'
 
+x-restart-policy: &restart_policy
+  restart: unless-stopped
+
 networks:
   frontend:
     driver: ${NETWORKS_DRIVER}
@@ -1628,6 +1631,7 @@ services:
         - "9000"
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
+        - "mysentry.com:host-gateway"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
         - DOCKER_HOST=tcp://docker-in-docker:2376
@@ -1958,6 +1962,7 @@ services:
 #        - php-fpm72
 #        - php-fpm73
         - php-fpm74
+        - sentry-worker
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "dysmsapi.aliyuncs.com:8.210.214.228"
@@ -3700,6 +3705,7 @@ services:
       networks:
         - backend
       depends_on:
+        - kafka
         - redis
         - postgres
       environment:
@@ -3709,7 +3715,14 @@ services:
         - SENTRY_REDIS_PASSWORD=12345678
         - SENTRY_REDIS_HOST=redis
         - SENTRY_SECRET_KEY=${SENTRY_SECRET_KEY}
+        - SENTRY_REDIS_DB=15
         - C_FORCE_ROOT=true
+        - SENTRY_EMAIL_HOST=smtp.gmail.com
+        - SENTRY_EMAIL_PORT=587
+        - SENTRY_EMAIL_USER=hahaxuanwu@gmail.com
+        - SENTRY_EMAIL_PASSWORD=xu@
+      extra_hosts:
+        - "mysentry.com:host-gateway"
 
     sentry-cron:
       build:
@@ -3721,6 +3734,7 @@ services:
       depends_on:
         - redis
         - postgres
+        - sentry
       command: sentry run cron
       environment:
         - POSTGRES_ENV_POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -3729,19 +3743,31 @@ services:
         - SENTRY_REDIS_PASSWORD=12345678
         - SENTRY_REDIS_HOST=redis
         - SENTRY_SECRET_KEY=${SENTRY_SECRET_KEY}
+        - SENTRY_REDIS_DB=15
         - C_FORCE_ROOT=true
+        - SENTRY_EMAIL_HOST=smtp.gmail.com
+        - SENTRY_EMAIL_PORT=587
+        - SENTRY_EMAIL_USER=hahaxuanwu@gmail.com
+        - SENTRY_EMAIL_PASSWORD=xu@nwuHarri5
+      extra_hosts:
+        - "mysentry.com:host-gateway"
 
+#  docker run --rm harris_sentry-worker bash -c "relay credentials generate --stdout"
     sentry-worker:
+      <<: *restart_policy
       build:
-        context: ./sentry
-        args:
-          - SENTRY_VERSION=${SENTRY_VERSION}
+        context: ./sentry-worker
       networks:
         - backend
-      command: sentry run worker
+      volumes:
+        - ./sentry-worker/config/config.yml:/work/.relay/config.yml
+        - ./sentry-worker/config/credentials.json:/work/.relay/credentials.json
+        - ./sentry-worker/geoip:/geoip
       depends_on:
+        - kafka
         - redis
         - postgres
+        - sentry
       environment:
         - POSTGRES_ENV_POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
         - POSTGRES_ENV_POSTGRES_USER=${POSTGRES_USER}
@@ -3749,5 +3775,12 @@ services:
         - SENTRY_REDIS_PASSWORD=12345678
         - SENTRY_REDIS_HOST=redis
         - SENTRY_SECRET_KEY=${SENTRY_SECRET_KEY}
+        - SENTRY_REDIS_DB=15
         - C_FORCE_ROOT=true
+        - SENTRY_EMAIL_HOST=smtp.gmail.com
+        - SENTRY_EMAIL_PORT=587
+        - SENTRY_EMAIL_USER=hahaxuanwu@gmail.com
+        - SENTRY_EMAIL_PASSWORD=xu@nwuHarri5
+      extra_hosts:
+        - "mysentry.com:host-gateway"
 
