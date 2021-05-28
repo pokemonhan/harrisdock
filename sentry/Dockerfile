@@ -1,5 +1,5 @@
-ARG SENTRY_VERSION=21.5.1
-FROM getsentry/sentry:${SENTRY_VERSION}
+ARG SENTRY_IMAGE
+FROM ${SENTRY_IMAGE}
 #https://medium.com/sentry-with-docker/installing-sentry-with-docker-c1d83dfee577
 
 #COPY entrypoint.sh /entrypoint.sh
