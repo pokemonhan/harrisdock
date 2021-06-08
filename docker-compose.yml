@@ -3733,7 +3733,6 @@ services:
       image: wurstmeister/kafka
       ports:
         - "9092:9092"
-      hostname: kafka
       environment:
         KAFKA_BROKER_ID: 1
         KAFKA_ADVERTISED_HOST_NAME: kafka
