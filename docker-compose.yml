@@ -74,7 +74,7 @@ x-snuba-defaults: &snuba_defaults
     UWSGI_DISABLE_LOGGING: "true"
     # Leaving the value empty to just pass whatever is set
     # on the host system (or in the .env file)
-    SENTRY_EVENT_RETENTION_DAYS:
+    SENTRY_EVENT_RETENTION_DAYS: 90
   networks:
     - backend
 
@@ -3739,6 +3739,8 @@ services:
         KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
         KAFKA_MESSAGE_MAX_BYTES: 2000000
         KAFKA_MAX_REQUEST_SIZE: 50000000
+        KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+        KAFKA_PRODUCER_AUTO_CREATE_TOPICS: 'client-side' # We need this for topic used outside of Snuba (attachments etc.)
         KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
         CONFLUENT_SUPPORT_METRICS_ENABLE: "false"
         KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
