@@ -2037,7 +2037,7 @@ services:
 #        - php-fpm72
 #        - php-fpm73
         - php-fpm74
-        - sentry-relay
+#        - sentry-relay
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "dysmsapi.aliyuncs.com:8.210.214.228"
