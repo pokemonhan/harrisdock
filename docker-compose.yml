@@ -2662,6 +2662,7 @@ services:
         - "${ELASTICSEARCH_HOST_TRANSPORT_PORT}:9300"
       depends_on:
         - php-fpm
+        - php-fpm74
       networks:
         - frontend
         - backend
@@ -3762,6 +3763,19 @@ services:
         - zookeeper
       networks:
         - backend
+
+    schema-registry:
+      image: confluentinc/cp-schema-registry:4.1.1
+      hostname: schema-registry
+      ports:
+        - "38081:38081"
+      depends_on:
+        - kafka
+      environment:
+        SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:32181
+        SCHEMA_REGISTRY_HOST_NAME: schema-registry
+        SCHEMA_REGISTRY_LISTENERS: http://schema-registry:38081
+        SCHEMA_REGISTRY_DEBUG: "true"
 
 ### kafka-manager ###########################################
     kafka-manager:
