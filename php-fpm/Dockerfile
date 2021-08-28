@@ -41,15 +41,32 @@ RUN if [ ${LARADOCK_PHP_VERSION} = 7.3 ]; then \
         rm -rf /var/lib/apt/lists/* ;\
         # Install the PHP pdo_mysql extention
         docker-php-ext-install pdo_mysql; \
-        php -m; \
-        # Install the PHP pdo_pgsql extention
-        docker-php-ext-install pdo_pgsql; \
         # Install the PHP gd library
         docker-php-ext-configure gd \
                 --with-jpeg-dir=/usr/lib \
                 --with-freetype-dir=/usr/include/freetype2; \
         docker-php-ext-install gd; \
-        php -r 'var_dump(gd_info());' \
+        php -r 'var_dump(gd_info());'; \
+        php -m; \
+    elif [ ${LARADOCK_PHP_VERSION} = 5.6 ]; then \
+            set -eux; \
+            apt-get update; \
+            apt-get upgrade -y; \
+            apt-get install -y --no-install-recommends \
+                    curl \
+                    libmemcached-dev \
+                    libz-dev \
+                    libpq-dev \
+                    libjpeg-dev \
+                    libpng-dev \
+                    libfreetype6-dev \
+                    libssl-dev \
+                    libmcrypt-dev; \
+        docker-php-ext-install mcrypt mysqli pdo_mysql gd \
+        && docker-php-ext-configure gd \
+                --enable-gd-native-ttf \
+                --with-jpeg-dir=/usr/lib \
+                --with-freetype-dir=/usr/include/freetype2 \
 ;fi
 #########################################################################
 # If you're in China, or you need to change sources, will be set CHANGE_SOURCE to true in .env.
@@ -1049,19 +1066,17 @@ ARG INSTALL_AUDIOWAVEFORM=false
 
 RUN if [ ${INSTALL_AUDIOWAVEFORM} = true ]; then \
    apt-get -y install wget make cmake gcc g++ libmad0-dev libid3tag0-dev libsndfile1-dev libgd-dev libboost-filesystem-dev libboost-program-options-dev libboost-regex-dev \
+   && cd /tmp \
    && git clone https://github.com/bbc/audiowaveform.git \
    && cd audiowaveform \
-   && wget https://github.com/google/googletest/archive/release-1.10.0.tar.gz \
-   && tar xzf release-1.10.0.tar.gz \
-   && ln -s googletest-release-1.10.0/googletest googletest \
-   && ln -s googletest-release-1.10.0/googlemock googlemock \
+   && git clone --depth=1 https://github.com/google/googletest.git -b release-1.11.0 \
    && mkdir build \
    && cd build \
    && cmake .. \
    && make \
    && make install \
 ;fi
-
+ 
 
 #####################################
 # wkhtmltopdf:
@@ -1196,6 +1211,33 @@ RUN if [ ${NEW_RELIC} = true ]; then \
   -e 's/;newrelic.daemon.app_connect_timeout =.*/newrelic.daemon.app_connect_timeout=15s/' \
   -e 's/;newrelic.daemon.start_timeout =.*/newrelic.daemon.start_timeout=5s/' \
   /usr/local/etc/php/conf.d/newrelic.ini \
+;fi
+
+###########################################################################
+# PHP SSDB:
+###########################################################################
+
+USER root
+
+ARG INSTALL_SSDB=false
+
+RUN set -xe; \
+    if [ ${INSTALL_SSDB} = true ] && [ $(php -r "echo PHP_MAJOR_VERSION;") != "8" ]; then \
+    apt-get -y install sudo wget && \
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
+      curl -L -o /tmp/ssdb-client-php.tar.gz https://github.com/jonnywang/phpssdb/archive/php7.tar.gz; \
+    else \
+      curl -L -o /tmp/ssdb-client-php.tar.gz https://github.com/jonnywang/phpssdb/archive/master.tar.gz; \
+    fi \
+    && mkdir -p /tmp/ssdb-client-php \
+    && tar -C /tmp/ssdb-client-php -zxvf /tmp/ssdb-client-php.tar.gz --strip 1 \
+    && cd /tmp/ssdb-client-php \
+    && phpize \
+    && ./configure \
+    && make \
+    && make install \
+    && rm /tmp/ssdb-client-php.tar.gz \
+    && docker-php-ext-enable ssdb \
 ;fi
 ###########################################################################
 # Downgrade Openssl:
