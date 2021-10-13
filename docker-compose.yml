@@ -2330,12 +2330,15 @@ services:
       build:
         context: ./mssql
       environment:
-        - MSSQL_PID=Express
+        - MSSQL_PID=${MSSQL_PID}
         - MSSQL_DATABASE=${MSSQL_DATABASE}
         - SA_PASSWORD=${MSSQL_PASSWORD}
         - ACCEPT_EULA=Y
+        - TZ=${WORKSPACE_TIMEZONE}
+        - MSSQL_AGENT_ENABLED=true
+        - MSSQL_MEMORY_LIMIT_MB="2048"
       volumes:
-        - ${DATA_PATH_HOST}/mssql:/var/opt/mssql
+        - ${DATA_PATH_HOST}/mssql:/var/opt/mssql/data
       ports:
         - "${MSSQL_PORT}:1433"
       networks:

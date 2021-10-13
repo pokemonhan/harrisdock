@@ -1,6 +1,7 @@
-FROM mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+FROM mcr.microsoft.com/mssql/server:2019-CU4-ubuntu-18.04
 
-ENV MSSQL_PID=Express
+#Express
+ENV MSSQL_PID=$MSSQL_PID
 ENV MSSQL_DATABASE=$MSSQL_DATABASE
 ENV ACCEPT_EULA=Y
 ENV SA_PASSWORD=$MSSQL_PASSWORD
