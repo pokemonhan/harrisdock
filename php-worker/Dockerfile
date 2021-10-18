@@ -25,6 +25,7 @@ RUN apk --update add wget \
   build-base \
   libmcrypt-dev \
   libxml2-dev \
+  linux-headers \
   pcre-dev \
   zlib-dev \
   autoconf \
@@ -38,7 +39,7 @@ RUN apk --update add wget \
 RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
        $("echo This is 5, $LARADOCK_PHP_VERSION") \
        docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
-        && pecl channel-update pecl.php.net && pecl install memcached-2.2.0 mcrypt-1.0.1 mongodb && docker-php-ext-enable memcached mongodb \
+        && pecl channel-update pecl.php.net && pecl install memcached-2.2.0 mcrypt-1.0.1 && docker-php-ext-enable memcached \
 #;else \
   ;elif [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
       php_minor_version=$(php -r "echo PHP_MINOR_VERSION ;");\
@@ -46,14 +47,18 @@ RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
           "2"|"3") \
           echo $LARADOCK_PHP_VERSION;\
           docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml pcntl \
-          && pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.3 mongodb && docker-php-ext-enable memcached mongodb \
+          && pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.3 && docker-php-ext-enable memcached \
           ;; \
           *)\
           echo "here is in default clause $LARADOCK_PHP_VERSION";\
           docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
-          && pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.3 mongodb && docker-php-ext-enable memcached mongodb \
+          && pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.3 && docker-php-ext-enable memcached \
           ;; \
        esac\
+    ;else \
+        echo "here is in 8 clause $LARADOCK_PHP_VERSION";\
+        docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml mcrypt pcntl \
+        && pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.3 && docker-php-ext-enable memcached \
 ;fi
 
 # Add a non-root user:
@@ -158,14 +163,20 @@ RUN if [ ${INSTALL_SOAP} = true ]; then \
 # Install MongoDB drivers:
 ARG INSTALL_MONGO=false
 RUN if [ ${INSTALL_MONGO} = true ]; then \
-      if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
-        pecl install mongo; \
-        docker-php-ext-enable mongo; \
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
+      pecl install mongo; \
+      docker-php-ext-enable mongo; \
+      php -m | grep -oiE '^mongo$'; \
+    else \
+      if [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "70000" ]; then \
+        pecl install mongodb-1.9.2; \
       else \
         pecl install mongodb; \
-        docker-php-ext-enable mongodb; \
       fi; \
-    fi
+      docker-php-ext-enable mongodb; \
+      php -m | grep -oiE '^mongodb$'; \
+    fi; \
+  fi
 
 ###########################################################################
 # PHP OCI8:
@@ -411,9 +422,9 @@ RUN if [ ${INSTALL_SWOOLE} = true ]; then \
     else \
       echo '' | pecl -q install swoole; \
     fi; \
-    docker-php-ext-enable swoole \
-    && php -m | grep -q 'swoole' \
-;fi
+    docker-php-ext-enable swoole; \
+    php -m | grep -oiE '^swoole$'; \
+  ;fi
 
 ###########################################################################
 # Taint EXTENSION
@@ -479,6 +490,37 @@ RUN if [ ${INSTALL_MEMCACHED} = true ]; then \
 fi
 
 ###########################################################################
+# SQL SERVER:
+###########################################################################
+
+ARG INSTALL_MSSQL=false
+
+RUN set -eux; \
+  if [ ${INSTALL_MSSQL} = true ]; then \
+  apk add --update gnupg \
+  ###########################################################################
+  # Ref from:
+  # - https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver15#alpine17
+  ###########################################################################
+  # Add Microsoft repo for Microsoft ODBC Driver 17 for Linux
+  # Driver version 17.5 or higher is required for Alpine support.
+  # Download the desired package(s)
+  && curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.8.1.1-1_amd64.apk \
+  # Verify signature, if 'gpg' is missing install it using 'apk add gnupg':
+  && curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.8.1.1-1_amd64.sig \
+  && curl https://packages.microsoft.com/keys/microsoft.asc  | gpg --import - \
+  && gpg --verify msodbcsql17_17.8.1.1-1_amd64.sig msodbcsql17_17.8.1.1-1_amd64.apk \
+  # Install the package(s)
+  && apk add --allow-untrusted msodbcsql17_17.8.1.1-1_amd64.apk unixodbc-dev \
+  && pecl install sqlsrv pdo_sqlsrv \
+  # && echo extension=pdo_sqlsrv.so >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/10_pdo_sqlsrv.ini
+  # && echo extension=sqlsrv.so >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/00_sqlsrv.ini
+  && docker-php-ext-enable pdo_sqlsrv sqlsrv \
+  && php -m | grep -q 'pdo_sqlsrv' \
+  && php -m | grep -q 'sqlsrv' \
+  ;fi
+
+###########################################################################
 # PHP SSDB:
 ###########################################################################
 
@@ -525,7 +567,7 @@ ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisord.conf"]
 #
 # If you need to modify this image, feel free to do it right here.
 #
-    # -- Your awesome modifications go here -- #
+# -- Your awesome modifications go here -- #
 
 #
 #--------------------------------------------------------------------------
