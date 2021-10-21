@@ -5,11 +5,14 @@ module.exports = {
     // MongoDB 数据库配置
     db: {
         // MongoDB 所在服务器
-        servername: '172.19.0.1',//yapi-mongo 172.19.0.1 mongo
+        servername: '172.18.0.1',//yapi-mongo 172.19.0.1 mongo
         // MongoDB 端口
         port: 27017,
         // YApi 使用的数据库名称
         DATABASE: 'yapi',
+        // user:'root',
+        // pass:'123qwe',
+        // authSource:''
     },
 
     // 邮件通知配置，默认关闭，若需开启请访问下面链接查看如何配置：

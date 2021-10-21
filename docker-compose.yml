@@ -2453,9 +2453,12 @@ services:
         - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
       volumes:
         - ${DATA_PATH_HOST}/mongo:/data/db
+        - ${DATA_PATH_HOST}/mongolog/:/var/log/mongodb/
         - ${DATA_PATH_HOST}/mongo_config:/data/configdb
+        - ./mongo/config/mongod.conf:/etc/mongod.conf
         #- ${DATA_PATH_HOST}/mongo:/data/db
         # - "mongodbdata:/data/db"
+#      restart: unless-stopped
       #command: mongod --smallfiles --logpath=/dev/null
       networks:
         - backend
