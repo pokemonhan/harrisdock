@@ -3969,10 +3969,20 @@ services:
       ports:
           - 8090:3000
       volumes:
-        - ./yapi/config/config.js:/yapi/config.js
+#        - ./yapi/config/config.js:/yapi/config.js
         - ./logs/yapi/:/yapi/log
+      environment:
+        - YAPI_ADMIN_ACCOUNT=harrisdt15f@gmail.com
+#        - YAPI_ADMIN_PASSWORD=123qwe
+        - YAPI_CLOSE_REGISTER=true
+        - YAPI_DB_SERVERNAME=mongo
+        - YAPI_DB_PORT=27017
+        - YAPI_DB_DATABASE=yapi
+        - YAPI_DB_USER=root
+        - YAPI_DB_PASS=pass123
+        - YAPI_DB_AUTH_SOURCE=admin
       networks:
-        - frontend
+        - backend
 
   ### sentry 异常报告 ########################################
     sentry:
