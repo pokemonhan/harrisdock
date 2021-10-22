@@ -7,7 +7,7 @@ LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
 VOLUME /data/db /data/configdb
 
 
-COPY docker-entrypoint.sh /usr/bin/
+COPY ./docker-entrypoint.sh /usr/bin/
 #COPY ./seed/seed-data.js /docker-entrypoint-initdb.d/
 COPY ./config/mongod.conf /etc/mongod.conf
 

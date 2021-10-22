@@ -3978,8 +3978,8 @@ services:
         - YAPI_DB_SERVERNAME=mongo
         - YAPI_DB_PORT=27017
         - YAPI_DB_DATABASE=yapi
-        - YAPI_DB_USER=root
-        - YAPI_DB_PASS=pass123
+        - YAPI_DB_USER=${MONGO_USERNAME}
+        - YAPI_DB_PASS=${MONGO_PASSWORD}
         - YAPI_DB_AUTH_SOURCE=admin
       networks:
         - backend
