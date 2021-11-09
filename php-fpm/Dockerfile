@@ -555,6 +555,28 @@ RUN if [ ${INSTALL_GEARMAN} = true ]; then \
     docker-php-ext-enable gearman \
 ;fi
 
+
+###########################################################################
+# Install OpenCC 简体转换繁体
+###########################################################################
+
+ARG INSTALL_OPENCC=false
+
+RUN if [ ${INSTALL_OPENCC} = true ]; then \
+    apt-get update -yqq && \
+    apt-get -y install libopencc-dev && \
+    cd /tmp && \
+    git clone https://github.com/nauxliu/opencc4php.git --depth 1 && \
+    cd /tmp/opencc4php && \
+    phpize && \
+    ./configure && \
+    make -j$(nproc) && \
+    make install && \
+    cd / && \
+    rm -r /tmp/opencc4php && \
+    docker-php-ext-enable opencc \
+;fi
+
 ###########################################################################
 # pcntl
 ###########################################################################
