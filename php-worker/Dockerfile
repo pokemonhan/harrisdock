@@ -84,15 +84,11 @@ fi
 ARG INSTALL_GNUPG=false
 
 RUN set -eux; if [ ${INSTALL_GNUPG} = true ]; then \
-      apk add --no-cache --no-progress --virtual BUILD_DEPS_PHP_GNUPG gpgme-dev; \
-      apk add --no-cache --no-progress gpgme; \
-      if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
-        pecl install gnupg-1.5.0RC2; \
-      else \
-        pecl install gnupg; \
-      fi; \
-      docker-php-ext-enable gnupg; \
-    fi
+  apk add --no-cache --no-progress --virtual BUILD_DEPS_PHP_GNUPG gpgme-dev; \
+  apk add --no-cache --no-progress gpgme; \
+  pecl install gnupg; \
+  docker-php-ext-enable gnupg; \
+  fi
 
 #Install LDAP
 ARG INSTALL_LDAP=false;
@@ -168,7 +164,7 @@ RUN if [ ${INSTALL_MONGO} = true ]; then \
       docker-php-ext-enable mongo; \
       php -m | grep -oiE '^mongo$'; \
     else \
-      if [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "70000" ]; then \
+      if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ] && { [ $(php -r "echo PHP_MINOR_VERSION;") = "0" ] ;}; then \
         pecl install mongodb-1.9.2; \
       else \
         pecl install mongodb; \
@@ -427,6 +423,24 @@ RUN if [ ${INSTALL_SWOOLE} = true ]; then \
   ;fi
 
 ###########################################################################
+# xlswriter:
+###########################################################################
+
+ARG INSTALL_XLSWRITER=false
+
+RUN set -eux; \
+    if [ ${INSTALL_XLSWRITER} = true ]; then \
+      # Install Php xlswriter Extension \
+      if   [ $(php -r "echo PHP_MAJOR_VERSION;") > "5" ]; then \
+          pecl install xlswriter && \
+          docker-php-ext-enable xlswriter && \
+          php -m | grep -q 'xlswriter'; \
+      else \
+          echo "PHP Extension for xlswriter is not supported for PHP 5.0"; \
+      fi \
+    ;fi
+
+###########################################################################
 # Taint EXTENSION
 ###########################################################################
 
@@ -462,14 +476,14 @@ RUN if [ ${INSTALL_IMAP} = true ]; then \
 ARG INSTALL_XMLRPC=false
 
 RUN if [ ${INSTALL_XMLRPC} = true ]; then \
-      if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
-        pecl install xmlrpc-1.0.0RC2; \
-        docker-php-ext-enable xmlrpc; \
-      else \
-        docker-php-ext-install xmlrpc; \
-      fi; \
-      php -m | grep -r 'xmlrpc'; \
-    fi
+  if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
+  pecl install xmlrpc-1.0.0RC3; \
+  docker-php-ext-enable xmlrpc; \
+  else \
+  docker-php-ext-install xmlrpc; \
+  fi; \
+  php -m | grep -r 'xmlrpc'; \
+  fi
 
 ###########################################################################
 # PHP Memcached:
