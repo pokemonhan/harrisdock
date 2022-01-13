@@ -537,6 +537,31 @@ RUN if [ ${INSTALL_CASSANDRA} = true ]; then \
     fi \
 ;fi
 
+ARG INSTALL_TG_BOT=false
+
+RUN if [ ${INSTALL_TG_BOT} = true ]; then \
+      if [ ! -d "/var/www/telegram-bot-bash" ]; then \
+          apt-get update && apt-get install --no-install-recommends -y wget jq && \
+          wget -qO- https://github.com/koalaman/shellcheck/releases/download/v0.7.0/shellcheck-v0.7.0.linux.x86_64.tar.xz | tar -xJf - && \
+          cd shellcheck-v0.7.0 && \
+          cp shellcheck /usr/local/bin && \
+          shellcheck --version && \
+          git clone https://github.com/topkecleon/telegram-bot-bash.git /var/www/telegram-bot-bash && \
+          cd /var/www/telegram-bot-bash && \
+          git checkout develop && \
+          bash dev/make-distribution.sh \
+          cd /var/www/telegram-bot-bash/DIST/telegram-bot-bash && \
+#          export BASHBOT_HOME="$(pwd)" && \
+#          source /var/www/telegram-bot-bash/DIST/telegram-bot-bash/bashbot.sh source && \
+#          read "5057710392:AAGwJ2jE4uRHIaTRvqi8HYgqB6bEA0ieMU4" && \
+#          read "5057710392" && \
+#          send_message "-781874795" "大家好,我起床了"; \
+     else \
+        cd /var/www/telegram-bot-bash/DIST/telegram-bot-bash && \
+        bash bashbot.sh start && \
+        send_message "-781874795" "大家好,我起床了"; \
+      fi \
+    ;fi
 ###########################################################################
 # Gearman:
 ###########################################################################

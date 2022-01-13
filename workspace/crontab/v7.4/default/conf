@@ -1,1 +1,3 @@
-#* * * * * root bash /var/www/jianghu-shell-scripts/syncRm-Lc/syncPullPush.sh >> /var/www/harrisdock/workspace/cronlog/cronlog.log
+# * * * * * root bash /var/www/jianghu-shell-scripts/syncRm-Lc/syncPullPush.sh >> /var/www/harrisdock/workspace/cronlog/cronlog.log
+
+* 1 * * * root bash /var/www/jianghu-shell-scripts/syncer/syncer.sh >> /var/www/harrisdock/workspace/cronlog/syncer.log
